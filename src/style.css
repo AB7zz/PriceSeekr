@@ -3,3 +3,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+td{
+    padding-right: 30px;
+    padding-left: 30px;
+}
