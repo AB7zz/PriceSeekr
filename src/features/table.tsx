@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { Link } from 'react-router-dom'
 
 const Table = ({data}) => {
+  const [page, setPage] = useState('/')
   useEffect(() => {
     if(data){
       document.getElementById("desc").innerHTML = data[4]
@@ -28,14 +29,13 @@ const Table = ({data}) => {
             <td id="desc"></td>
           </tr> : <tr className="border">
             <td><img src="" /></td>
-            <td>Random Title</td>
+            <td>Random Title testing</td>
             <td>Random price</td>
             <td>Random Description</td>
           </tr>}
         </tbody>
       </table>
     </div>
-    {/* <Link to='/similiar' className='m-auto'>View similiar products</Link> */}
     </>
   )
 }

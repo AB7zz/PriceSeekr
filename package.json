@@ -11,10 +11,12 @@
   },
   "dependencies": {
     "@plasmohq/storage": "^1.6.1",
+    "google-search-results-nodejs": "^2.1.0",
     "plasmo": "0.76.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router-dom": "^6.14.1",
+    "serp": "^2.2.2",
     "tailwindcss": "3.3.2",
     "wikipedia-tldr": "^2.0.1"
   },

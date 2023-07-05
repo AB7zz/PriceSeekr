@@ -26,7 +26,7 @@ export const config: PlasmoCSConfig = {
 
 function IndexPopup() {
   const [data, setData] = useState(null)
-    const [page, setPage] = useState('/')
+  const [page, setPage] = useState('/')
   useEffect(() => {
     console.log('use effect is run')
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -39,14 +39,14 @@ function IndexPopup() {
                 func: () => {
                     const productTitle = document.querySelector('#productTitle').innerHTML
                     const price = `${document.querySelector('.a-price-symbol').innerHTML} ${document.querySelector('.a-price-whole').innerHTML}`
-                    const image = document.querySelector('#landingImage').getAttribute('src')
+                    const image = document.querySelector('#landingImage') != null ? document.querySelector('#landingImage').getAttribute('src') : document.querySelector("img.a-dynamic-image").getAttribute('src')
                     const feature = document.querySelector('#feature-bullets').innerHTML
                     const details = document.querySelector('#detailBullets_feature_div').innerHTML
-                    return [productTitle, price, image, feature, details]
+                    return [productTitle.replace(/ {2,}/g, ''), price, image, feature, details]
                 }
               });
               const data = result.result;
-              console.log(result)
+              console.log(data)
               chrome.storage.local.set({ 'data': data })
               setData(data)
             }
@@ -64,15 +64,26 @@ function IndexPopup() {
     if(page == '/'){
         return <Table data={data} />
     }else if(page == '/similiar'){
-        return <Similiar />
+        return <Similiar data={data} />
     }
   }
   return (
     <>
       {renderContent()}
-      <div className="flex py-5">
-        <button onClick={() => setPage('/similiar')} className='m-auto bg-sky-500 text-white px-5 py-2 rounded'>View similiar products</button>
-      </div>
+      {page == "/" ? 
+        <div className="flex py-5">
+          <button onClick={() => setPage('/similiar')} className='m-auto bg-sky-500 text-white px-5 py-2 rounded'>View similiar products</button>
+        </div>
+      : page == "/similiar" ?
+        <div className="flex py-5">
+          <button onClick={() => setPage('/')} className='m-auto bg-sky-500 text-white px-5 py-2 rounded'>Go back</button>
+        </div>
+      :
+        <div className="flex py-5">
+          <button onClick={() => setPage('/')} className='m-auto bg-sky-500 text-white px-5 py-2 rounded'>Home</button>
+        </div>
+
+      }
     </>
   )
 }
