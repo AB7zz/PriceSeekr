@@ -1,9 +1,9 @@
 {
-  "name": "wiki-query",
-  "displayName": "Wiki query",
+  "name": "PriceSeekr",
+  "displayName": "PriceSeekr",
   "version": "0.0.1",
-  "description": "wiki look up",
-  "author": "abhinav",
+  "description": "Look up similiar products from google",
+  "author": "Abhinav & Abbas",
   "scripts": {
     "dev": "plasmo dev",
     "build": "plasmo build",
@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@plasmohq/storage": "^1.6.1",
+    "axios": "^1.4.0",
     "google-search-results-nodejs": "^2.1.0",
     "plasmo": "0.76.3",
     "react": "18.2.0",
