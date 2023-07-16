@@ -4,6 +4,8 @@ import Table from "~features/table"
 import "~base.css"
 import "~style.css"
 import Similiar from "~features/similiar"
+import Same from "~features/same"
+import { title } from "process"
  
 export const config: PlasmoCSConfig = {
   matches: [
@@ -38,15 +40,21 @@ function IndexPopup() {
                 target: { tabId: tab.id },
                 func: () => {
                     const productTitle = document.querySelector('#productTitle').innerHTML
+                    console.log(productTitle)
                     const price = `${document.querySelector('.a-price-symbol').innerHTML} ${document.querySelector('.a-price-whole').innerHTML}`
+                    console.log(price)
+                    
                     const image = document.querySelector('#landingImage') != null ? document.querySelector('#landingImage').getAttribute('src') : document.querySelector("img.a-dynamic-image").getAttribute('src')
+                    console.log(image)
                     const feature = document.querySelector('#feature-bullets').innerHTML
+                    console.log(feature)
                     const details = document.querySelector('#detailBullets_feature_div').innerHTML
+                    console.log(details)
                     return [productTitle.replace(/ {2,}/g, ''), price, image, feature, details]
                 }
               });
               const data = result.result;
-              console.log(data)
+              console.log("your data: ",data)
               chrome.storage.local.set({ 'data': data })
               setData(data)
             }
@@ -61,10 +69,12 @@ function IndexPopup() {
     });
   }, [])
   const renderContent = () => {
-    if(page == '/'){
-        return <Table data={data} />
-    }else if(page == '/similiar'){
-        return <Similiar data={data} />
+      if(page == '/'){
+          return <Table data={data} />
+      }else if(page == '/similiar'){
+          return <Similiar data={data} />
+      }else if(page == '/same'){
+        return <Same data={data} />
     }
   }
   return (
@@ -73,8 +83,13 @@ function IndexPopup() {
       {page == "/" ? 
         <div className="flex py-5">
           <button onClick={() => setPage('/similiar')} className='m-auto bg-sky-500 text-white px-5 py-2 rounded'>View similiar products</button>
+          <button onClick={() => setPage('/same')} className='m-auto bg-sky-500 text-white px-5 py-2 rounded'>View Same products</button>
         </div>
       : page == "/similiar" ?
+        <div className="flex py-5">
+          <button onClick={() => setPage('/')} className='m-auto bg-sky-500 text-white px-5 py-2 rounded'>Go back</button>
+        </div>
+      : page == "/same" ?
         <div className="flex py-5">
           <button onClick={() => setPage('/')} className='m-auto bg-sky-500 text-white px-5 py-2 rounded'>Go back</button>
         </div>

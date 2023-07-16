@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import SerpApi from "google-search-results-nodejs"
+const SerpApi = require("google-search-results-nodejs")
 const search = new SerpApi.GoogleSearch("9ff5a1b75caee5bb01410bebc61e1014f53a01e8dfa29b28d2e7f23067c0338f")
 import axios from 'axios'
 import google_domains from '../json/google-domains.json'
