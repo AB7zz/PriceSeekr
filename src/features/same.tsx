@@ -32,18 +32,18 @@ const Same = ({data}) => {
     }
     if(data){
       getLocation()
-        .then(country => searchImage(data[2], country))
+        .then(country => searchImage(data[1], country))
     }
   }, [data])
   return (
-    <div className="px-5 py-5 w-[500px] bg-slate-100">
+    <div className="px-5 py-5 w-[500px] bg-white">
       <div>
         <h1 className='text-xl font-bold my-3'>Your product</h1>
         {data && 
           <div className='shadow-lg px-3 py-3 rounded-[15px] bg-white'>
-            <img className='w-[200px]' src={data[2]} alt="" />
+            <img className='w-[200px]' src={data[1]} alt="" />
             <h3 className='text-lg'>{data[0]}</h3>
-            <p className='text-blue-500 text-lg font-bold'>{data[1]}</p>
+            <p className='text-blue-500 text-lg font-bold'>{data[2]}</p>
           </div>
         }
       </div>
@@ -51,7 +51,7 @@ const Same = ({data}) => {
         <h1 className='text-xl font-bold my-3'>Same products</h1>
         <div className='grid grid-cols-2 gap-4'>
           {same && same.map((product, i) => (
-            <div className='shadow-lg px-3 py-3 rounded-[15px] bg-white'>
+            <div className='shadow-lg px-3 py-3 rounded-[15px] bg-gray-100'>
               <img className='w-[200px]' src={product.thumbnail} alt="product thumbnail" />
               <a href={product.link} className="text-lg">{product.title}</a>
               {product.price && (

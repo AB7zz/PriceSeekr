@@ -9,7 +9,7 @@ const Table = ({data}) => {
     }
   }, [data])
   return (
-    <div className='bg-slate-100'>
+    <div className='bg-gray-100'>
       <h1 className='text-2xl text-center py-5'>Product Details</h1>
       <div className="flex items-center justify-center px-5 pb-5">
         <table className="table-auto bg-white rounded-[15px]">
