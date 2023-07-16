@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react'
 const SerpApi = require("google-search-results-nodejs")
 const search = new SerpApi.GoogleSearch("4ede514098f0aaed97b7659099bcebc41d4015a987a506f23ab7a6c4be65063f")
-
+import google_domains from '../json/google-domains.json'
+import axios from 'axios'
 
 const Same = ({data}) => {
   const [same, setSame] = useState(null)
   useEffect(() => {
-    const searchImage = async(image) => {
+    const searchImage = async(image, country) => {
       console.log(image)
       let params = {
-        api_key: "4ede514098f0aaed97b7659099bcebc41d4015a987a506f23ab7a6c4be65063f", 
-        url: image,       
-        engine: 'google_lens',     
-        location: "Kochi, Kerala, India",            
+        api_key: "9ff5a1b75caee5bb01410bebc61e1014f53a01e8dfa29b28d2e7f23067c0338f",    
+        gl: country,
+        url: image,
+        google_domain: google_domains.find(g => g.country_code == country)?.domain,
+        engine: 'google_lens',              
       }
       let result = search.json(params, (data) => {
         console.log(data["visual_matches"])
@@ -20,8 +22,17 @@ const Same = ({data}) => {
         console.log(same)
       })
     }
+    const getLocation = async() => {
+      try{
+        const response = await axios.get("https://ipinfo.io");
+        return response.data.country.toLowerCase()
+      }catch(error){
+        console.log(error)
+      }
+    }
     if(data){
-      searchImage(data[2])
+      getLocation()
+        .then(country => searchImage(data[2], country))
     }
   }, [data])
   return (
