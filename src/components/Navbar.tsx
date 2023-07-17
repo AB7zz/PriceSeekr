@@ -1,5 +1,6 @@
 import React from 'react'
 
+
 const Navbar = ({setPage, page}) => {
   return (
     <div className="bg-gray-100 h-[70px]">
