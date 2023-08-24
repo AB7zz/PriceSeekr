@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
 const SerpApi = require("google-search-results-nodejs")
 const search = new SerpApi.GoogleSearch("4ede514098f0aaed97b7659099bcebc41d4015a987a506f23ab7a6c4be65063f")
+import axios from 'axios'
 
 
 const Same = ({ data }) => {
   const [same, setSame] = useState(null);
   useEffect(() => {
-    const searchImage = async(image) => {
+    const searchImage = async(image, country) => {
       console.log(image)
       let params = {
         api_key: "4ede514098f0aaed97b7659099bcebc41d4015a987a506f23ab7a6c4be65063f", 
+        gl: country,
         url: image,       
         engine: 'google_lens',     
         location: "Kochi, Kerala, India",            
@@ -20,8 +22,17 @@ const Same = ({ data }) => {
         console.log(same)
       })
     }
+    const getLocation = async() => {
+      try{
+        const response = await axios.get("https://ipinfo.io");
+        return response.data.country.toLowerCase()
+      }catch(error){
+        console.log(error)
+      }
+    }
     if(data){
-      searchImage(data[2])
+      getLocation()
+        .then(country => searchImage(data[0], country))
     }
   }, [data]);
 
