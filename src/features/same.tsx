@@ -16,11 +16,41 @@ const Same = ({ data }) => {
         engine: 'google_lens',     
         location: "Kochi, Kerala, India",            
       }
-      let result = search.json(params, (data) => {
-        console.log(data["visual_matches"])
-        setSame(data["visual_matches"])
-        console.log(same)
-      })
+      let result = search.json(params, async (data) => {
+        if (data && data["visual_matches"] && data["visual_matches"].length > 0) {
+          // Filter out items that don't have a "price" property
+          const itemsWithPrice = data["visual_matches"].filter(item => item.price);
+
+          // Use Promise.all to fetch webpage content for each item
+          const itemPromises = itemsWithPrice.map(async (item) => {
+            try {
+              const response = await axios.get(item.link);
+              item.pageContent = response.data; // Store the webpage content
+              return item;
+            } catch (error) {
+              console.error(`Error fetching ${item.link}: ${error.message}`);
+              return null; // Handle errors gracefully
+            }
+          });
+
+          const itemsWithPageContent = await Promise.all(itemPromises);
+
+          // Filter out items that contain "out of stock" in their webpage content
+          const filteredItems = itemsWithPageContent.filter(item => {
+            if (item.pageContent) {
+              const pageContentLower = item.pageContent.toLowerCase();
+              return !(
+                pageContentLower.includes('out of stock') ||
+                pageContentLower.includes('no longer available') || 
+                pageContentLower.includes('sold out')
+              );
+            }
+            return true; // Include items without webpage content
+          });
+          const sortedItems = filteredItems.sort((a, b) => a.price.extracted_value - b.price.extracted_value);
+          setSame(sortedItems);
+        }
+      });
     }
     const getLocation = async() => {
       try{
