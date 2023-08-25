@@ -1,38 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 const SerpApi = require("google-search-results-nodejs")
-const search = new SerpApi.GoogleSearch("9ff5a1b75caee5bb01410bebc61e1014f53a01e8dfa29b28d2e7f23067c0338f")
-import axios from 'axios'
-import google_domains from '../json/google-domains.json'
+import { useSearchContext } from '~context/SearchContext'
 
 const Similiar = ({data}) => {
-  const [similiar, setSimiliar] = useState(null)
-  useEffect(() => {
-    const searchTitle = async(title, country) => {
-      console.log(country)
-      let params = {
-        api_key: "9ff5a1b75caee5bb01410bebc61e1014f53a01e8dfa29b28d2e7f23067c0338f", 
-        q: title,       
-        gl: country,
-        google_domain: google_domains.find(g => g.country_code == country)?.domain,
-        engine: 'google_shopping',             
-      }
-      let result = search.json(params, (data) => {
-        console.log(data["shopping_results"])
-        setSimiliar(data["shopping_results"])
-      })
-    }
-
-    const getLocation = async() => {
-      try{
-        const response = await axios.get("https://ipinfo.io");
-        return response.data.country.toLowerCase()
-      }catch(error){
-        console.log(error)
-      }
-    }
-    if(data){
-      getLocation()
-        .then(country => searchTitle(data[0], country))
+  const {runSearch, similiar} = useSearchContext()
+  React.useEffect(() => {
+    if(!similiar){
+      runSearch(data)
     }
   }, [data])
   return (
