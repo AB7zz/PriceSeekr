@@ -35,8 +35,8 @@ export const MySearchProvider = ({ children }) => {
         }
         search.json(params, (data: any) => {
             const numericValue = parseFloat(currentPrice.replace(/[^0-9.]/g, ''));
-            const itemsWithPrice = data["shopping_results"].filter(item => item.price && parseFloat(item.price.replace(/[^0-9.]/g, '')) <= numericValue)
-            const sortedItems = itemsWithPrice.sort((a, b) => parseFloat(a.price.replace(/[^0-9.]/g, '')) - parseFloat(b.price.replace(/[^0-9.]/g, '')))
+            const itemsWithPrice = data["shopping_results"].filter(item => item.price && item.extracted_price <= numericValue)
+            const sortedItems = itemsWithPrice.sort((a, b) => a.extracted_price - b.extracted_price)
             setSimiliar(sortedItems)
         })
     }
