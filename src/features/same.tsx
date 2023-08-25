@@ -4,19 +4,22 @@ const search = new SerpApi.GoogleSearch("4ede514098f0aaed97b7659099bcebc41d4015a
 import axios from 'axios'
 
 
-const Same = ({ data }) => {
+const Same = ({ data}) => {
   const [same, setSame] = useState(null);
   useEffect(() => {
-    const searchImage = async(image, country) => {
+    const searchImage = async(image, country, currentPrice) => {
       let params = {
         api_key: "4ede514098f0aaed97b7659099bcebc41d4015a987a506f23ab7a6c4be65063f", 
         url: image,       
         engine: 'google_lens',                
       }
+      const numericValue = parseFloat(currentPrice.replace(/[^0-9.]/g, ''));
       let result = search.json(params, async (data) => {
         if (data && data["visual_matches"] && data["visual_matches"].length > 0) {
+          console.log(numericValue)
           // Filter out items that don't have a "price" property
-          const itemsWithPrice = data["visual_matches"].filter(item => item.price);
+          const itemsWithPrice = data["visual_matches"].filter(item => item.price && item.price.extracted_value <= numericValue);
+          console.log(itemsWithPrice)
 
           // Use Promise.all to fetch webpage content for each item
           const itemPromises = itemsWithPrice.map(async (item) => {
@@ -60,7 +63,7 @@ const Same = ({ data }) => {
     }
     if(data){
       getLocation()
-        .then(country => searchImage(data[1], country))
+        .then(country => searchImage(data[1], country, data[2]))
     }
   }, [data]);
 
