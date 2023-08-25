@@ -8,13 +8,10 @@ const Same = ({ data }) => {
   const [same, setSame] = useState(null);
   useEffect(() => {
     const searchImage = async(image, country) => {
-      console.log(image)
       let params = {
         api_key: "4ede514098f0aaed97b7659099bcebc41d4015a987a506f23ab7a6c4be65063f", 
-        gl: country,
         url: image,       
-        engine: 'google_lens',     
-        location: "Kochi, Kerala, India",            
+        engine: 'google_lens',                
       }
       let result = search.json(params, async (data) => {
         if (data && data["visual_matches"] && data["visual_matches"].length > 0) {
@@ -28,8 +25,9 @@ const Same = ({ data }) => {
               item.pageContent = response.data; // Store the webpage content
               return item;
             } catch (error) {
-              console.error(`Error fetching ${item.link}: ${error.message}`);
-              return null; // Handle errors gracefully
+              // console.error(`Error fetching ${item.link}: ${error.message}`);
+              item.pageContent = null
+              return item; // Handle errors gracefully
             }
           });
 
@@ -62,7 +60,7 @@ const Same = ({ data }) => {
     }
     if(data){
       getLocation()
-        .then(country => searchImage(data[0], country))
+        .then(country => searchImage(data[1], country))
     }
   }, [data]);
 
