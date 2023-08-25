@@ -3,10 +3,10 @@ const SerpApi = require("google-search-results-nodejs")
 import { useSearchContext } from '~context/SearchContext'
 
 const Similiar = ({data}) => {
-  const {runSearch, similiar} = useSearchContext()
+  const {runSearchSimiliar, similiar} = useSearchContext()
   React.useEffect(() => {
     if(!similiar){
-      runSearch(data)
+      runSearchSimiliar(data)
     }
   }, [data])
   return (

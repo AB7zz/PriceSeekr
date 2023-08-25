@@ -2,68 +2,14 @@ import React, { useEffect, useState } from 'react'
 const SerpApi = require("google-search-results-nodejs")
 const search = new SerpApi.GoogleSearch("4ede514098f0aaed97b7659099bcebc41d4015a987a506f23ab7a6c4be65063f")
 import axios from 'axios'
+import { useSearchContext } from '~context/SearchContext'
 
 
 const Same = ({ data}) => {
-  const [same, setSame] = useState(null);
+  const {runSearchImage, same} = useSearchContext()
   useEffect(() => {
-    const searchImage = async(image, country, currentPrice) => {
-      let params = {
-        api_key: "4ede514098f0aaed97b7659099bcebc41d4015a987a506f23ab7a6c4be65063f", 
-        url: image,       
-        engine: 'google_lens',                
-      }
-      const numericValue = parseFloat(currentPrice.replace(/[^0-9.]/g, ''));
-      let result = search.json(params, async (data) => {
-        if (data && data["visual_matches"] && data["visual_matches"].length > 0) {
-          console.log(numericValue)
-          // Filter out items that don't have a "price" property
-          const itemsWithPrice = data["visual_matches"].filter(item => item.price && item.price.extracted_value <= numericValue);
-          console.log(itemsWithPrice)
-
-          // Use Promise.all to fetch webpage content for each item
-          const itemPromises = itemsWithPrice.map(async (item) => {
-            try {
-              const response = await axios.get(item.link);
-              item.pageContent = response.data; // Store the webpage content
-              return item;
-            } catch (error) {
-              // console.error(`Error fetching ${item.link}: ${error.message}`);
-              item.pageContent = null
-              return item; // Handle errors gracefully
-            }
-          });
-
-          const itemsWithPageContent = await Promise.all(itemPromises);
-
-          // Filter out items that contain "out of stock" in their webpage content
-          const filteredItems = itemsWithPageContent.filter(item => {
-            if (item.pageContent) {
-              const pageContentLower = item.pageContent.toLowerCase();
-              return !(
-                pageContentLower.includes('out of stock') ||
-                pageContentLower.includes('no longer available') || 
-                pageContentLower.includes('sold out')
-              );
-            }
-            return true; // Include items without webpage content
-          });
-          const sortedItems = filteredItems.sort((a, b) => a.price.extracted_value - b.price.extracted_value);
-          setSame(sortedItems);
-        }
-      });
-    }
-    const getLocation = async() => {
-      try{
-        const response = await axios.get("https://ipinfo.io");
-        return response.data.country.toLowerCase()
-      }catch(error){
-        console.log(error)
-      }
-    }
-    if(data){
-      getLocation()
-        .then(country => searchImage(data[1], country, data[2]))
+    if(!same){
+      runSearchImage(data)
     }
   }, [data]);
 
