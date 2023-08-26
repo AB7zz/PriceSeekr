@@ -1,7 +1,9 @@
 import React from 'react'
+require('dotenv').config();
 const SerpApi = require("google-search-results-nodejs")
 const search = new SerpApi.GoogleSearch("9ff5a1b75caee5bb01410bebc61e1014f53a01e8dfa29b28d2e7f23067c0338f")
 import google_domains from '../json/google-domains.json'
+
 import axios from 'axios'
 
 interface User {
@@ -95,32 +97,31 @@ export const MySearchProvider = ({ children }) => {
     }
 
     const searchImage = async(image: any, country: any, currentPrice: any) => {
-        console.log('Country: ', country)
         let params = {
-            api_key: "4ede514098f0aaed97b7659099bcebc41d4015a987a506f23ab7a6c4be65063f", 
-            gl: country,
-            google_domain: google_domains.find(g => g.country_code == country)?.domain,
+            api_key:"4ede514098f0aaed97b7659099bcebc41d4015a987a506f23ab7a6c4be65063f", 
             url: image,       
             engine: 'google_lens',                
         }
         const numericValue = parseFloat(currentPrice.replace(/[^0-9.]/g, ''));
         search.json(params, async (data) => {
             if (data && data["visual_matches"] && data["visual_matches"].length > 0) {
-                console.log(numericValue)
                 // Filter out items that don't have a "price" property
                 const itemsWithPrice = data["visual_matches"].filter(item => item.price && item.price.extracted_value <= numericValue);
-                console.log(itemsWithPrice)
-    
-                // Use Promise.all to fetch webpage content for each item
-                const itemPromises = itemsWithPrice.map(async (item) => {
+                // filter items not in country
+                const allowedDomains = ['.com', country] 
+                const itemsInLocation = itemsWithPrice.filter(item => {
+                    const itemDomain = new URL(item.link).hostname.toLowerCase();
+                    return allowedDomains.some(allowedDomain => itemDomain.endsWith(allowedDomain));
+                  });
+                // console.log(itemsInLocation)
+                const itemPromises = itemsInLocation.map(async (item) => {
                     try {
                         const response = await axios.get(item.link);
                         item.pageContent = response.data; // Store the webpage content
                         return item;
                     } catch (error) {
-                        // console.error(`Error fetching ${item.link}: ${error.message}`);
                         item.pageContent = null
-                        return item; // Handle errors gracefully
+                        return item; 
                     }
                 });
     
@@ -128,7 +129,7 @@ export const MySearchProvider = ({ children }) => {
     
                 // Filter out items that contain "out of stock" in their webpage content
                 const filteredItems = itemsWithPageContent.filter(item => {
-                    if (item.pageContent) {
+                    if (typeof item.pageContent === 'string') {
                         const pageContentLower = item.pageContent.toLowerCase();
                         return !(
                             pageContentLower.includes('out of stock') ||

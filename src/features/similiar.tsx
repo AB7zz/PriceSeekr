@@ -1,5 +1,4 @@
 import React from 'react'
-const SerpApi = require("google-search-results-nodejs")
 import { useSearchContext } from '~context/SearchContext'
 
 const Similiar = ({data}) => {

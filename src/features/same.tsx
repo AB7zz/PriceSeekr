@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from 'react'
-const SerpApi = require("google-search-results-nodejs")
-const search = new SerpApi.GoogleSearch("4ede514098f0aaed97b7659099bcebc41d4015a987a506f23ab7a6c4be65063f")
-import axios from 'axios'
 import { useSearchContext } from '~context/SearchContext'
 
 
