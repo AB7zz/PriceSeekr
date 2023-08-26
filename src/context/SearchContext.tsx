@@ -8,22 +8,27 @@ import axios from 'axios'
 interface SearchContextState {
     similiar: any[] | null;
     same: any[] | null;
+    user: unknown | null;
 }
 
 interface SearchContextValue extends SearchContextState {
     runSearchSimiliar: (data: any) => void;
     runSearchImage: (data: any) => void;
+    setUser: React.Dispatch<React.SetStateAction<any>>;
 }
 
 const MySearchContext = React.createContext<SearchContextValue>({
     runSearchSimiliar: () => {},
     runSearchImage: () => {},
+    setUser: () => {},
+    user: null,
     similiar: null,
     same: null,
 });
 
 export const MySearchProvider = ({ children }) => {
     const [similiar, setSimiliar] = React.useState(null)
+    const [user, setUser] = React.useState(null); 
     const [same, setSame] = React.useState(null);
     const [country, setCountry] = React.useState(null)
     
@@ -134,6 +139,8 @@ export const MySearchProvider = ({ children }) => {
         <MySearchContext.Provider value={{ 
             runSearchSimiliar,
             runSearchImage,
+            setUser,
+            user,
             similiar,
             same,
         }}>
