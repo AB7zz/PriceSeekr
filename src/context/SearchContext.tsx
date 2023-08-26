@@ -1,4 +1,5 @@
 import React from 'react'
+require('dotenv').config();
 const SerpApi = require("google-search-results-nodejs")
 const search = new SerpApi.GoogleSearch("9ff5a1b75caee5bb01410bebc61e1014f53a01e8dfa29b28d2e7f23067c0338f")
 import google_domains from '../json/google-domains.json'
@@ -34,7 +35,7 @@ export const MySearchProvider = ({ children }) => {
     
     const searchTitle = async(title: string, country: string, currentPrice: any) => {
         let params = {
-            api_key: process.env.API_KEY_SIMILAR, 
+            api_key: "9ff5a1b75caee5bb01410bebc61e1014f53a01e8dfa29b28d2e7f23067c0338f", 
             q: title,       
             gl: country,
             google_domain: google_domains.find(g => g.country_code == country)?.domain,
@@ -88,7 +89,7 @@ export const MySearchProvider = ({ children }) => {
 
     const searchImage = async(image: any, country: any, currentPrice: any) => {
         let params = {
-            api_key:process.env.API_KEY_SAME, 
+            api_key:"4ede514098f0aaed97b7659099bcebc41d4015a987a506f23ab7a6c4be65063f", 
             url: image,       
             engine: 'google_lens',                
         }
