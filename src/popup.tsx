@@ -112,14 +112,14 @@ function IndexPopup() {
         {user ? (
           <div>
             <p>Welcome, {user.displayName}</p>
-            <Navbar setPage={setPage} page={page} />    
-            {renderContent()}
+
             <button onClick={handleSignOut}>Sign Out</button>
           </div>
         ) : (
           <button onClick={handleGoogleLogin}>Sign In with Google</button>
         )}
-
+        <Navbar setPage={setPage} page={page} />    
+        {renderContent()}
         {page === "/" ? (
           <div className="flex py-5">
             <button
