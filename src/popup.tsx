@@ -6,52 +6,74 @@ import Similiar from "~features/similiar"
 import Same from "~features/same"
 import Navbar from "~components/Navbar"
 import { MySearchProvider } from "~context/SearchContext"
- 
-// export const config: PlasmoCSConfig = {
-//   matches: [
-//     "http://www.amazon.com/*",
-//     "https://www.amazon.com/*",
-//     "http://smile.amazon.com/*",
-//     "https://smile.amazon.com/*",
-//     "https://www.amazon.ca/*",
-//     "https://www.amazon.co.uk/*",
-//     "http://www.amazon.it/*",
-//     "https://www.amazon.it/*",
-//     "https://www.amazon.fr/*",
-//     "https://www.amazon.es/*",
-//     "https://www.amazon.pl/*",
-//     "https://www.amazon.in/*"
-//   ],
-//   all_frames: true
-// }
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import {
+  getAuth,
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
 
+const firebaseConfig = {
+  apiKey: process.env.PLASMO_PUBLIC_FIREBASE_PUBLIC_API_KEY,
+  authDomain: process.env.PLASMO_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.PLASMO_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.PLASMO_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.PLASMO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.PLASMO_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.PLASMO_PUBLIC_FIREBASE_MEASUREMENT_ID
+};
 
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 function IndexPopup() {
-  const [page, setPage] = useState('/similiar')
-  const [pageData, setPageData] = useState(null)
+  const [page, setPage] = useState('/similiar');
+  const [pageData, setPageData] = useState(null);
+  const [user, setUser] = useState(null); 
+
+  const auth = getAuth();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+
+    return () => unsubscribe(); // Clean up the listener
+  }, [auth]);
+
+  const handleGoogleLogin = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      console.log("Google login successful:", result.user);
+    } catch (error) {
+      console.error("Google login error:", error);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Sign out error:", error);
+    }
+  };
+
   useEffect(() => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const currentTab = tabs[0];
       const getHTMLData = async(tab: any) => {
-        console.log('getHTMLData is called')
         try {
             if (tab) {
                 const [result] = await chrome.scripting.executeScript({
                     target: { tabId: tab.id },
                     func: () => {
                         const productTitle = document.querySelector('#productTitle').innerHTML
-                        console.log(productTitle)
-                        
                         const image = document.querySelector('#landingImage') != null ? document.querySelector('#landingImage').getAttribute('src') : document.querySelector("img.a-dynamic-image").getAttribute('src')
-                        console.log(image)
                         const price = document.querySelector('.a-offscreen').innerHTML
-                        console.log(price)
-                        // const price = `${document.querySelector('.a-price-symbol').innerHTML} ${document.querySelector('.a-price-whole').innerHTML}`
-                        // const feature = document.querySelector('#feature-bullets').innerHTML
-                        // console.log(feature)
-                        // const details = document.querySelector('#detailBullets_feature_div').innerHTML
-                        // console.log(details)
                         return [productTitle.replace(/ {2,}/g, ''), image, price]
                     }
                 });
@@ -76,36 +98,43 @@ function IndexPopup() {
       }else if(page == '/same'){
         return <Same data={pageData} />
     }
-  }
+  };
   return (
     <>
       <MySearchProvider>
-        <Navbar setPage={setPage} page={page} />
-        {renderContent()}
-        {page == "/" ? 
-          <div className="flex py-5">
-            <button onClick={() => setPage('/similiar')} className='m-auto bg-sky-500 text-white px-5 py-2 rounded'>View similiar products</button>
-            <button onClick={() => setPage('/same')} className='m-auto bg-sky-500 text-white px-5 py-2 rounded'>View Same products</button>
+       
+        {user ? (
+          <div>
+            <p>Welcome, {user.displayName}</p>
+            <Navbar setPage={setPage} page={page} />    
+            {renderContent()}
+            <button onClick={handleSignOut}>Sign Out</button>
           </div>
-        // : page == "/similiar" ?
-        //   <div className="flex py-5">
-        //     <button onClick={() => setPage('/')} className='m-auto bg-sky-500 text-white px-5 py-2 rounded'>Go back</button>
-        //   </div>
-        // : page == "/same" ?
-        //   <div className="flex py-5">
-        //     <button onClick={() => setPage('/')} className='m-auto bg-sky-500 text-white px-5 py-2 rounded'>Go back</button>
-        //   </div>
-        // :
-        //   <div className="flex py-5">
-        //     <button onClick={() => setPage('/')} className='m-auto bg-sky-500 text-white px-5 py-2 rounded'>Home</button>
-        //   </div>
-        :
-        <></>
-        
-        }
+        ) : (
+          <button onClick={handleGoogleLogin}>Sign In with Google</button>
+        )}
+
+        {page === "/" ? (
+          <div className="flex py-5">
+            <button
+              onClick={() => setPage('/similiar')}
+              className='m-auto bg-sky-500 text-white px-5 py-2 rounded'
+            >
+              View similar products
+            </button>
+            <button
+              onClick={() => setPage('/same')}
+              className='m-auto bg-sky-500 text-white px-5 py-2 rounded'
+            >
+              View Same products
+            </button>
+          </div>
+        ) : (
+          <></>
+        )}
       </MySearchProvider>
     </>
-  )
+  );
 }
 
 export default IndexPopup
