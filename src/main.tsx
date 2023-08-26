@@ -12,13 +12,11 @@ import {
   getAuth,
   onAuthStateChanged
 } from "firebase/auth";
-import {auth, app} from "~firebase"
+import { auth } from "~firebase"
 
 function Main() {
   const [page, setPage] = useState('/similiar');
   const {user, setUser, getHTMLData, pageData} = useSearchContext()
-
-  const auth = getAuth(app);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -27,7 +25,7 @@ function Main() {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [auth]);
 
   useEffect(() => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -60,16 +58,14 @@ function Main() {
                 <button className="bg-white px-3 py-1 rounded-[10px] text-yellow-500 font-semibold text-center" onClick={handleSignOut}>Sign Out</button>
               </div>
             </div>
-            {/* <Navbar setPage={setPage} page={page} />    
-            {renderContent()} */}
+            <Navbar setPage={setPage} page={page} />    
+            {renderContent()}
           </div>
         ) : (
           <div className="px-2 py-5 w-[250px] flex justify-center">
             <button className="bg-yellow-500 hover:bg-yellow-600 px-2 py-2 rounded-[15px] text-white" onClick={handleGoogleLogin}>Sign In with Google</button>
           </div>
         )}
-        <Navbar setPage={setPage} page={page} />    
-        {renderContent()}
         {page === "/" ? (
           <div className="flex py-5">
             <button
