@@ -25,7 +25,7 @@ export const MySearchProvider = ({ children }) => {
     const [similiar, setSimiliar] = React.useState(null)
     const [same, setSame] = React.useState(null);
     const [country, setCountry] = React.useState(null)
-    const searchTitle = async(title: string, country: string) => {
+    const searchTitle = async(title: string, country: string, currentPrice: any) => {
         let params = {
             api_key: "9ff5a1b75caee5bb01410bebc61e1014f53a01e8dfa29b28d2e7f23067c0338f", 
             q: title,       
@@ -34,8 +34,10 @@ export const MySearchProvider = ({ children }) => {
             engine: 'google_shopping',             
         }
         search.json(params, (data: any) => {
-            console.log(data["shopping_results"])
-            setSimiliar(data["shopping_results"])
+            const numericValue = parseFloat(currentPrice.replace(/[^0-9.]/g, ''));
+            const itemsWithPrice = data["shopping_results"].filter(item => item.price && item.extracted_price <= numericValue)
+            const sortedItems = itemsWithPrice.sort((a, b) => a.extracted_price - b.extracted_price)
+            setSimiliar(sortedItems)
         })
     }
 
@@ -54,9 +56,12 @@ export const MySearchProvider = ({ children }) => {
             console.log('runSearchSimiliar is called')
             if(!country){
                 getLocation()
-                    .then(country => searchTitle(data[0], country))
+                    .then(country => {
+                        setCountry(country)
+                        searchTitle(data[0], country, data[2])
+                    })
             }else{
-                searchTitle(data[0], country)
+                searchTitle(data[0], country, data[2])
             }
         }
     }
@@ -65,14 +70,17 @@ export const MySearchProvider = ({ children }) => {
         console.log('runSearchImage is called')
         if(!country){
             getLocation()
-                .then(country => searchImage(data[1], country, data[2]))
+                .then(country => {
+                    setCountry(country)
+                    searchImage(data[1], country, data[2])
+                })
         }else{
             searchImage(data[1], country, data[2])
         }
     }
 
     const searchImage = async(image: any, country: any, currentPrice: any) => {
-        console.log(image, country, currentPrice)
+        console.log('Country: ', country)
         let params = {
             api_key: "4ede514098f0aaed97b7659099bcebc41d4015a987a506f23ab7a6c4be65063f", 
             gl: country,
@@ -81,45 +89,45 @@ export const MySearchProvider = ({ children }) => {
             engine: 'google_lens',                
         }
         const numericValue = parseFloat(currentPrice.replace(/[^0-9.]/g, ''));
-        let result = search.json(params, async (data) => {
-          if (data && data["visual_matches"] && data["visual_matches"].length > 0) {
-            console.log(numericValue)
-            // Filter out items that don't have a "price" property
-            const itemsWithPrice = data["visual_matches"].filter(item => item.price && item.price.extracted_value <= numericValue);
-            console.log(itemsWithPrice)
-  
-            // Use Promise.all to fetch webpage content for each item
-            const itemPromises = itemsWithPrice.map(async (item) => {
-              try {
-                const response = await axios.get(item.link);
-                item.pageContent = response.data; // Store the webpage content
-                return item;
-              } catch (error) {
-                // console.error(`Error fetching ${item.link}: ${error.message}`);
-                item.pageContent = null
-                return item; // Handle errors gracefully
-              }
-            });
-  
-            const itemsWithPageContent = await Promise.all(itemPromises);
-  
-            // Filter out items that contain "out of stock" in their webpage content
-            const filteredItems = itemsWithPageContent.filter(item => {
-              if (item.pageContent) {
-                const pageContentLower = item.pageContent.toLowerCase();
-                return !(
-                  pageContentLower.includes('out of stock') ||
-                  pageContentLower.includes('no longer available') || 
-                  pageContentLower.includes('sold out')
-                );
-              }
-              return true; // Include items without webpage content
-            });
-            const sortedItems = filteredItems.sort((a, b) => a.price.extracted_value - b.price.extracted_value);
-            setSame(sortedItems);
-          }
+        search.json(params, async (data) => {
+            if (data && data["visual_matches"] && data["visual_matches"].length > 0) {
+                console.log(numericValue)
+                // Filter out items that don't have a "price" property
+                const itemsWithPrice = data["visual_matches"].filter(item => item.price && item.price.extracted_value <= numericValue);
+                console.log(itemsWithPrice)
+    
+                // Use Promise.all to fetch webpage content for each item
+                const itemPromises = itemsWithPrice.map(async (item) => {
+                    try {
+                        const response = await axios.get(item.link);
+                        item.pageContent = response.data; // Store the webpage content
+                        return item;
+                    } catch (error) {
+                        // console.error(`Error fetching ${item.link}: ${error.message}`);
+                        item.pageContent = null
+                        return item; // Handle errors gracefully
+                    }
+                });
+    
+                const itemsWithPageContent = await Promise.all(itemPromises);
+    
+                // Filter out items that contain "out of stock" in their webpage content
+                const filteredItems = itemsWithPageContent.filter(item => {
+                    if (item.pageContent) {
+                        const pageContentLower = item.pageContent.toLowerCase();
+                        return !(
+                            pageContentLower.includes('out of stock') ||
+                            pageContentLower.includes('no longer available') || 
+                            pageContentLower.includes('sold out')
+                        );
+                    }
+                    return true; // Include items without webpage content
+                });
+                const sortedItems = filteredItems.sort((a, b) => a.price.extracted_value - b.price.extracted_value);
+                setSame(sortedItems);
+            }
         });
-      }
+    }
 
     return (
         <MySearchContext.Provider value={{ 
