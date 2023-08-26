@@ -6,15 +6,21 @@ import google_domains from '../json/google-domains.json'
 
 import axios from 'axios'
 
+interface User {
+    displayName: string;
+}
+
 interface SearchContextState {
     similiar: any[] | null;
     same: any[] | null;
-    user: unknown | null;
+    user: Partial<User> | null;
+    pageData: any[] | null;
 }
 
 interface SearchContextValue extends SearchContextState {
     runSearchSimiliar: (data: any) => void;
     runSearchImage: (data: any) => void;
+    getHTMLData: (data: any) => void;
     setUser: React.Dispatch<React.SetStateAction<any>>;
 }
 
@@ -22,9 +28,11 @@ const MySearchContext = React.createContext<SearchContextValue>({
     runSearchSimiliar: () => {},
     runSearchImage: () => {},
     setUser: () => {},
+    getHTMLData: () => {},
     user: null,
     similiar: null,
     same: null,
+    pageData: null
 });
 
 export const MySearchProvider = ({ children }) => {
@@ -32,6 +40,7 @@ export const MySearchProvider = ({ children }) => {
     const [user, setUser] = React.useState(null); 
     const [same, setSame] = React.useState(null);
     const [country, setCountry] = React.useState(null)
+    const [pageData, setPageData] = React.useState(null)
     
     const searchTitle = async(title: string, country: string, currentPrice: any) => {
         let params = {
@@ -136,14 +145,38 @@ export const MySearchProvider = ({ children }) => {
         });
     }
 
+    const getHTMLData = async(tab: any) => {
+        try {
+            if (tab) {
+                const [result] = await chrome.scripting.executeScript({
+                    target: { tabId: tab.id },
+                    func: () => {
+                        const productTitle = document.querySelector('#productTitle').innerHTML
+                        const image = document.querySelector('#landingImage') != null ? document.querySelector('#landingImage').getAttribute('src') : document.querySelector("img.a-dynamic-image").getAttribute('src')
+                        const price = document.querySelector('.a-offscreen').innerHTML
+                        return [productTitle.replace(/ {2,}/g, ''), image, price]
+                    }
+                });
+                const data = result.result;
+                console.log("your data: ",data)
+                chrome.storage.local.set({ 'data': data })
+                setPageData(data)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <MySearchContext.Provider value={{ 
             runSearchSimiliar,
             runSearchImage,
             setUser,
+            getHTMLData,
             user,
             similiar,
             same,
+            pageData
         }}>
         {children}
         </MySearchContext.Provider>
