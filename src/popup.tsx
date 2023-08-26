@@ -27,31 +27,37 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 
 function IndexPopup() {
   const [page, setPage] = useState('/similiar');
   const [pageData, setPageData] = useState(null);
   const [user, setUser] = useState(null); 
 
-  const auth = getAuth();
+  const auth = getAuth(app);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+      setUser(user)
     });
 
     return () => unsubscribe(); // Clean up the listener
   }, [auth]);
 
   const handleGoogleLogin = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      const result = await signInWithPopup(auth, provider);
-      console.log("Google login successful:", result.user);
-    } catch (error) {
-      console.error("Google login error:", error);
-    }
+    chrome.identity.getAuthToken({ interactive: true }, async function (token) {
+      if (chrome.runtime.lastError || !token) {
+        console.error(chrome.runtime.lastError)
+        return
+      }
+      if (token) {
+        const credential = GoogleAuthProvider.credential(null, token)
+        try {
+          await signInWithPopup(auth, credential)
+        } catch (e) {
+          console.error("Could not log in. ", e)
+        }
+      }
+    })
   };
 
   const handleSignOut = async () => {

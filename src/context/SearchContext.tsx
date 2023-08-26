@@ -25,6 +25,7 @@ export const MySearchProvider = ({ children }) => {
     const [similiar, setSimiliar] = React.useState(null)
     const [same, setSame] = React.useState(null);
     const [country, setCountry] = React.useState(null)
+    
     const searchTitle = async(title: string, country: string, currentPrice: any) => {
         let params = {
             api_key: "9ff5a1b75caee5bb01410bebc61e1014f53a01e8dfa29b28d2e7f23067c0338f", 
