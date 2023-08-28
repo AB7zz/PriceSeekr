@@ -43,7 +43,7 @@ const Same = ({ data }) => {
               </div>
             ))
           ) : (
-            !isLoading && <p>No cheaper products found.</p>
+            !isLoading && <p>This is the best seller we found</p>
           )}
         </div>
       </div>
