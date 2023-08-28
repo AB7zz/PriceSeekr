@@ -156,16 +156,16 @@ export const MySearchProvider = ({ children }) => {
                     func: (url) => {
                         let productTitle, image, price
                         if (url.includes('ebay')) {
-                            productTitle = document.querySelector(".x-item-title__mainTitle?.ux-textspans")?.innerHTML || "";
+                            productTitle = document.querySelector(".x-item-title__mainTitle .ux-textspans")?.innerHTML || "";
                             image = document.querySelector('img.a-dynamic-image')?.getAttribute('src') || document.querySelector('img.ux-image-magnify__image--original')?.getAttribute('src') || "";
-                            price = document.querySelector(".x-price-primary?.ux-textspans")?.innerHTML || "";
-                            return ["ebay", "ebay", "ebay"]
+                            price = document.querySelector('.x-price-primary .ux-textspans')?.innerHTML || "";
+                            return [productTitle, image, price]
                         } else if (url.includes('amazon')) {
                             productTitle = document.querySelector('#productTitle')?.innerHTML || "";
                             image = document.querySelector('#landingImage')?.getAttribute('src') || document.querySelector("img.a-dynamic-image")?.getAttribute('src') || "";
                             price = document.querySelector('.a-offscreen')?.innerHTML || "";
+                            return [productTitle.replace(/ {2,}/g, ''), image, price]
                         }
-                        return [productTitle.replace(/ {2,}/g, ''), image, price]
                     },
                     args: [tab.url]
                 });
