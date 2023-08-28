@@ -62,7 +62,7 @@ function Main() {
             {renderContent()}
           </div>
         ) : (
-          <div className="px-2 py-5 w-[250px] flex justify-center">
+          <div className="px-2 py-5 w-[360px] flex justify-center">
             <button className="bg-yellow-500 hover:bg-yellow-600 px-2 py-2 rounded-[15px] text-white" onClick={handleGoogleLogin}>Sign In with Google</button>
           </div>
         )}

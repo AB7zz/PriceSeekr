@@ -153,17 +153,26 @@ export const MySearchProvider = ({ children }) => {
             if (tab) {
                 const [result] = await chrome.scripting.executeScript({
                     target: { tabId: tab.id },
-                    func: () => {
-                        const productTitle = document.querySelector('#productTitle').innerHTML
-                        const image = document.querySelector('#landingImage') != null ? document.querySelector('#landingImage').getAttribute('src') : document.querySelector("img.a-dynamic-image").getAttribute('src')
-                        const price = document.querySelector('.a-offscreen').innerHTML
+                    func: (url) => {
+                        let productTitle, image, price
+                        if (url.includes('ebay')) {
+                            productTitle = document.querySelector(".x-item-title__mainTitle?.ux-textspans")?.innerHTML || "";
+                            image = document.querySelector('img.a-dynamic-image')?.getAttribute('src') || document.querySelector('img.ux-image-magnify__image--original')?.getAttribute('src') || "";
+                            price = document.querySelector(".x-price-primary?.ux-textspans")?.innerHTML || "";
+                            return ["ebay", "ebay", "ebay"]
+                        } else if (url.includes('amazon')) {
+                            productTitle = document.querySelector('#productTitle')?.innerHTML || "";
+                            image = document.querySelector('#landingImage')?.getAttribute('src') || document.querySelector("img.a-dynamic-image")?.getAttribute('src') || "";
+                            price = document.querySelector('.a-offscreen')?.innerHTML || "";
+                        }
                         return [productTitle.replace(/ {2,}/g, ''), image, price]
-                    }
+                    },
+                    args: [tab.url]
                 });
                 const data = result.result;
                 console.log("your data: ",data)
                 chrome.storage.local.set({ 'data': data })
-                setPageData(data)
+                setPageData(data || 'none')
             }
         } catch (error) {
             console.log(error)
