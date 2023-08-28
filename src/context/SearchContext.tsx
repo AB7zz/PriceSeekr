@@ -142,6 +142,9 @@ export const MySearchProvider = ({ children }) => {
                 const sortedItems = filteredItems.sort((a, b) => a.price.extracted_value - b.price.extracted_value);
                 setSame(sortedItems);
             }
+            else{
+                setSame(["Not found"])
+            }
         });
     }
 
@@ -182,5 +185,4 @@ export const MySearchProvider = ({ children }) => {
         </MySearchContext.Provider>
     );
 };
-
 export const useSearchContext =  () => React.useContext(MySearchContext)
