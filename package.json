@@ -48,7 +48,8 @@
       ]
     },
     "host_permissions": [
-      "https://*/*"
+      "https://*/*",
+      "apis.google.com/*"
     ],
     "permissions": [
       "browsingData",
