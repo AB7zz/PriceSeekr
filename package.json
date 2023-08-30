@@ -51,6 +51,7 @@
       "https://*/*"
     ],
     "permissions": [
+      "browsingData",
       "activeTab",
       "contextMenus",
       "tabs",

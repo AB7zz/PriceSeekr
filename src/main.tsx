@@ -7,25 +7,18 @@ import Navbar from "~components/Navbar"
 import TopBar from "~components/TopBar"
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useSearchContext } from "~context/SearchContext"
-import { handleSignOut, handleGoogleLogin } from "~firebase/hooks"
-import {
-  getAuth,
-  onAuthStateChanged
-} from "firebase/auth";
-import { auth } from "~firebase"
+import { useSignOut, useGoogleLogin, useDetectChange } from "~firebase/hooks"
 
 function Main() {
   const [page, setPage] = useState('/similiar');
-  const {user, setUser, getHTMLData, pageData} = useSearchContext()
+  const {user, getHTMLData, pageData} = useSearchContext()
+  const handleSignOut = useSignOut()
+  const handleGoogleLogin = useGoogleLogin()
+  const handleDetectChange = useDetectChange()
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      console.log(user)
-    });
-
-    return () => unsubscribe();
-  }, [auth]);
+    handleDetectChange()
+  }, [])
 
   useEffect(() => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
