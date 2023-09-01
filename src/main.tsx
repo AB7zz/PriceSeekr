@@ -25,10 +25,12 @@ function Main() {
     localStorage.getItem("isNewUser") === "true"
   );
 
+  const [error, setError] = useState(""); // Error state for login/signup
+
   const handleSignOut = useSignOut();
-  const handleEmailSignIn = useEmailSignIn(setIsNewUser);
-  const handleEmailSignUp = useEmailSignUp(setIsNewUser);
-  const handleGoogleLogin = useGoogleLogin(setIsNewUser);
+  const handleEmailSignIn = useEmailSignIn(setIsNewUser, setError);
+  const handleEmailSignUp = useEmailSignUp(setIsNewUser, setError);
+  const handleGoogleLogin = useGoogleLogin(setIsNewUser, setError);
 
   const handleDetectChange = useDetectChange();
   const [showLoginForm, setShowLoginForm] = useState(true);
@@ -38,11 +40,12 @@ function Main() {
     if (isNewUser && user) {
       console.log("page set to pref")
       setPage('/preferences');
-    }else if(!isNewUser && user){
+    } else if (!isNewUser && user) {
       console.log("page being set to similar")
       setPage('/similar');
     }
-  }, [isNewUser,user]);
+  }, [isNewUser, user]);
+  
   useEffect(() => {
     handleDetectChange();
   }, []);
@@ -72,6 +75,7 @@ function Main() {
 
   const toggleLoginMode = () => {
     setShowLoginForm(!showLoginForm);
+    setError(""); // Clear any previous error messages when toggling login/signup
   };
 
   return (
@@ -96,7 +100,7 @@ function Main() {
           </div>
         )
       ) : showLoginForm ? (
-        <div className="px-2 py-5 w-[360px] flex justify-center">
+        <div className="px-2 py-5 w-[360px] flex flex-col justify-center items-center">
           <form>
             <input
               type="text"
@@ -127,16 +131,17 @@ function Main() {
             Don't have an account? Sign up
           </span>
           <button
-            className="bg-yellow-500 hover:bg-yellow-600 px-2 py-2 rounded-[15px] text-white"
+            className="bg-yellow-500 hover:bg-yellow-600 px-2 py-2 rounded-[15px] text-white mt-4"
             onClick={handleGoogleLogin}
           >
             <span className="text-gray-700 font-medium">
               Continue with Google
             </span>
           </button>
+          <p className="text-red-500 mt-2">{error}</p> {/* Display error message */}
         </div>
       ) : (
-        <div className="px-2 py-5 w-[360px] flex justify-center">
+        <div className="px-2 py-5 w-[360px] flex flex-col justify-center items-center">
           <form>
             <input
               type="text"
@@ -167,13 +172,14 @@ function Main() {
             Already have an account? Log in
           </span>
           <button
-            className="bg-yellow-500 hover:bg-yellow-600 px-2 py-2 rounded-[15px] text-white"
+            className="bg-yellow-500 hover:bg-yellow-600 px-2 py-2 rounded-[15px] text-white mt-4"
             onClick={handleGoogleLogin}
           >
             <span className="text-gray-700 font-medium">
               Continue with Google
             </span>
           </button>
+          <p className="text-red-500 mt-2">{error}</p> {/* Display error message */}
         </div>
       )}
     </>
