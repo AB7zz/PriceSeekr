@@ -7,7 +7,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSearchContext } from "~context/SearchContext";
 import { auth } from "~firebase";
 
@@ -19,6 +19,7 @@ export const useSignOut = () => {
         console.log('Cache cleared.');
       });
       await signOut(auth);
+      localStorage.clear();
       setUser(null);
     } catch (error) {
       console.error("Sign out error:", error);
@@ -40,7 +41,7 @@ export const useDetectChange = () => {
 };
 
 
-export const useGoogleLogin = () => {
+export const useGoogleLogin = (setIsNewUserCallback) => {
   const {setUser, user} = useSearchContext()
   const handleGoogleLogin = async() => {
     if (user) {
@@ -71,6 +72,7 @@ export const useGoogleLogin = () => {
               try {
                 const res = await signInWithCredential(auth, credential)
                 setUser(res.user)
+                setIsNewUserCallback(false);
                 console.log(res.user)
               } catch (e) {
                 console.error("Could not log in. ", e)
@@ -85,13 +87,14 @@ export const useGoogleLogin = () => {
   return handleGoogleLogin
 };
 
-export const useEmailSignIn = () => {
+export const useEmailSignIn = (setIsNewUserCallback) => {
   const { setUser } = useSearchContext();
 
   const handleEmailSignIn = async (email, password) => {
     try {
       const res = await signInWithEmailAndPassword(auth, email, password);
       setUser(res.user);
+      setIsNewUserCallback(false);
     } catch (error) {
       console.error("Email sign-in error:", error);
     }
@@ -100,13 +103,14 @@ export const useEmailSignIn = () => {
   return handleEmailSignIn;
 };
 
-export const useEmailSignUp = () => {
+export const useEmailSignUp = (setIsNewUserCallback) => {
   const { setUser } = useSearchContext();
 
   const handleEmailSignUp = async (email, password) => {
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
       setUser(res.user);
+      setIsNewUserCallback(true);
     } catch (error) {
       console.error("Email sign-up error:", error);
     }
