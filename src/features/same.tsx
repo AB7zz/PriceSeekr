@@ -12,7 +12,6 @@ const Same = ({ data }) => {
       if (!same && data!="none") {
         runSearchImage(data);
       }else if(JSON.stringify(same) === JSON.stringify(["Not found"])){
-        console.log("worked")
         setIsLoading(false);
         setnotfound(true);
       }else{

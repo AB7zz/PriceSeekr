@@ -38,8 +38,11 @@ function Main() {
     if (isNewUser && user) {
       console.log("page set to pref")
       setPage('/preferences');
+    }else if(!isNewUser && user){
+      console.log("page being set to similar")
+      setPage('/similar');
     }
-  }, [isNewUser]);
+  }, [isNewUser,user]);
   useEffect(() => {
     handleDetectChange();
   }, []);
@@ -55,15 +58,14 @@ function Main() {
   }, []);
 
   const renderContent = () => {
-    if (page === "/similiar") {
-      console.log("similar")
+    if (page === "/similar") {
+      console.log("page set to similar")
       return <Similiar data={pageData} />;
     } 
     else if (page === "/same") {
       return <Same data={pageData} />;
     }
     else if (page === "/preferences"){
-      console.log("pref")
       return <Preferences/>;
     }
   };
@@ -83,14 +85,13 @@ function Main() {
         ) : (
           <div>
             <TopBar />
+            {renderContent()}
             <button
               className="bg-red-500 hover:bg-red-600 text-white text-base rounded-lg py-2.5 px-5 transition-colors w-full mt-4"
               onClick={handleSignOut}
             >
               Sign Out
             </button>
-            <Navbar />
-            {renderContent()}
             <BotNav />
           </div>
         )
