@@ -15,6 +15,7 @@ interface SearchContextState {
     same: any[] | null;
     user: Partial<User> | null;
     pageData: any[] | null;
+    page: string | null;
 }
 
 interface SearchContextValue extends SearchContextState {
@@ -22,6 +23,7 @@ interface SearchContextValue extends SearchContextState {
     runSearchImage: (data: any) => void;
     getHTMLData: (data: any) => void;
     setUser: React.Dispatch<React.SetStateAction<any>>;
+    setPage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const MySearchContext = React.createContext<SearchContextValue>({
@@ -29,10 +31,12 @@ const MySearchContext = React.createContext<SearchContextValue>({
     runSearchImage: () => {},
     setUser: () => {},
     getHTMLData: () => {},
+    setPage: () => {},
     user: null,
     similiar: null,
     same: null,
-    pageData: null
+    pageData: null,
+    page: null
 });
 
 export const MySearchProvider = ({ children }) => {
@@ -41,6 +45,7 @@ export const MySearchProvider = ({ children }) => {
     const [same, setSame] = React.useState(null);
     const [country, setCountry] = React.useState(null)
     const [pageData, setPageData] = React.useState(null)
+    const [page, setPage] = React.useState(null);
     
     const searchTitle = async(title: string, country: string, currentPrice: any) => {
         let params = {
@@ -201,10 +206,12 @@ export const MySearchProvider = ({ children }) => {
             runSearchImage,
             setUser,
             getHTMLData,
+            setPage,
             user,
             similiar,
             same,
-            pageData
+            pageData,
+            page
         }}>
         {children}
         </MySearchContext.Provider>

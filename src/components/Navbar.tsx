@@ -1,7 +1,16 @@
 import React from 'react'
+import { useSearchContext } from '~context/SearchContext'
 
 
-const Navbar = ({setPage, page}) => {
+
+const Navbar = () => {
+    const {page, setPage} = useSearchContext()
+    const handlePageChange = (newPage) => {
+        if (newPage !== page) {
+          setPage(newPage);
+          console.log(page)
+        }
+      };
   return (
     <div className="bg-gray-100 h-[70px]">
         <div className='flex justify-between h-[100%] w-[100%]'>
@@ -19,7 +28,7 @@ const Navbar = ({setPage, page}) => {
                     <button className='m-auto text-center text-[#FFA800] text-xl font-bold'>Same</button>
                 </div>
             :
-                <div onClick={() => setPage('/same')} className='cursor-pointer h-[100%] w-[50%] flex'>
+                <div onClick={() => handlePageChange('/same')} className='cursor-pointer h-[100%] w-[50%] flex'>
                     <button className='m-auto text-yellow-500 text-xl font-bold'>Same</button>
                 </div>
             }
