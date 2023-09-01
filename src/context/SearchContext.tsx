@@ -51,10 +51,16 @@ export const MySearchProvider = ({ children }) => {
             engine: 'google_shopping',             
         }
         search.json(params, (data: any) => {
+            const preference = ["amazon", "ebay", "walmart", "bestbuy", "other"]
             const numericValue = parseFloat(currentPrice.replace(/[^0-9.]/g, ''));
             const itemsWithPrice = data["shopping_results"].filter(item => item.price && item.extracted_price <= numericValue)
             const sortedItems = itemsWithPrice.sort((a, b) => a.extracted_price - b.extracted_price)
-            setSimiliar(sortedItems)
+            const sortByPref = sortedItems.filter(prod => {
+                if(preference.some(p => prod.link.includes(p)) || preference.includes("other")){
+                    return prod
+                }
+            })
+            setSimiliar(sortByPref)
         })
     }
 
@@ -165,6 +171,16 @@ export const MySearchProvider = ({ children }) => {
                             image = document.querySelector('#landingImage')?.getAttribute('src') || document.querySelector("img.a-dynamic-image")?.getAttribute('src') || "";
                             price = document.querySelector('.a-offscreen')?.innerHTML || "";
                             return [productTitle.replace(/ {2,}/g, ''), image, price]
+                        } else if (url.includes('walmart')){
+                            productTitle = document.querySelector("#main-title")?.innerHTML || "";
+                            image = document.querySelector('[data-testid="hero-image-container"] img')?.getAttribute("src") || ""
+                            price = document.querySelector('[itemprop="price"]')?.innerHTML
+                            return [productTitle, image, price]
+                        } else if (url.includes('bestbuy')){
+                            productTitle = document.querySelector(".shop-product-title h1")?.innerHTML || ""
+                            image = document.querySelector(".primary-image")?.getAttribute("src") || ""
+                            price = document.querySelector('[data-testid="customer-price"] span')?.innerHTML || ""
+                            return [productTitle, image, price]
                         }
                     },
                     args: [tab.url]

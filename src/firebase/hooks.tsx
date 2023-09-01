@@ -38,34 +38,50 @@ export const useDetectChange = () => {
   return handleDetectChange;
 };
 
-export const useGoogleLogin = () => {
-  const { setUser, user } = useSearchContext();
 
-  const handleGoogleLogin = async () => {
+export const useGoogleLogin = () => {
+  const {setUser, user} = useSearchContext()
+  const handleGoogleLogin = async() => {
     if (user) {
       console.log("User is already logged in:", user);
+      setUser(user)
     } else {
       console.log("No user is currently logged in.");
-
       chrome.identity.getAuthToken({ interactive: true }, async function (token) {
         if (chrome.runtime.lastError || !token) {
-          console.error(chrome.runtime.lastError);
-          return;
+          console.error('Chrome error: ', chrome.runtime.lastError)
+          return
         }
         if (token) {
-          const credential = new GoogleAuthProvider();
-          try {
-            const res = await signInWithPopup(auth, credential);
-            setUser(res.user);
-          } catch (e) {
-            console.error("Could not log in. ", e);
-          }
+          chrome.identity.removeCachedAuthToken({token:token},function(){
+            console.log('R',token)
+          });
+          chrome.identity.clearAllCachedAuthTokens(() => {
+            console.log('C')
+          });
+          chrome.identity.getAuthToken({ interactive: true }, async function (token2) {
+            if (chrome.runtime.lastError || !token2) {
+              console.error('Chrome error: ', chrome.runtime.lastError)
+              return
+            }
+            if (token2) {
+              console.log('G',token2)
+              const credential = GoogleAuthProvider.credential(null, token2)
+              try {
+                const res = await signInWithCredential(auth, credential)
+                setUser(res.user)
+                console.log(res.user)
+              } catch (e) {
+                console.error("Could not log in. ", e)
+              }
+            }
+          })
         }
-      });
+      })
     }
-  };
+  }
 
-  return handleGoogleLogin;
+  return handleGoogleLogin
 };
 
 export const useEmailSignIn = () => {

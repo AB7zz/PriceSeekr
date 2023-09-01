@@ -49,7 +49,7 @@
     },
     "host_permissions": [
       "https://*/*",
-      "apis.google.com/*"
+      "https://apis.google.com/*"
     ],
     "permissions": [
       "browsingData",
@@ -60,6 +60,10 @@
       "scripting",
       "storage",
       "identity"
-    ]
+    ],
+    "content_security_policy": {
+      "extension_pages": "script-src 'self' 'wasm-unsafe-eval'",
+      "sandbox": "sandbox allow-scripts; script-src 'self' 'https://apis.google.com/' 'https://www.gstatic.com/' 'https://*.firebaseio.com' 'https://www.googleapis.com' 'https://securetoken.googleapis.com'; object-src 'self'"
+    }
   }
 }
