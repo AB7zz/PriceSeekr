@@ -1,6 +1,7 @@
 import {
   onAuthStateChanged,
   GoogleAuthProvider,
+  signInWithCredential,
   signInWithPopup,
   signOut,
   createUserWithEmailAndPassword,
