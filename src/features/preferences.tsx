@@ -1,9 +1,12 @@
 import React from 'react';
+import { database } from '~firebase';
+import { ref, set } from 'firebase/database';
 import amazonImage from 'data-base64:~assets/amazon.png';
 import bestbuyImage from 'data-base64:~assets/bestbuy.png';
 import craigsImage from 'data-base64:~assets/craigs.png';
 import ebayImage from 'data-base64:~assets/ebay.png';
 import targetImage from 'data-base64:~assets/target.png';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import walmartImage from 'data-base64:~assets/walmart.webp';
 
 const Preferences: React.FC = () => {
@@ -18,7 +21,37 @@ const Preferences: React.FC = () => {
   ];
 
   const handleContinue = () => {
-    // Add your logic for continuing here
+    // Get the current authenticated user
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const userEmail = user.email; 
+    if (user) {
+      // Use the User ID as the key in the database
+      const userId = user.uid; // This is the Firebase Authentication User ID
+      const db = database;
+  
+      // Sample preferences and theme data (replace with actual data)
+      const preferences = {
+        Amazon: true,
+        Ebay: true,
+        Walmart: true
+      };
+  
+      // Sample history data (replace with actual data)
+      const history = [
+        'https://www.amazon.com/product1',
+        'https://www.ebay.com/product2',
+        'https://www.walmart.com/product3'
+      ];
+  
+      // Write user data to the database using the User ID as the key
+      set(ref(db, 'Users/' + userId), {
+        Theme: true, // Change this to a boolean value
+        Preferences: preferences,
+        History: history,
+        Email: userEmail
+      });
+    }
   };
 
   return (
@@ -34,7 +67,7 @@ const Preferences: React.FC = () => {
         ))}
       </div>
       <div className="flex justify-center mt-6">
-      <button className="bg-[#FF9C1A] text-white text-base rounded-lg py-2 px-4 transition-colors" onClick={handleContinue}>
+        <button className="bg-[#FF9C1A] text-white text-base rounded-lg py-2 px-4 transition-colors" onClick={handleContinue}>
           Continue
         </button>
       </div>

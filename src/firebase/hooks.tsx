@@ -19,7 +19,6 @@ export const useSignOut = () => {
         console.log('Cache cleared.');
       });
       await signOut(auth);
-      localStorage.clear();
       setUser(null);
     } catch (error) {
       console.error("Sign out error:", error);

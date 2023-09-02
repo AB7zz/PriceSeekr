@@ -31,7 +31,7 @@ function Main() {
   const handleEmailSignIn = useEmailSignIn(setIsNewUser, setError);
   const handleEmailSignUp = useEmailSignUp(setIsNewUser, setError);
   const handleGoogleLogin = useGoogleLogin(setIsNewUser, setError);
-
+ 
   const handleDetectChange = useDetectChange();
   const [showLoginForm, setShowLoginForm] = useState(true);
   const { user, getHTMLData, pageData, page, setPage } = useSearchContext();
@@ -72,6 +72,7 @@ function Main() {
       return <Preferences/>;
     }
   };
+
 
   const toggleLoginMode = () => {
     setShowLoginForm(!showLoginForm);
