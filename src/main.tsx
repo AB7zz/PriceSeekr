@@ -3,7 +3,7 @@ import "~base.css";
 import "~style.css";
 import Similiar from "~features/similiar";
 import Same from "~features/same";
-import Preferences from '~features/preferences';
+import Preferences from '~components/preferences';
 import Navbar from "~components/Navbar";
 import TopBar from "~components/TopBar";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -171,7 +171,7 @@ function Main() {
                 className="my-2 text-black font-semibold cursor-pointer"
                 onClick={toggleLoginMode}
               >
-              Don't have an account? <span className="text-blue-500">Log in</span>
+              Already have an account? <span className="text-blue-500">Log in</span>
             </p>
             <div className="flex justify-center">
               <button
