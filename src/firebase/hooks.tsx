@@ -2,12 +2,10 @@ import {
   onAuthStateChanged,
   GoogleAuthProvider,
   signInWithCredential,
-  signInWithPopup,
   signOut,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import React from "react";
 import { useSearchContext } from "~context/SearchContext";
 import { auth } from "~firebase";
 
