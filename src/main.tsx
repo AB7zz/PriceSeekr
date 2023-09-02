@@ -6,7 +6,6 @@ import Same from "~features/same";
 import Preferences from '~components/preferences';
 import Navbar from "~components/Navbar";
 import TopBar from "~components/TopBar";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import GoogleIcon from '@mui/icons-material/Google';
 import { useSearchContext } from "~context/SearchContext";
 import {
