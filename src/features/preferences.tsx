@@ -1,16 +1,22 @@
-import React from 'react';
-import { database } from '~firebase';
-import { ref, set } from 'firebase/database';
+import React, { useState } from 'react';
 import amazonImage from 'data-base64:~assets/amazon.png';
 import bestbuyImage from 'data-base64:~assets/bestbuy.png';
 import craigsImage from 'data-base64:~assets/craigs.png';
 import ebayImage from 'data-base64:~assets/ebay.png';
 import targetImage from 'data-base64:~assets/target.png';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { writeToDB } from '~firebase/writetoDB';
 import walmartImage from 'data-base64:~assets/walmart.webp';
 
+const initialPreferences = {
+  Amazon: true,
+  bestbuy: true,
+  craigs: true,
+  Ebay: true,
+  target:true,
+  Walmart: true
+};
+
 const Preferences: React.FC = () => {
-  // Sample image URLs, you should replace these with your image URLs
   const imageUrls = [
     amazonImage,
     bestbuyImage,
@@ -20,38 +26,18 @@ const Preferences: React.FC = () => {
     walmartImage
   ];
 
+  const [preferences, setPreferences] = useState(initialPreferences);
+
+  const toggleOption = (optionName) => {
+    setPreferences((prevPreferences) => ({
+      ...prevPreferences,
+      [optionName]: !prevPreferences[optionName]
+    }));
+  };
+
   const handleContinue = () => {
-    // Get the current authenticated user
-    const auth = getAuth();
-    const user = auth.currentUser;
-    const userEmail = user.email; 
-    if (user) {
-      // Use the User ID as the key in the database
-      const userId = user.uid; // This is the Firebase Authentication User ID
-      const db = database;
-  
-      // Sample preferences and theme data (replace with actual data)
-      const preferences = {
-        Amazon: true,
-        Ebay: true,
-        Walmart: true
-      };
-  
-      // Sample history data (replace with actual data)
-      const history = [
-        'https://www.amazon.com/product1',
-        'https://www.ebay.com/product2',
-        'https://www.walmart.com/product3'
-      ];
-  
-      // Write user data to the database using the User ID as the key
-      set(ref(db, 'Users/' + userId), {
-        Theme: true, // Change this to a boolean value
-        Preferences: preferences,
-        History: history,
-        Email: userEmail
-      });
-    }
+    const selectedOptions = Object.keys(preferences).filter((option) => preferences[option]);
+    writeToDB(selectedOptions);
   };
 
   return (
@@ -60,9 +46,9 @@ const Preferences: React.FC = () => {
         <p className="text-m mb-4">Pick where you love to shop for better deals!</p>
       </div>
       <div className="grid grid-cols-2 gap-4">
-        {imageUrls.map((imageUrl, index) => (
-          <div key={index} className="bg-[#EFEFEF] rounded-lg w-100 h-20">
-            <img src={imageUrl} alt={`Image ${index}`} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+        {Object.keys(initialPreferences).map((optionName, index) => (
+          <div key={index}         className={`rounded-lg w-100 h-20 ${preferences[optionName] ? 'border-2 border-[#FF9C1A]' : 'border border-[#EFEFEF]'} cursor-pointer`} onClick={() => toggleOption(optionName)}>
+            <img src={imageUrls[index]} alt={`Image ${index}`} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
           </div>
         ))}
       </div>
