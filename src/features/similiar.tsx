@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchContext } from '~context/SearchContext'
-import Loader from './loader';
+import Loader from '../components/loader';
 const Similiar = ({data}) => {
   const {runSearchSimiliar, similiar} = useSearchContext()
   const [isLoading, setIsLoading] = useState(true);

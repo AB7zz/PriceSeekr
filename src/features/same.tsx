@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchContext } from '~context/SearchContext';
-import Loader from './loader';
+import Loader from '../components/loader';
 
 const Same = ({ data }) => {
   const { runSearchImage, same } = useSearchContext();
@@ -12,7 +12,6 @@ const Same = ({ data }) => {
       if (!same && data!="none") {
         runSearchImage(data);
       }else if(JSON.stringify(same) === JSON.stringify(["Not found"])){
-        console.log("worked")
         setIsLoading(false);
         setnotfound(true);
       }else{
