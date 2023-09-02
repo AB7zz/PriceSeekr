@@ -151,7 +151,7 @@ function Main() {
         </>
       ) : (
         <>
-        <div className="px-2 py-5 w-[360px] flex flex-col justify-center items-center">
+        <div className="px-2 mt-5 py-5 w-[360px] flex flex-col justify-center items-center">
           <form className="px-10">
             <input
               type="text"
