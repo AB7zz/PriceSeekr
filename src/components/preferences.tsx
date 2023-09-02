@@ -4,7 +4,7 @@ import bestbuyImage from 'data-base64:~assets/bestbuy.png';
 import craigsImage from 'data-base64:~assets/craigs.png';
 import ebayImage from 'data-base64:~assets/ebay.png';
 import targetImage from 'data-base64:~assets/target.png';
-import { writeToDB } from '~firebase/writetoDB';
+import { writeToDB } from '~firebase/hooks';
 import walmartImage from 'data-base64:~assets/walmart.webp';
 
 const initialPreferences = {
