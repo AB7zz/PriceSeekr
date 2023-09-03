@@ -3,10 +3,10 @@ import "~base.css";
 import "~style.css";
 import Similiar from "~features/similiar";
 import Same from "~features/same";
-import Preferences from '~features/preferences';
+import Preferences from '~components/preferences';
 import Navbar from "~components/Navbar";
 import TopBar from "~components/TopBar";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import GoogleIcon from '@mui/icons-material/Google';
 import { useSearchContext } from "~context/SearchContext";
 import {
   useSignOut,
@@ -38,10 +38,8 @@ function Main() {
 
   React.useEffect(() => {
     if (isNewUser && user) {
-      console.log("page set to pref")
       setPage('/preferences');
     } else if (!isNewUser && user) {
-      console.log("page being set to similar")
       setPage('/similar');
     }
   }, [isNewUser, user]);
@@ -54,7 +52,6 @@ function Main() {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const currentTab = tabs[0];
       if (currentTab) {
-        console.log("Popup clicked - Tab", currentTab);
         getHTMLData(currentTab);
       }
     });
@@ -62,7 +59,6 @@ function Main() {
 
   const renderContent = () => {
     if (page === "/similar") {
-      console.log("page set to similar")
       return <Similiar data={pageData} />;
     } 
     else if (page === "/same") {
@@ -81,15 +77,14 @@ function Main() {
 
   return (
     <>
+      <TopBar />
       {user ? (
         isNewUser ? (
           <>
-            <TopBar />
             {renderContent()}
           </>
         ) : (
           <div>
-            <TopBar />
             {renderContent()}
             <button
               className="bg-red-500 hover:bg-red-600 text-white text-base rounded-lg py-2.5 px-5 transition-colors w-full mt-4"
@@ -101,87 +96,111 @@ function Main() {
           </div>
         )
       ) : showLoginForm ? (
-        <div className="px-2 py-5 w-[360px] flex flex-col justify-center items-center">
-          <form>
+        <>
+        <div className="px-2 mt-5 py-5 w-[360px] flex flex-col justify-center items-center">
+          <form className="block px-10">
             <input
               type="text"
-              className="w-full px-6 py-3 mb-2 border border-slate-600 rounded-lg font-medium"
+              className="!border-none bg-[#D9D9D9] text-[#989898] font-medium poppins w-full px-5 py-3 border border-slate-600 rounded-lg"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
             <input
               type="password"
-              className="w-full px-6 py-3 mb-2 border border-slate-600 rounded-lg font-medium"
+              className="!border-none bg-[#D9D9D9] text-[#989898] font-medium poppins w-full px-5 py-3 mt-5 border border-slate-600 rounded-lg"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <button
-              type="button"
-              className="bg-slate-500 hover:bg-slate-700 text-white text-base rounded-lg py-2.5 px-5 transition-colors w-full text-[19px]"
-              onClick={() => handleEmailSignIn(email, password)}
+            <p
+              className="my-2 text-black font-semibold cursor-pointer"
+              onClick={toggleLoginMode}
             >
-              Log In
-            </button>
+              Don't have an account? <span className="text-blue-500">Sign up</span>
+            </p>
+            <div className="flex justify-center">
+              <button
+                type="button"
+                className="mt-5 bg-[#FF9C1A] hover:bg-[#E38A16] text-white text-base rounded-[5px] py-2 px-10 text-[19px]"
+                onClick={() => handleEmailSignIn(email, password)}
+              >
+                Log In
+              </button>
+            </div>
           </form>
-          <span
-            className="mb-2 text-gray-900 cursor-pointer"
-            onClick={toggleLoginMode}
-          >
-            Don't have an account? Sign up
-          </span>
-          <button
-            className="bg-yellow-500 hover:bg-yellow-600 px-2 py-2 rounded-[15px] text-white mt-4"
-            onClick={handleGoogleLogin}
-          >
-            <span className="text-gray-700 font-medium">
-              Continue with Google
-            </span>
-          </button>
-          <p className="text-red-500 mt-2">{error}</p> {/* Display error message */}
         </div>
+        <div className="px-5">
+          <div className="flex justify-around items-center">
+            <hr className="border-[#C5C5C5] border-t-2 w-[100px]" />
+            <span className="text-lg text-[#A4A4A4] poppins">OR</span>
+            <hr className="border-[#C5C5C5] border-t-2 w-[100px]" />
+          </div>
+          <div className="flex justify-center py-5">
+            <button
+              className="bg-[#CF4332] hover:bg-[#AB3324] px-7 py-2 rounded-[5px] text-white font-semibold"
+              onClick={handleGoogleLogin}
+            >
+              <GoogleIcon className="text-white mr-3" />
+              Continue with Google
+            </button>
+            <p className="text-red-500 mt-2">{error}</p> {/* Display error message */}
+          </div>
+        </div>
+        </>
       ) : (
-        <div className="px-2 py-5 w-[360px] flex flex-col justify-center items-center">
-          <form>
+        <>
+        <div className="px-2 mt-5 py-5 w-[360px] flex flex-col justify-center items-center">
+          <form className="px-10">
             <input
               type="text"
-              className="w-full px-6 py-3 mb-2 border border-slate-600 rounded-lg font-medium"
+              className="!border-none bg-[#D9D9D9] text-[#989898] font-medium poppins w-full px-5 py-3 border border-slate-600 rounded-lg"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
             <input
               type="password"
-              className="w-full px-6 py-3 mb-2 border border-slate-600 rounded-lg font-medium"
+              className="!border-none bg-[#D9D9D9] text-[#989898] font-medium poppins w-full px-5 py-3 mt-5 border border-slate-600 rounded-lg"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <button
-              type="button"
-              className="bg-slate-500 hover:bg-slate-700 text-white text-base rounded-lg py-2.5 px-5 transition-colors w-full text-[19px]"
-              onClick={() => handleEmailSignUp(email, password)}
-            >
-              Sign up
-            </button>
+            <p
+                className="my-2 text-black font-semibold cursor-pointer"
+                onClick={toggleLoginMode}
+              >
+              Already have an account? <span className="text-blue-500">Log in</span>
+            </p>
+            <div className="flex justify-center">
+              <button
+                type="button"
+                className="mt-5 bg-[#FF9C1A] hover:bg-[#E38A16] text-white text-base rounded-[5px] py-2 px-10 text-[19px]"
+                onClick={() => handleEmailSignUp(email, password)}
+              >
+                Sign up
+              </button>
+            </div>
           </form>
-          <span
-            className="mb-2 text-gray-900 cursor-pointer"
-            onClick={toggleLoginMode}
-          >
-            Already have an account? Log in
-          </span>
-          <button
-            className="bg-yellow-500 hover:bg-yellow-600 px-2 py-2 rounded-[15px] text-white mt-4"
-            onClick={handleGoogleLogin}
-          >
-            <span className="text-gray-700 font-medium">
-              Continue with Google
-            </span>
-          </button>
-          <p className="text-red-500 mt-2">{error}</p> {/* Display error message */}
         </div>
+        <div className="px-5">
+          <div className="flex justify-around items-center">
+            <hr className="border-[#C5C5C5] border-t-2 w-[100px]" />
+            <span className="text-lg text-[#A4A4A4] poppins">OR</span>
+            <hr className="border-[#C5C5C5] border-t-2 w-[100px]" />
+          </div>
+          <div className="flex justify-center py-5">
+            <button
+              className="bg-[#CF4332] hover:bg-[#AB3324] px-7 py-2 rounded-[5px] text-white font-semibold"
+              onClick={handleGoogleLogin}
+            >
+              <GoogleIcon className="text-white mr-3" />
+              Continue with Google
+            </button>
+            <p className="text-red-500 mt-2">{error}</p> {/* Display error message */}
+          </div>
+        </div>
+        </>
       )}
     </>
   );

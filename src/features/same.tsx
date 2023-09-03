@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchContext } from '~context/SearchContext';
-import Loader from './loader';
+import Loader from '../components/loader';
 
 const Same = ({ data }) => {
   const { runSearchImage, same } = useSearchContext();

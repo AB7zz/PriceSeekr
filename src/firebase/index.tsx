@@ -2,7 +2,7 @@ import {
     getAuth
 } from "firebase/auth";
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set } from "firebase/database";
+import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
     apiKey: process.env.PLASMO_PUBLIC_FIREBASE_PUBLIC_API_KEY,
