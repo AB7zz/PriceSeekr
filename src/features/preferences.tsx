@@ -47,7 +47,7 @@ const Preferences: React.FC = () => {
       </div>
       <div className="grid grid-cols-2 gap-4">
         {Object.keys(initialPreferences).map((optionName, index) => (
-          <div key={index}         className={`rounded-lg w-100 h-20 ${preferences[optionName] ? 'border-2 border-[#FF9C1A]' : 'border border-[#EFEFEF]'} cursor-pointer`} onClick={() => toggleOption(optionName)}>
+          <div key={index}  className={`rounded-lg w-100 h-20 ${preferences[optionName] ? 'border-2 border-[black]' : 'border border-[#EFEFEF]'} cursor-pointer`} onClick={() => toggleOption(optionName)}>
             <img src={imageUrls[index]} alt={`Image ${index}`} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
           </div>
         ))}
