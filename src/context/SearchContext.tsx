@@ -16,6 +16,7 @@ interface SearchContextState {
     user: Partial<User> | null;
     pageData: any[] | null;
     page: string | null;
+    trigger: boolean | null;
 }
 
 interface SearchContextValue extends SearchContextState {
@@ -36,7 +37,8 @@ const MySearchContext = React.createContext<SearchContextValue>({
     similiar: null,
     same: null,
     pageData: null,
-    page: null
+    page: null,
+    trigger: false
 });
 
 export const MySearchProvider = ({ children }) => {
@@ -46,6 +48,7 @@ export const MySearchProvider = ({ children }) => {
     const [country, setCountry] = React.useState(null)
     const [pageData, setPageData] = React.useState(null)
     const [page, setPage] = React.useState(null);
+    const [trigger, setTrigger] = React.useState(false)
     
     const searchTitle = async(title: string, country: string, currentPrice: any) => {
         let params = {
@@ -191,6 +194,9 @@ export const MySearchProvider = ({ children }) => {
                     args: [tab.url]
                 });
                 const data = result.result;
+                if(data){
+                    setTrigger(true)
+                }
                 console.log("your data: ",data)
                 chrome.storage.local.set({ 'data': data })
                 setPageData(data || 'none')
@@ -211,7 +217,8 @@ export const MySearchProvider = ({ children }) => {
             similiar,
             same,
             pageData,
-            page
+            page,
+            trigger
         }}>
         {children}
         </MySearchContext.Provider>

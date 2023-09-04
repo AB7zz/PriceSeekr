@@ -8,6 +8,7 @@ import Navbar from "~components/Navbar";
 import TopBar from "~components/TopBar";
 import GoogleIcon from '@mui/icons-material/Google';
 import { useSearchContext } from "~context/SearchContext";
+import Choose from "~components/Choose";
 import {
   useSignOut,
   useGoogleLogin,
@@ -40,7 +41,7 @@ function Main() {
     if (isNewUser && user) {
       setPage('/preferences');
     } else if (!isNewUser && user) {
-      setPage('/similar');
+      setPage('/choose');
     }
   }, [isNewUser, user]);
   
@@ -67,6 +68,9 @@ function Main() {
     else if (page === "/preferences"){
       return <Preferences/>;
     }
+    else if (page === "/choose"){
+      return <Choose />
+    }
   };
 
 
@@ -76,7 +80,7 @@ function Main() {
   };
 
   return (
-    <>
+    <div className="w-[360px]">
       <TopBar />
       {user ? (
         isNewUser ? (
@@ -202,7 +206,7 @@ function Main() {
         </div>
         </>
       )}
-    </>
+    </div>
   );
 }
 
