@@ -32,22 +32,17 @@ export const config: PlasmoCSConfig = {
 
 const CustomButton = () => {
   const {getHTMLData, trigger, pageData} = useSearchContext()
-  const [inf, setInf] = React.useState(false)
   const handleMessage = (message, sender, sendResponse) => {
-    if (message.action === 'amazon_opened') {
-      console.log('Message received in content.jsx:', message);
-    }
+    console.log('Message received in content.jsx:', message);
+    sendResponse({message: "Response from content.jsx"})
   }
   React.useEffect(() => {
+    console.log('content is loaded')
     chrome.runtime.onMessage.addListener(handleMessage)
-    setInf(inf => !inf)
     return () => {
       chrome.runtime.onMessage.removeListener(handleMessage);
     };
-  }, [inf])
-  React.useEffect(() => {
-    console.log('PAGE DATAAAA', pageData, trigger)
-  }, [pageData, trigger])
+  }, [])
     return (
       <MySearchProvider>
         {trigger && <div style={{backgroundColor: "white", borderRadius: "50%", padding: "0 5px 0 5px"}}>
