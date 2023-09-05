@@ -21,10 +21,7 @@ import BotNav from "~components/BotNav";
 function Main() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isNewUser, setIsNewUser] = useState(
-    // Check if 'isNewUser' is set in localStorage and parse it as a boolean
-    localStorage.getItem("isNewUser") === "true"
-  );
+  const [isNewUser, setIsNewUser] = useState(false);
 
   const [error, setError] = useState(""); // Error state for login/signup
 
@@ -57,7 +54,10 @@ function Main() {
       }
     });
   }, []);
-
+  
+  const setIsNewUserToFalse = () => {
+    setIsNewUser(false);
+  };
   const renderContent = () => {
     if (page === "/similar") {
       return <Similiar data={pageData} />;
@@ -66,7 +66,7 @@ function Main() {
       return <Same data={pageData} />;
     }
     else if (page === "/preferences"){
-      return <Preferences/>;
+      return <Preferences setIsNewUserToFalse={setIsNewUserToFalse}/>;
     }
     else if (page === "/choose"){
       return <Choose />

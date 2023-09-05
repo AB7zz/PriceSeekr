@@ -7,16 +7,11 @@ import targetImage from 'data-base64:~assets/target.png';
 import { writeToDB } from '~firebase/hooks';
 import walmartImage from 'data-base64:~assets/walmart.webp';
 
-const initialPreferences = {
-  Amazon: true,
-  bestbuy: true,
-  craigs: true,
-  Ebay: true,
-  target:true,
-  Walmart: true
-};
+interface PreferencesProps {
+  setIsNewUserToFalse: () => void;
+}
 
-const Preferences: React.FC = () => {
+const Preferences: React.FC<PreferencesProps> = ({ setIsNewUserToFalse }) => {
   const imageUrls = [
     amazonImage,
     bestbuyImage,
@@ -26,9 +21,17 @@ const Preferences: React.FC = () => {
     walmartImage
   ];
 
+  const initialPreferences = {
+    Amazon: true,
+    bestbuy: true,
+    craigs: true,
+    Ebay: true,
+    target: true,
+    Walmart: true
+  };
   const [preferences, setPreferences] = useState(initialPreferences);
 
-  const toggleOption = (optionName) => {
+  const toggleOption = (optionName: string) => {
     setPreferences((prevPreferences) => ({
       ...prevPreferences,
       [optionName]: !prevPreferences[optionName]
@@ -38,6 +41,9 @@ const Preferences: React.FC = () => {
   const handleContinue = () => {
     const selectedOptions = Object.keys(preferences).filter((option) => preferences[option]);
     writeToDB(selectedOptions);
+    
+    // Call the callback function to set isNewUser to false in Main
+    setIsNewUserToFalse();
   };
 
   return (
@@ -49,7 +55,7 @@ const Preferences: React.FC = () => {
         {Object.keys(initialPreferences).map((optionName, index) => (
           <div key={index} className={`rounded-lg w-[100%] h-[60px] px-3 items-center bg-[#EFEFEF] flex ${preferences[optionName] ? 'border-2 border-[#FF9C1A]' : 'border-none'} cursor-pointer`} onClick={() => toggleOption(optionName)}>
             <img src={imageUrls[index]} alt={`Image ${index}`} className='w-[35px] mr-3' style={{ objectFit: 'contain' }} />
-            <p className='text-[#393939] poppins font-semibold textlg text-center'>{optionName}</p>
+            <p className='text-[#393939] poppins font-semibold text-lg text-center'>{optionName}</p>
           </div>
         ))}
       </div>

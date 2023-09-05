@@ -111,8 +111,8 @@ export const useEmailSignUp = (setIsNewUserCallback, setErrorCallback) => {
   const handleEmailSignUp = async (email, password) => {
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
-      setUser(res.user);
       setIsNewUserCallback(true);
+      setUser(res.user);
     } catch (error) {
       setErrorCallback(error.code);
     }
