@@ -35,12 +35,13 @@ function Main() {
   const { user, getHTMLData, pageData, page, setPage } = useSearchContext();
 
   React.useEffect(() => {
-    if (isNewUser && user) {
-      setPage('/preferences');
-    } else if (!isNewUser && user) {
+    console.log(user, isNewUser)
+    if (user && !isNewUser) {
       setPage('/choose');
+    }else if(user && isNewUser){
+      setPage('/preferences')
     }
-  }, [isNewUser, user]);
+  }, [user]);
   
   useEffect(() => {
     handleDetectChange();
@@ -82,7 +83,7 @@ function Main() {
   return (
     <div className="w-[360px]">
       <TopBar />
-      {user ? (
+      {user != null ? (
         isNewUser ? (
           <>
             {renderContent()}

@@ -39,12 +39,13 @@ export const useDetectChange = () => {
 };
 
 export const useGoogleLogin = (setIsNewUserCallback, setErrorCallback) => {
-  const { setUser, user } = useSearchContext();
+  const { setUser, user, setPage } = useSearchContext();
 
   const handleGoogleLogin = async () => {
     if (user) {
       console.log("User is already logged in:", user);
       setUser(user);
+      setPage('/choose')
     } else {
       console.log("No user is currently logged in.");
       chrome.identity.getAuthToken({ interactive: true }, async function (token) {
@@ -73,6 +74,7 @@ export const useGoogleLogin = (setIsNewUserCallback, setErrorCallback) => {
                 const res = await signInWithCredential(auth, credential);
                 setUser(res.user);
                 setIsNewUserCallback(false);
+                setPage('/choose')
                 console.log(res.user);
               } catch (e) {
                 // console.error("Could not log in. ", e);
@@ -89,15 +91,15 @@ export const useGoogleLogin = (setIsNewUserCallback, setErrorCallback) => {
 };
 
 export const useEmailSignIn = (setIsNewUserCallback, setErrorCallback) => {
-  const { setUser } = useSearchContext();
+  const { setUser, setPage } = useSearchContext();
 
   const handleEmailSignIn = async (email, password) => {
     try {
       const res = await signInWithEmailAndPassword(auth, email, password);
       setUser(res.user);
       setIsNewUserCallback(false);
+      setPage('/choose')
     } catch (error) {
-      // console.error("Email sign-in error:", error);
       setErrorCallback(error.code);
     }
   };
@@ -106,13 +108,14 @@ export const useEmailSignIn = (setIsNewUserCallback, setErrorCallback) => {
 };
 
 export const useEmailSignUp = (setIsNewUserCallback, setErrorCallback) => {
-  const { setUser } = useSearchContext();
+  const { setUser, setPage } = useSearchContext();
 
   const handleEmailSignUp = async (email, password) => {
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
       setIsNewUserCallback(true);
       setUser(res.user);
+      setPage('/preferences')
     } catch (error) {
       setErrorCallback(error.code);
     }
@@ -121,25 +124,31 @@ export const useEmailSignUp = (setIsNewUserCallback, setErrorCallback) => {
   return handleEmailSignUp;
 };
 
-export const writeToDB = (preferences) => {
+export const useWriteToDB = () => {
   const user = auth.currentUser;
   const userEmail = user.email; 
-  if (user) 
-  {
-      const userId = user.uid; // This is the Firebase Authentication User ID
-      const db = database;
-      const history = [
-          'https://www.amazon.com/product1',
-          'https://www.ebay.com/product2',
-          'https://www.walmart.com/product3'
-      ];
-
-      // Write user data to the database using the User ID as the key
-      set(ref(db, 'Users/' + userId), {
-          Theme: true, // Change this to a boolean value
-          Preferences: preferences,
-          History: history,
-          Email: userEmail
-      });
+  const {setPage} = useSearchContext()
+  const writeToDB = (preferences) => {
+    if (user) 
+    {
+        const userId = user.uid; // This is the Firebase Authentication User ID
+        const db = database;
+        const history = [
+            'https://www.amazon.com/product1',
+            'https://www.ebay.com/product2',
+            'https://www.walmart.com/product3'
+        ];
+  
+        // Write user data to the database using the User ID as the key
+        set(ref(db, 'Users/' + userId), {
+            Theme: true, // Change this to a boolean value
+            Preferences: preferences,
+            History: history,
+            Email: userEmail
+        });
+  
+        setPage('/choose')
+    }
   }
+  return writeToDB
 }
