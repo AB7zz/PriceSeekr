@@ -15,8 +15,10 @@ import {
   useDetectChange,
   useEmailSignUp,
   useEmailSignIn,
+  useReadDB,
 } from "~firebase/hooks";
 import BotNav from "~components/BotNav";
+import { use } from "chai";
 
 function Main() {
   const [email, setEmail] = useState("");
@@ -29,6 +31,7 @@ function Main() {
   const handleEmailSignIn = useEmailSignIn(setIsNewUser, setError);
   const handleEmailSignUp = useEmailSignUp(setIsNewUser, setError);
   const handleGoogleLogin = useGoogleLogin(setIsNewUser, setError);
+  const readFromDB = useReadDB()
  
   const handleDetectChange = useDetectChange();
   const [showLoginForm, setShowLoginForm] = useState(true);
@@ -37,6 +40,7 @@ function Main() {
   React.useEffect(() => {
     console.log(user, isNewUser)
     if (user && !isNewUser) {
+      readFromDB(user.uid)
       setPage('/choose');
     }else if(user && isNewUser){
       setPage('/preferences')

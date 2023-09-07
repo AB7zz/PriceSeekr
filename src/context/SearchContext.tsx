@@ -8,6 +8,7 @@ import axios from 'axios'
 
 interface User {
     displayName: string;
+    uid: string;
 }
 
 interface SearchContextState {
@@ -17,6 +18,8 @@ interface SearchContextState {
     pageData: any[] | null;
     page: string | null;
     trigger: boolean | null;
+    preferences: any[] | null;
+    userData: any[] | null;
 }
 
 interface SearchContextValue extends SearchContextState {
@@ -25,6 +28,8 @@ interface SearchContextValue extends SearchContextState {
     getHTMLData: (data: any) => void;
     setUser: React.Dispatch<React.SetStateAction<any>>;
     setPage: React.Dispatch<React.SetStateAction<string>>;
+    setPreferences: React.Dispatch<React.SetStateAction<string>>;
+    setUserData: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const MySearchContext = React.createContext<SearchContextValue>({
@@ -33,12 +38,16 @@ const MySearchContext = React.createContext<SearchContextValue>({
     setUser: () => {},
     getHTMLData: () => {},
     setPage: () => {},
+    setPreferences: () => {},
+    setUserData: () => {},
     user: null,
     similiar: null,
     same: null,
     pageData: null,
     page: null,
-    trigger: false
+    trigger: false,
+    preferences: null,
+    userData: null
 });
 
 export const MySearchProvider = ({ children }) => {
@@ -49,6 +58,8 @@ export const MySearchProvider = ({ children }) => {
     const [pageData, setPageData] = React.useState(null)
     const [page, setPage] = React.useState(null);
     const [trigger, setTrigger] = React.useState(false)
+    const [preferences, setPreferences] = React.useState(null)
+    const [userData, setUserData] = React.useState(null)
     
     const searchTitle = async(title: string, country: string, currentPrice: any) => {
         let params = {
@@ -213,12 +224,16 @@ export const MySearchProvider = ({ children }) => {
             setUser,
             getHTMLData,
             setPage,
+            setPreferences,
+            setUserData,
             user,
             similiar,
             same,
             pageData,
             page,
-            trigger
+            trigger,
+            preferences,
+            userData
         }}>
         {children}
         </MySearchContext.Provider>

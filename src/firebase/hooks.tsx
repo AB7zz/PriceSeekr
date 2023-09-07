@@ -8,7 +8,7 @@ import {
 } from "firebase/auth";
 import { useSearchContext } from "~context/SearchContext";
 import { auth, database } from "~firebase";
-import { ref, set } from 'firebase/database';
+import { ref, set, get } from 'firebase/database';
 
 export const useSignOut = () => {
   const { setUser } = useSearchContext();
@@ -151,4 +151,24 @@ export const useWriteToDB = () => {
     }
   }
   return writeToDB
+}
+
+export const useReadDB = () => {
+  const {setPreferences, setUserData} = useSearchContext()
+  const readFromDB = (userId) => {
+    const db = database;
+    const dbRef = ref(db, 'Users/' + userId);
+    get(dbRef).then((snapshot) => {
+      if (snapshot.exists()) {
+        console.log(snapshot.val());
+        setUserData(snapshot.val())
+        setPreferences(snapshot.val().Preferences)
+      } else {
+        console.log("No data available");
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+  }
+  return readFromDB
 }
