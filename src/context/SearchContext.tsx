@@ -70,12 +70,11 @@ export const MySearchProvider = ({ children }) => {
             engine: 'google_shopping',             
         }
         search.json(params, (data: any) => {
-            const preference = ["amazon", "ebay", "walmart", "bestbuy", "other"]
             const numericValue = parseFloat(currentPrice.replace(/[^0-9.]/g, ''));
             const itemsWithPrice = data["shopping_results"].filter(item => item.price && item.extracted_price <= numericValue)
             const sortedItems = itemsWithPrice.sort((a, b) => a.extracted_price - b.extracted_price)
             const sortByPref = sortedItems.filter(prod => {
-                if(preference.some(p => prod.link.includes(p)) || preference.includes("other")){
+                if(preferences.some(p => prod.link.includes(p)) || preferences.includes("other")){
                     return prod
                 }
             })
@@ -165,7 +164,12 @@ export const MySearchProvider = ({ children }) => {
                     return true; // Include items without webpage content
                 });
                 const sortedItems = filteredItems.sort((a, b) => a.price.extracted_value - b.price.extracted_value);
-                setSame(sortedItems);
+                const sortByPref = sortedItems.filter(prod => {
+                    if(preferences.some(p => prod.link.includes(p)) || preferences.includes("other")){
+                        return prod
+                    }
+                })
+                setSame(sortByPref);
             }
             else{
                 setSame(["Not found"])
