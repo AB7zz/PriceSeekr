@@ -30,6 +30,7 @@ interface SearchContextValue extends SearchContextState {
     setPage: React.Dispatch<React.SetStateAction<string>>;
     setPreferences: React.Dispatch<React.SetStateAction<string>>;
     setUserData: React.Dispatch<React.SetStateAction<string>>;
+    setPageData: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const MySearchContext = React.createContext<SearchContextValue>({
@@ -38,6 +39,7 @@ const MySearchContext = React.createContext<SearchContextValue>({
     setUser: () => {},
     getHTMLData: () => {},
     setPage: () => {},
+    setPageData: () => {},
     setPreferences: () => {},
     setUserData: () => {},
     user: null,
@@ -181,7 +183,7 @@ export const MySearchProvider = ({ children }) => {
         try {
             if (tab) {
                 const [result] = await chrome.scripting.executeScript({
-                    target: { tabId: tab.id },
+                    target: { tabId: tab.tabId || tab.id },
                     func: (url) => {
                         let productTitle, image, price
                         if (url.includes('ebay')) {
@@ -215,6 +217,7 @@ export const MySearchProvider = ({ children }) => {
                 console.log("your data: ",data)
                 chrome.storage.local.set({ 'data': data })
                 setPageData(data || 'none')
+                console.log('page data set ', data)
             }
         } catch (error) {
             console.log(error)
@@ -228,6 +231,7 @@ export const MySearchProvider = ({ children }) => {
             setUser,
             getHTMLData,
             setPage,
+            setPageData,
             setPreferences,
             setUserData,
             user,
