@@ -41,10 +41,11 @@ const handler: PlasmoMessaging.PortHandler = async (req, res) => {
             args: [details.url]
         });
         const data = result.result;
-        console.log("your data: ",data)
-        res.send({
-          data: data
-        })
+        if(data[0] != "" && data[1] != "" && data[2] != "") {
+            res.send({
+              data: data
+            })
+        }
       }
   });
 }

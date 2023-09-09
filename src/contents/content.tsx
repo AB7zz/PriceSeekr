@@ -1,8 +1,15 @@
 import { usePort } from "@plasmohq/messaging/hook"
 import type { PlasmoCSConfig } from "plasmo"
 import React from 'react'
-import { useSearchContext } from "~context/SearchContext"
- 
+import logo from 'data-base64:~assets/icon.development.png'
+// import cssText from "data-text:./style.css"
+
+// export const getStyle = () => {
+//   const style = document.createElement("style")
+//   style.textContent = cssText
+//   return style
+// }
+
 export const config: PlasmoCSConfig = {
   matches: [
     "http://www.amazon.com/*",
@@ -22,8 +29,6 @@ export const config: PlasmoCSConfig = {
  
 function Content() {
   const htmlPort = usePort("html")
-  // const [pageData, setPageData] = React.useState(null)
-  // const {getHTMLData, setPageData, pageData} = useSearchContext()
  React.useEffect(() => {
   htmlPort.send({
     message: "run_get_html_data"
@@ -39,11 +44,45 @@ function Content() {
   return (
     <div>
       {htmlPort.data?.data &&
-        htmlPort.data?.data.map(data => 
-          <>
-            <h1>{data}</h1>
-          </>
-        )
+      <div
+      style={{
+        width: "100%"
+      }}
+      >
+        <div
+        style={{
+          backgroundColor: "#F2F2F2",
+          paddingTop: "0.5rem",
+          paddingBottom: "0.5rem",
+          paddingLeft: "1.25rem",
+          paddingRight: "1.25rem",
+          position: "fixed",
+          left: 0,
+          top: "175px",
+          width: "305px",
+          borderTopRightRadius: "15px",
+          borderBottomRightRadius: "15px",
+        }}
+        >
+          <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+          >
+            <img style={{height: "35px", marginRight: "30px"}} src={logo} alt="logo"  />
+            <h3
+            style={{
+              color: "black",
+              fontFamily: "'Poppins', sans-serif",
+              fontWeight: "bold",
+              fontSize: "1rem"
+            }}
+            >Search for the same product for cheaper prices!</h3>
+          </div>
+        </div>  
+      </div>
       }
     </div>
   )

@@ -1,8 +1,6 @@
 import React from 'react'
 import { useSearchContext } from '~context/SearchContext'
 
-
-
 const Navbar = () => {
     const {page, setPage} = useSearchContext()
     const handlePageChange = (newPage) => {
