@@ -122,27 +122,31 @@ export const useEmailSignUp = (setIsNewUserCallback, setErrorCallback) => {
   return handleEmailSignUp;
 };
 
-export const useWriteToDB = async (preferences) => {
+export const useWriteToDB = () => {
   const user = auth.currentUser;
-
-  if (user) {
-    const userId = user.uid;
-    const userEmail = user.email;
-
-    const userDocRef = doc(colRef, userId);
-    try {
-      await setDoc(userDocRef, {
-        Email: userEmail,
-        History: ['amazon.com'],
-        Preferences: preferences,
-        Theme: true,
-        
-      });
-      console.log('Data written to Firestore successfully');
-    } catch (error) {
-      console.error('Error writing to Firestore:', error);
+  const {setPage} = useSearchContext()
+  const handleWriteToDB = async(preferences) => {
+    if (user) {
+      const userId = user.uid;
+      const userEmail = user.email;
+  
+      const userDocRef = doc(colRef, userId);
+      try {
+        await setDoc(userDocRef, {
+          Email: userEmail,
+          History: ['amazon.com'],
+          Preferences: preferences,
+          Theme: true,
+          
+        });
+        console.log('Data written to Firestore successfully');
+        setPage('/choose')
+      } catch (error) {
+        console.error('Error writing to Firestore:', error);
+      }
     }
   }
+  return handleWriteToDB
 };
 
 export const useReadDB = () => {

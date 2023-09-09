@@ -4,8 +4,8 @@ import bestbuyImage from 'data-base64:~assets/bestbuy.png';
 import ebayImage from 'data-base64:~assets/ebay.png';
 import targetImage from 'data-base64:~assets/target.png';
 import smallSellerImage from 'data-base64:~assets/smallsellers.png';
-import { useWriteToDB } from '~firebase/hooks';
 import walmartImage from 'data-base64:~assets/walmart.webp';
+import { useWriteToDB } from '~firebase/hooks';
 
 interface PreferencesProps {
   setIsNewUserToFalse: () => void;
@@ -29,7 +29,7 @@ const Preferences: React.FC<PreferencesProps> = ({ setIsNewUserToFalse }) => {
     Walmart: true,
     Others: true
   };
-  const [preferences, setPreferences] = useState(initialPreferences);
+  const [preferences, setPreferences] = useState(initialPreferences)
 
   const toggleOption = (optionName: string) => {
     setPreferences((prevPreferences) => ({
@@ -38,10 +38,11 @@ const Preferences: React.FC<PreferencesProps> = ({ setIsNewUserToFalse }) => {
     }));
   };
 
+  const handleWriteToDB = useWriteToDB()
 
   const handleContinue = () => {
     const selectedOptions = Object.keys(preferences).filter((option) => preferences[option]);
-    useWriteToDB(selectedOptions);
+    handleWriteToDB(selectedOptions);
     setIsNewUserToFalse();
   };
 
@@ -57,7 +58,7 @@ const Preferences: React.FC<PreferencesProps> = ({ setIsNewUserToFalse }) => {
     };
   
     // Write updated preferences to the database
-    useWriteToDB(updatedPreferences);
+    handleWriteToDB(updatedPreferences);
   
     // Continue with the rest of your logic
     setIsNewUserToFalse();
