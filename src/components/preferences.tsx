@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import amazonImage from 'data-base64:~assets/amazon.png';
 import bestbuyImage from 'data-base64:~assets/bestbuy.png';
-import craigsImage from 'data-base64:~assets/craigs.png';
 import ebayImage from 'data-base64:~assets/ebay.png';
 import targetImage from 'data-base64:~assets/target.png';
+import smallSellerImage from 'data-base64:~assets/smallsellers.png';
 import { useWriteToDB } from '~firebase/hooks';
 import walmartImage from 'data-base64:~assets/walmart.webp';
 
@@ -15,19 +15,19 @@ const Preferences: React.FC<PreferencesProps> = ({ setIsNewUserToFalse }) => {
   const imageUrls = [
     amazonImage,
     bestbuyImage,
-    craigsImage,
     ebayImage,
     targetImage,
-    walmartImage
+    walmartImage,
+    smallSellerImage
   ];
 
   const initialPreferences = {
     Amazon: true,
-    bestbuy: true,
-    craigs: true,
+    Bestbuy: true,
     Ebay: true,
-    target: true,
-    Walmart: true
+    Target: true,
+    Walmart: true,
+    Others: true
   };
   const [preferences, setPreferences] = useState(initialPreferences);
 
@@ -38,15 +38,31 @@ const Preferences: React.FC<PreferencesProps> = ({ setIsNewUserToFalse }) => {
     }));
   };
 
-  const writeToDB = useWriteToDB()
+
   const handleContinue = () => {
     const selectedOptions = Object.keys(preferences).filter((option) => preferences[option]);
-    writeToDB(selectedOptions);
-    
-    // Call the callback function to set isNewUser to false in Main
+    useWriteToDB(selectedOptions);
     setIsNewUserToFalse();
   };
 
+  const handleSkip = () => {
+    // Update all preferences to true
+    const updatedPreferences = {
+      Amazon: true,
+      Bestbuy: true,
+      Ebay: true,
+      Target: true,
+      Walmart: true,
+      Others: true
+    };
+  
+    // Write updated preferences to the database
+    useWriteToDB(updatedPreferences);
+  
+    // Continue with the rest of your logic
+    setIsNewUserToFalse();
+  };
+  
   return (
     <div className="px-5 py-10 pt-5 w-[360px] bg-white mt-5">
       <div className="flex flex-col justify-center items-center">
@@ -66,9 +82,10 @@ const Preferences: React.FC<PreferencesProps> = ({ setIsNewUserToFalse }) => {
         </button>
       </div>
       <div className="flex justify-center mt-2">
-        <a href="#" className="text-blue-500 poppins font-semibold hover:underline">
+        <a href="#" className="text-blue-500 poppins font-semibold hover:underline" onClick={handleSkip}>
           Skip
         </a>
+
       </div>
     </div>
   );

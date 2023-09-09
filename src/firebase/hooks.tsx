@@ -7,8 +7,9 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { useSearchContext } from "~context/SearchContext";
-import { auth, database } from "~firebase";
-import { ref, set, get } from 'firebase/database';
+import { auth, colRef } from "~firebase";
+import { getFirestore, doc, getDoc, setDoc, snapshotEqual } from 'firebase/firestore';
+
 
 export const useSignOut = () => {
   const { setUser } = useSearchContext();
@@ -39,13 +40,12 @@ export const useDetectChange = () => {
 };
 
 export const useGoogleLogin = (setIsNewUserCallback, setErrorCallback) => {
-  const { setUser, user, setPage } = useSearchContext();
+  const { setUser, user } = useSearchContext();
 
   const handleGoogleLogin = async () => {
     if (user) {
       console.log("User is already logged in:", user);
       setUser(user);
-      setPage('/choose')
     } else {
       console.log("No user is currently logged in.");
       chrome.identity.getAuthToken({ interactive: true }, async function (token) {
@@ -74,7 +74,6 @@ export const useGoogleLogin = (setIsNewUserCallback, setErrorCallback) => {
                 const res = await signInWithCredential(auth, credential);
                 setUser(res.user);
                 setIsNewUserCallback(false);
-                setPage('/choose')
                 console.log(res.user);
               } catch (e) {
                 // console.error("Could not log in. ", e);
@@ -91,15 +90,15 @@ export const useGoogleLogin = (setIsNewUserCallback, setErrorCallback) => {
 };
 
 export const useEmailSignIn = (setIsNewUserCallback, setErrorCallback) => {
-  const { setUser, setPage } = useSearchContext();
+  const { setUser } = useSearchContext();
 
   const handleEmailSignIn = async (email, password) => {
     try {
       const res = await signInWithEmailAndPassword(auth, email, password);
       setUser(res.user);
       setIsNewUserCallback(false);
-      setPage('/choose')
     } catch (error) {
+      // console.error("Email sign-in error:", error);
       setErrorCallback(error.code);
     }
   };
@@ -108,14 +107,13 @@ export const useEmailSignIn = (setIsNewUserCallback, setErrorCallback) => {
 };
 
 export const useEmailSignUp = (setIsNewUserCallback, setErrorCallback) => {
-  const { setUser, setPage } = useSearchContext();
+  const { setUser } = useSearchContext();
 
   const handleEmailSignUp = async (email, password) => {
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
       setIsNewUserCallback(true);
       setUser(res.user);
-      setPage('/preferences')
     } catch (error) {
       setErrorCallback(error.code);
     }
@@ -124,51 +122,49 @@ export const useEmailSignUp = (setIsNewUserCallback, setErrorCallback) => {
   return handleEmailSignUp;
 };
 
-export const useWriteToDB = () => {
+export const useWriteToDB = async (preferences) => {
   const user = auth.currentUser;
-  const userEmail = user.email; 
-  const {setPage} = useSearchContext()
-  const writeToDB = (preferences) => {
-    if (user) 
-    {
-        const userId = user.uid; // This is the Firebase Authentication User ID
-        const db = database;
-        const history = [
-            'https://www.amazon.com/product1',
-            'https://www.ebay.com/product2',
-            'https://www.walmart.com/product3'
-        ];
-  
-        // Write user data to the database using the User ID as the key
-        set(ref(db, 'Users/' + userId), {
-            Theme: true, // Change this to a boolean value
-            Preferences: preferences,
-            History: history,
-            Email: userEmail
-        });
-  
-        setPage('/choose')
+
+  if (user) {
+    const userId = user.uid;
+    const userEmail = user.email;
+
+    const userDocRef = doc(colRef, userId);
+    try {
+      await setDoc(userDocRef, {
+        Email: userEmail,
+        History: ['amazon.com'],
+        Preferences: preferences,
+        Theme: true,
+        
+      });
+      console.log('Data written to Firestore successfully');
+    } catch (error) {
+      console.error('Error writing to Firestore:', error);
     }
   }
-  return writeToDB
-}
+};
 
 export const useReadDB = () => {
-  const {setPreferences, setUserData} = useSearchContext()
-  const readFromDB = (userId) => {
-    const db = database;
-    const dbRef = ref(db, 'Users/' + userId);
-    get(dbRef).then((snapshot) => {
-      if (snapshot.exists()) {
-        console.log(snapshot.val());
-        setUserData(snapshot.val())
-        setPreferences(snapshot.val().Preferences)
+  const {setPreferences} = useSearchContext()
+
+  const readFromDB = async (userId) => {
+    const userDocRef = doc(colRef, userId);
+
+    try {
+      const docSnapshot = await getDoc(userDocRef);
+
+      if (docSnapshot.exists()) {
+        docSnapshot.data().Preferences
+        const userData = docSnapshot.data();
+        console.log('User data:', userData);
       } else {
-        console.log("No data available");
+        console.log('No data available');
       }
-    }).catch((error) => {
-      console.error(error);
-    });
-  }
-  return readFromDB
-}
+    } catch (error) {
+      console.error('Error reading from Firestore:', error);
+    }
+  };
+
+  return readFromDB;
+};
