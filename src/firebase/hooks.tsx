@@ -155,7 +155,7 @@ export const useReadDB = () => {
       const docSnapshot = await getDoc(userDocRef);
 
       if (docSnapshot.exists()) {
-        docSnapshot.data().Preferences
+        setPreferences(docSnapshot.data().Preferences)
         const userData = docSnapshot.data();
         console.log('User data:', userData);
       } else {
