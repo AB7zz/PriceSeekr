@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchContext } from '~context/SearchContext'
 import Loader from '../components/loader';
+import NotSupport from '../components/NotSupport'
 const Similiar = ({data}) => {
   const {runSearchSimiliar, similiar} = useSearchContext()
   const [isLoading, setIsLoading] = useState(true);
@@ -18,7 +19,7 @@ const Similiar = ({data}) => {
     <div className="px-5 py-5 w-[360px] bg-white">
       {data == "none" ? 
       <div>
-        <p className='text-center font-semibold text-lg'>Sorry! We don't support this website yet</p>
+          <NotSupport/>
       </div> 
       : 
       <>
