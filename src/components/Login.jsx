@@ -1,8 +1,9 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {
     useEmailSignIn,
     useGoogleLogin
 } from "~firebase/hooks";
+import GoogleIcon from '@mui/icons-material/Google';
 
 const Login = ({setIsNewUser, setShowLoginForm, showLoginForm}) => {
     const [error, setError] = useState("");
