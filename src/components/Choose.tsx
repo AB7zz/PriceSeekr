@@ -3,11 +3,15 @@ import animation1 from "./animation_lm95baft.json"
 import animation2 from "./animation_im34retq.json"
 import Lottie from 'lottie-react'
 import { useSearchContext } from '~context/SearchContext'
+import NotSupport from './NotSupport'
 
-const Choose = () => {
+const Choose = ({data}) => {
   const {setPage} = useSearchContext()
   return (
-    <div className='px-5 py-7 grid grid-cols-1'>
+    <>
+    {data == 'none' ? 
+    <NotSupport /> 
+    : <div className='px-5 py-7 grid grid-cols-1'>
         <div onClick={() => setPage('/same')} className='bg-[#FFF5ED] cursor-pointer px-5 py-5 rounded-[15px]'>
           <div className="grid grid-cols-1">
             <Lottie animationData={animation1} className='!w-[100px] flex m-auto'/>  
@@ -25,7 +29,8 @@ const Choose = () => {
             </div>
           </div>  
         </div>
-    </div>
+    </div>}
+    </>
   )
 }
 

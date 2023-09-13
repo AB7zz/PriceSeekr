@@ -64,7 +64,7 @@ function Main() {
       return <Preferences setIsNewUserToFalse={setIsNewUserToFalse}/>;
     }
     else if (page === "/choose"){
-      return <Choose />
+      return <Choose data={pageData} />
     }
   };
 

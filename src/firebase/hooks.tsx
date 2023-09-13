@@ -137,7 +137,6 @@ export const useWriteToDB = () => {
           History: ['amazon.com'],
           Preferences: preferences,
           Theme: true,
-          
         });
         console.log('Data written to Firestore successfully');
         setPage('/choose')
