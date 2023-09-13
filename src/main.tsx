@@ -79,7 +79,9 @@ function Main() {
           </>
         ) : (
           <div>
-            {renderContent()}
+            <div className='px-10'>
+              {renderContent()}
+            </div>
             <Signout />
             <BotNav />
           </div>
