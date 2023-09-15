@@ -2,6 +2,7 @@ import { usePort } from "@plasmohq/messaging/hook"
 import type { PlasmoCSConfig } from "plasmo"
 import React from 'react'
 import logo from 'data-base64:~assets/icon.development.png'
+import CloseIcon from '@mui/icons-material/Close';
 // import cssText from "data-text:./style.css"
 
 // export const getStyle = () => {
@@ -29,6 +30,7 @@ export const config: PlasmoCSConfig = {
  
 function Content() {
   const htmlPort = usePort("html")
+  const [display, setDisplay] = React.useState(true)
  React.useEffect(() => {
   htmlPort.send({
     message: "run_get_html_data"
@@ -43,7 +45,7 @@ function Content() {
 
   return (
     <div>
-      {htmlPort.data?.data &&
+      {htmlPort.data?.data && display &&
       <div
       style={{
         width: "100%"
@@ -57,11 +59,10 @@ function Content() {
           paddingLeft: "1.25rem",
           paddingRight: "1.25rem",
           position: "fixed",
-          left: 0,
-          top: "175px",
-          width: "305px",
-          borderTopRightRadius: "15px",
-          borderBottomRightRadius: "15px",
+          left: "70%",
+          top: 0,
+          width: "350px",
+          borderRadius: "10px"
         }}
         >
           <div
@@ -77,9 +78,11 @@ function Content() {
               color: "black",
               fontFamily: "'Poppins', sans-serif",
               fontWeight: "bold",
-              fontSize: "1rem"
+              fontSize: "1rem",
+              marginRight: "10px"
             }}
             >Search for the same product for cheaper prices!</h3>
+            <CloseIcon onClick={() => setDisplay(false)} style={{width: "50px", cursor: "pointer"}} />
           </div>
         </div>  
       </div>
