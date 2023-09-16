@@ -9,6 +9,7 @@ import Login from '~components/Login'
 import Signup from '~components/Signup'
 import TopBar from "~components/TopBar";
 import { useSearchContext } from "~context/SearchContext";
+import Profile from "~components/profile";
 import Choose from "~components/Choose";
 import {
   useDetectChange,
@@ -66,33 +67,42 @@ function Main() {
     else if (page === "/choose"){
       return <Choose data={pageData} />
     }
+    else if (page === '/Profile'){
+      return <Profile/>
+    }
   };
 
 
   return (
     <div className="w-[360px]">
-      <TopBar />
-      {user != null ? (
-        isNewUser ? (
-          <>
-            {renderContent()}
-          </>
-        ) : (
-          <div>
-            <div className='px-10'>
-              {renderContent()}
-            </div>
-            <Signout />
-            <BotNav />
-          </div>
-        )
-      ) : showLoginForm ? (
-        <Login setIsNewUser={setIsNewUser} setShowLoginForm={setShowLoginForm} showLoginForm={showLoginForm} />
+    <TopBar />
+    {user != null ? (
+      isNewUser ? (
+        <>{renderContent()}</>
       ) : (
-        <Signup setIsNewUser={setIsNewUser} setShowLoginForm={setShowLoginForm} showLoginForm={showLoginForm} />
-      )}
-    </div>
-  );
+        <div>
+          <div className={`px-10 ${page === "/Profile" ? "px-3" : ""}`}>
+            {renderContent()}
+          </div>
+          <Signout />
+          <BotNav />
+        </div>
+      )
+    ) : showLoginForm ? (
+      <Login
+        setIsNewUser={setIsNewUser}
+        setShowLoginForm={setShowLoginForm}
+        showLoginForm={showLoginForm}
+      />
+    ) : (
+      <Signup
+        setIsNewUser={setIsNewUser}
+        setShowLoginForm={setShowLoginForm}
+        showLoginForm={showLoginForm}
+      />
+    )}
+  </div>
+);
 }
 
 export default Main;
