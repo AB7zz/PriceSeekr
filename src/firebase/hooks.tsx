@@ -28,10 +28,11 @@ export const useSignOut = () => {
 };
 
 export const useDetectChange = () => {
-  const { setUser } = useSearchContext();
+  const { setUser,setEmail } = useSearchContext();
   const handleDetectChange = () => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
+      setEmail(user.email)
       console.log(user);
     });
     return () => unsubscribe();
@@ -40,7 +41,7 @@ export const useDetectChange = () => {
 };
 
 export const useGoogleLogin = (setIsNewUserCallback, setErrorCallback) => {
-  const { setUser, user } = useSearchContext();
+  const { setUser, user, setEmail } = useSearchContext();
 
   const handleGoogleLogin = async () => {
     if (user) {
@@ -73,6 +74,7 @@ export const useGoogleLogin = (setIsNewUserCallback, setErrorCallback) => {
               try {
                 const res = await signInWithCredential(auth, credential);
                 setUser(res.user);
+                setEmail(res.user.email)
                 setIsNewUserCallback(false);
                 console.log(res.user);
               } catch (e) {
@@ -90,12 +92,13 @@ export const useGoogleLogin = (setIsNewUserCallback, setErrorCallback) => {
 };
 
 export const useEmailSignIn = (setIsNewUserCallback, setErrorCallback) => {
-  const { setUser } = useSearchContext();
+  const { setUser,setEmail } = useSearchContext();
 
   const handleEmailSignIn = async (email, password) => {
     try {
       const res = await signInWithEmailAndPassword(auth, email, password);
       setUser(res.user);
+      setEmail(res.user.email)
       setIsNewUserCallback(false);
     } catch (error) {
       // console.error("Email sign-in error:", error);
@@ -107,13 +110,14 @@ export const useEmailSignIn = (setIsNewUserCallback, setErrorCallback) => {
 };
 
 export const useEmailSignUp = (setIsNewUserCallback, setErrorCallback) => {
-  const { setUser } = useSearchContext();
+  const { setUser,setEmail } = useSearchContext();
 
   const handleEmailSignUp = async (email, password) => {
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
       setIsNewUserCallback(true);
       setUser(res.user);
+      setEmail(res.user.email)
     } catch (error) {
       setErrorCallback(error.code);
     }
@@ -170,4 +174,32 @@ export const useReadDB = () => {
   };
 
   return readFromDB;
+};
+export const useUpdateDB = () => {
+  const user = auth.currentUser;
+  const { setPage, setPreferences } = useSearchContext();
+
+  const updateToDB = async (updatedData) => {
+    if (user) {
+      const userId = user.uid;
+      const userDocRef = doc(colRef, userId);
+
+      try {
+        await setDoc(userDocRef, updatedData, { merge: true });
+        console.log('Data updated in Firestore successfully');
+        
+        // Update global state if Preferences are updated
+        if (updatedData.Preferences) {
+          setPreferences(updatedData.Preferences);
+        }
+
+        // Optionally, you can navigate to a different page after updating
+        setPage('/choose');
+      } catch (error) {
+        console.error('Error updating data in Firestore:', error);
+      }
+    }
+  };
+
+  return updateToDB;
 };

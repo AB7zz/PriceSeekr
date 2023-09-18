@@ -20,6 +20,7 @@ interface SearchContextState {
     trigger: boolean | null;
     preferences: any[] | null;
     userData: any[] | null;
+    userEmail: any[] | null;
 }
 
 interface SearchContextValue extends SearchContextState {
@@ -30,6 +31,7 @@ interface SearchContextValue extends SearchContextState {
     setPage: React.Dispatch<React.SetStateAction<string>>;
     setPreferences: React.Dispatch<React.SetStateAction<string>>;
     setUserData: React.Dispatch<React.SetStateAction<string>>;
+    setEmail: React.Dispatch<React.SetStateAction<string>>;
     setPageData: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -42,6 +44,7 @@ const MySearchContext = React.createContext<SearchContextValue>({
     setPageData: () => {},
     setPreferences: () => {},
     setUserData: () => {},
+    setEmail: () => {}, 
     user: null,
     similiar: null,
     same: null,
@@ -49,12 +52,14 @@ const MySearchContext = React.createContext<SearchContextValue>({
     page: null,
     trigger: false,
     preferences: null,
-    userData: null
+    userData: null,
+    userEmail: null,
 });
 
 export const MySearchProvider = ({ children }) => {
     const [similiar, setSimiliar] = React.useState(null)
     const [user, setUser] = React.useState(null); 
+    const [userEmail, setEmail] = React.useState(null); 
     const [same, setSame] = React.useState(null);
     const [country, setCountry] = React.useState(null)
     const [pageData, setPageData] = React.useState(null)
@@ -234,6 +239,7 @@ export const MySearchProvider = ({ children }) => {
             setPageData,
             setPreferences,
             setUserData,
+            setEmail,
             user,
             similiar,
             same,
@@ -241,7 +247,8 @@ export const MySearchProvider = ({ children }) => {
             page,
             trigger,
             preferences,
-            userData
+            userData,
+            userEmail
         }}>
         {children}
         </MySearchContext.Provider>
