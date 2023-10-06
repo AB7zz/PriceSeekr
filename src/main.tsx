@@ -6,11 +6,13 @@ import Same from "~features/same";
 import Preferences from '~components/preferences';
 import Signout from '~components/Signout'
 import Login from '~components/Login'
+import DisplayHistory from "~components/history";
 import Signup from '~components/Signup'
 import TopBar from "~components/TopBar";
 import { useSearchContext } from "~context/SearchContext";
 import Profile from "~components/profile";
 import Choose from "~components/Choose";
+import ContactUs from "~components/Contact";
 import {
   useDetectChange,
   useReadDB,
@@ -70,18 +72,25 @@ function Main() {
     else if (page === '/Profile'){
       return <Profile/>
     }
+    else if (page === '/History'){
+      return <DisplayHistory/>
+    }
+    else if (page === '/Contact'){
+      return <ContactUs/>
+    }
+
   };
 
 
   return (
-    <div className="w-[360px]">
+    <div className="w-[400px]">
     <TopBar />
     {user != null ? (
       isNewUser ? (
         <>{renderContent()}</>
       ) : (
         <div>
-          <div className={`px-10 ${page === "/Profile" ? "px-3" : ""}`}>
+          <div className={`px-5 ${page === "/Profile" ? "px-3" : ""}`}>
             {renderContent()}
           </div>
           <Signout />

@@ -2,19 +2,24 @@ import React, { useEffect, useState } from 'react';
 import { useSearchContext } from '~context/SearchContext'
 import Loader from '../components/loader';
 import NotSupport from '../components/NotSupport'
+import { saveSearchResultToFirestore } from '~firebase/hooks';
+
 const Similiar = ({data}) => {
   const {runSearchSimiliar, similiar} = useSearchContext()
   const [isLoading, setIsLoading] = useState(true);
 
   React.useEffect(() => {
-
-    if(!similiar && data!="none"){
-      runSearchSimiliar(data)
-    } else {
+    if (!similiar && data !== "none") {
+      runSearchSimiliar(data);
+    } else if (JSON.stringify(similiar) === JSON.stringify(["Not found"])) {
       setIsLoading(false);
     }
+    // Save search results to Firestore if data is available
+    if (similiar && similiar.length > 0) {
+      saveSearchResultToFirestore(similiar,data);    
+    }
   }, [data, similiar]);
-
+  
   return (
     <div className="px-5 py-5 w-[360px] bg-white">
       {data == "none" ? 

@@ -1,21 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchContext } from '~context/SearchContext';
 import Loader from '../components/loader';
-import NotSupport from '../components/NotSupport'
+import NotSupport from '../components/NotSupport';
+import { saveSearchResultToFirestore } from '~firebase/hooks';
 const Same = ({ data }) => {
   const { runSearchImage, same } = useSearchContext();
   const [isLoading, setIsLoading] = useState(true);
   const [notfound, setnotfound] = useState(false);
 
-  useEffect(() => {
+
+  
+  React.useEffect(() => {
     const fetchData = async () => {
-      if (!same && data!="none") {
+      if (!same && data !== "none") {
         runSearchImage(data);
-      }else if(JSON.stringify(same) === JSON.stringify(["Not found"])){
+      } else if (JSON.stringify(same) === JSON.stringify(["Not found"])) {
         setIsLoading(false);
         setnotfound(true);
-      }else{
+      } else {
         setIsLoading(false);
+      }
+    
+      // Save search result to Firestore if data is available
+      if (same && same.length > 0) {
+        const searchResult = same[0]; // Assuming you want to save the first result
+        saveSearchResultToFirestore(searchResult, data);
       }
     };
 

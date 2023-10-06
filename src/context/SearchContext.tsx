@@ -21,6 +21,7 @@ interface SearchContextState {
     preferences: any[] | null;
     userData: any[] | null;
     userEmail: any[] | null;
+    history: any[] | null;
 }
 
 interface SearchContextValue extends SearchContextState {
@@ -29,6 +30,7 @@ interface SearchContextValue extends SearchContextState {
     getHTMLData: (data: any) => void;
     setUser: React.Dispatch<React.SetStateAction<any>>;
     setPage: React.Dispatch<React.SetStateAction<string>>;
+    setHistory: React.Dispatch<React.SetStateAction<any>>;
     setPreferences: React.Dispatch<React.SetStateAction<string>>;
     setUserData: React.Dispatch<React.SetStateAction<string>>;
     setEmail: React.Dispatch<React.SetStateAction<string>>;
@@ -45,6 +47,7 @@ const MySearchContext = React.createContext<SearchContextValue>({
     setPreferences: () => {},
     setUserData: () => {},
     setEmail: () => {}, 
+    setHistory: () => {},
     user: null,
     similiar: null,
     same: null,
@@ -54,6 +57,7 @@ const MySearchContext = React.createContext<SearchContextValue>({
     preferences: null,
     userData: null,
     userEmail: null,
+    history: null,
 });
 
 export const MySearchProvider = ({ children }) => {
@@ -66,6 +70,7 @@ export const MySearchProvider = ({ children }) => {
     const [page, setPage] = React.useState(null);
     const [trigger, setTrigger] = React.useState(false)
     const [preferences, setPreferences] = React.useState(null)
+    const [history, setHistory] = React.useState(null)
     const [userData, setUserData] = React.useState(null)
     
     const searchTitle = async(title: string, country: string, currentPrice: any) => {
@@ -240,6 +245,7 @@ export const MySearchProvider = ({ children }) => {
             setPreferences,
             setUserData,
             setEmail,
+            setHistory,
             user,
             similiar,
             same,
@@ -248,7 +254,8 @@ export const MySearchProvider = ({ children }) => {
             trigger,
             preferences,
             userData,
-            userEmail
+            userEmail,
+            history,
         }}>
         {children}
         </MySearchContext.Provider>
