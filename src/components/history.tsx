@@ -64,7 +64,7 @@ useEffect(() => {
           <button onClick={() => setSelectedItemIndex(null)}>Back to History</button>
         </div>
       );
-    } else {
+    } else if(pageDetails) {
       // Display the table of items
       return (
         <table className="w-full bg-white shadow-md rounded-lg overflow-hidden">
@@ -101,6 +101,12 @@ useEffect(() => {
           </tbody>
         </table>
       );
+    }else{
+      return(
+        <div>
+          <h1 className='text-center text-xl text-black font-semibold'>Nothing to display</h1>
+        </div>
+      )
     }
   };
 

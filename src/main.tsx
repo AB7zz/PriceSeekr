@@ -109,7 +109,7 @@ function Main() {
         <>{renderContent()}</>
       ) : (
         <div>
-          <div className={`px-5 ${page === "/Profile" ? "px-3" : ""}`}>
+          <div className={`h-full px-5 ${page === "/Profile" ? "px-3" : ""}`}>
             {renderContent()}
           </div>
           {/* <Signout /> */}
