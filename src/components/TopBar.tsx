@@ -43,7 +43,7 @@ const TopBar = () => {
   };
 
   return (
-    <div className={`bg-black px-5 py-3 mb-2 flex justify-between items-center top-bar-container`}>
+    <div className={`bg-black px-6 py-3 mb-2 flex justify-between items-center h-[65px]`}>
       <div className="flex items-center">
         <img className="w-[25px] mr-1" src={logo} alt="logo" />
         <h3
