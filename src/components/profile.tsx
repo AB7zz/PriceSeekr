@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import Lottie from 'lottie-react';
 import amazonImage from 'data-base64:~assets/amazon.png';
 import bestbuyImage from 'data-base64:~assets/bestbuy.png';
 import ebayImage from 'data-base64:~assets/ebay.png';
@@ -6,8 +7,8 @@ import targetImage from 'data-base64:~assets/target.png';
 import smallSellerImage from 'data-base64:~assets/smallsellers.png';
 import walmartImage from 'data-base64:~assets/walmart.webp';
 import { useSearchContext } from '~context/SearchContext';
-import { useUpdateDB } from '~firebase/hooks'; 
-import { motion } from 'framer-motion'
+import { useUpdateDB } from '~firebase/hooks';
+import { motion } from 'framer-motion';
 
 const imageUrls = [
   amazonImage,
@@ -20,6 +21,7 @@ const imageUrls = [
 
 const Profile = () => {
   const { preferences, setPreferences, userEmail } = useSearchContext();
+  const [isLoading, setIsLoading] = useState(false); // State for loading animation
 
   // Check if preferences is an array and not null
   const initialPreferences = Array.isArray(preferences)
@@ -29,7 +31,7 @@ const Profile = () => {
         eBay: preferences.includes('eBay'),
         Target: preferences.includes('Target'),
         Walmart: preferences.includes('Walmart'),
-        Others: preferences.includes('Others')
+        Others: preferences.includes('Others'),
       }
     : {
         Amazon: false,
@@ -37,79 +39,97 @@ const Profile = () => {
         eBay: false,
         Target: false,
         Walmart: false,
-        Others: false
+        Others: false,
       };
 
   const [selectedPreferences, setSelectedPreferences] = useState(initialPreferences);
 
-  const toggleOption = (optionName) => {
+  const toggleOption = async (optionName) => {
+    setIsLoading(true); // Show the loader
+
+    // Simulate a delay of 2-3 seconds
+    await new Promise((resolve) => setTimeout(resolve, 2000 + Math.random() * 1000));
+
+    // Your logic for toggling preferences here
     setSelectedPreferences((prevState) => {
       const updatedPreferences = {
         ...prevState,
-        [optionName]: !prevState[optionName]
+        [optionName]: !prevState[optionName],
       };
 
       // Save the updated preferences to the database whenever a preference is toggled
       updateToDB({
-        Preferences: Object.keys(updatedPreferences).filter(
-          (option) => updatedPreferences[option]
-        ),
+        Preferences: Object.keys(updatedPreferences).filter((option) => updatedPreferences[option]),
       });
 
       return updatedPreferences;
     });
+
+    setIsLoading(false); // Hide the loader
   };
 
   const updateToDB = useUpdateDB();
 
-
   return (
-    <div className="mt-5 px-2 py-5 max-w-[340px] mx-auto">
-      <div className="text-left mb-2 font-semibold">Your Email</div>
-      <div className="rounded bg-[#EDEDED] p-2 border border-gray-300 text-[#8C8C8C]">
-        {userEmail}
-      </div>
-
-      <div className="mt-6 grid grid-cols-2 gap-4">
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          className="rounded-lg bg-[#FFEFDC] text-[#FF9C1A] px-8 py-3 border border-[#FF9C1A] hover:text-[#FF9C1A] hover:bg-[#FFEFDC]">
-          Light Theme
-        </motion.button>
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          className="rounded-lg bg-black text-[#FF9C1A] px-8 py-3">Dark Theme</motion.button>
-      </div>
-
-      <div className="mt-8 border-t border-gray-200 pt-4">
-        <h2 className="text-md text-center">Edit your preferences</h2>
-
-        <div className="grid grid-cols-2 gap-4 mt-5">
-          {Object.keys(initialPreferences).map((optionName, index) => (
-            <div
-              key={index}
-              className={`rounded-lg w-[100%] h-[60px] px-3 items-center bg-[#EFEFEF] flex ${
-                selectedPreferences[optionName]
-                  ? 'border-2 border-[#FF9C1A]'
-                  : 'border-0 hover:border-2 hover:border-[#FF9C1A]'
-              } cursor-pointer`}
-              onClick={() => toggleOption(optionName)}
-            >
-              <img
-                src={imageUrls[index]}
-                alt={`Image ${index}`}
-                className="w-[35px] mr-3"
-                style={{ objectFit: 'contain' }}
-              />
-              <p className="text-[#393939] poppins font-semibold text-lg text-center">
-                {optionName}
-              </p>
-            </div>
-          ))}
+    <div className="flex items-center justify-center">
+      <div className="mt-5 px-2 py-5 max-w-[340px] mx-auto">
+        <div className="text-left mb-2 font-semibold">Your Email</div>
+        <div className="rounded bg-[#EDEDED] p-2 border border-gray-300 text-[#8C8C8C]">
+          {userEmail}
         </div>
+
+        <div className="mt-6 grid grid-cols-2 gap-4">
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            className="rounded-lg bg-[#FFEFDC] text-[#FF9C1A] px-8 py-3 border border-[#FF9C1A] hover:text-[#FF9C1A] hover:bg-[#FFEFDC]"
+          >
+            Light Theme
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            className="rounded-lg bg-black text-[#FF9C1A] px-8 py-3"
+          >
+            Dark Theme
+          </motion.button>
+        </div>
+
+        <div className="mt-8 border-t border-gray-200 pt-4">
+          <h2 className="text-md text-center">Edit your preferences</h2>
+
+          <div className="grid grid-cols-2 gap-4 mt-5">
+            {Object.keys(initialPreferences).map((optionName, index) => (
+              <div
+                key={index}
+                className={`rounded-lg w-[100%] h-[60px] px-3 items-center bg-[#EFEFEF] flex ${
+                  selectedPreferences[optionName]
+                    ? 'border-2 border-[#FF9C1A]'
+                    : 'border-0 hover:border-2 hover:border-[#FF9C1A]'
+                } cursor-pointer`}
+                onClick={() => toggleOption(optionName)}
+              >
+                <img
+                  src={imageUrls[index]}
+                  alt={`Image ${index}`}
+                  className="w-[35px] mr-3"
+                  style={{ objectFit: 'contain' }}
+                />
+                <p className="text-[#393939] poppins font-semibold text-lg text-center">
+                  {optionName}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {isLoading && (
+          <div className="absolute inset-0 bg-gray-800 bg-opacity-40 flex items-center justify-center">
+            <div className="border-t-transparent border-solid animate-spin rounded-full border-blue-400 border-4 h-20 w-20 mx-auto mb-4" />
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
 export default Profile;
+
