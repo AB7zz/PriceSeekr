@@ -11,6 +11,22 @@ import { auth, colRef } from "~firebase";
 import { getFirestore, doc, getDoc, setDoc, snapshotEqual } from 'firebase/firestore';
 
 
+const mapFirebaseErrorToMessage = (errorCode) => {
+  switch (errorCode) {
+    case "auth/invalid-email":
+      return "Invalid email address.";
+    case "auth/user-not-found":
+      return "User not found. Please sign up first.";
+    case "auth/wrong-password":
+      return "Incorrect password.";
+    case "auth/weak-password":
+      return "Password is too weak. Please use a stronger password.";
+    default:
+      return "An error occurred. Please try again later.";
+  }
+};
+
+
 export const useSignOut = () => {
   const { setUser } = useSearchContext();
   const handleSignOut = async () => {
@@ -41,7 +57,7 @@ export const useDetectChange = () => {
 };
 
 export const useGoogleLogin = (setIsNewUserCallback, setErrorCallback) => {
-  const { setUser, user, setEmail } = useSearchContext();
+  const { setUser, user } = useSearchContext();
 
   const handleGoogleLogin = async () => {
     if (user) {
@@ -74,7 +90,6 @@ export const useGoogleLogin = (setIsNewUserCallback, setErrorCallback) => {
               try {
                 const res = await signInWithCredential(auth, credential);
                 setUser(res.user);
-                setEmail(res.user.email)
                 setIsNewUserCallback(false);
                 console.log(res.user);
               } catch (e) {
@@ -90,19 +105,18 @@ export const useGoogleLogin = (setIsNewUserCallback, setErrorCallback) => {
 
   return handleGoogleLogin;
 };
-
 export const useEmailSignIn = (setIsNewUserCallback, setErrorCallback) => {
-  const { setUser,setEmail } = useSearchContext();
+  const { setUser, setEmail } = useSearchContext();
 
   const handleEmailSignIn = async (email, password) => {
     try {
       const res = await signInWithEmailAndPassword(auth, email, password);
       setUser(res.user);
-      setEmail(res.user.email)
+      setEmail(res.user.email);
       setIsNewUserCallback(false);
     } catch (error) {
-      // console.error("Email sign-in error:", error);
-      setErrorCallback(error.code);
+      const errorMessage = mapFirebaseErrorToMessage(error.code);
+      setErrorCallback(errorMessage);
     }
   };
 
@@ -110,22 +124,22 @@ export const useEmailSignIn = (setIsNewUserCallback, setErrorCallback) => {
 };
 
 export const useEmailSignUp = (setIsNewUserCallback, setErrorCallback) => {
-  const { setUser,setEmail } = useSearchContext();
+  const { setUser, setEmail } = useSearchContext();
 
   const handleEmailSignUp = async (email, password) => {
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
       setIsNewUserCallback(true);
       setUser(res.user);
-      setEmail(res.user.email)
+      setEmail(res.user.email);
     } catch (error) {
-      setErrorCallback(error.code);
+      const errorMessage = mapFirebaseErrorToMessage(error.code);
+      setErrorCallback(errorMessage);
     }
   };
 
   return handleEmailSignUp;
 };
-
 export const useWriteToDB = () => {
   const user = auth.currentUser;
   const {setPage} = useSearchContext()
@@ -138,7 +152,7 @@ export const useWriteToDB = () => {
       try {
         await setDoc(userDocRef, {
           Email: userEmail,
-          History: ['amazon.com'],
+          History: {},
           Preferences: preferences,
           Theme: true,
         });
@@ -151,6 +165,65 @@ export const useWriteToDB = () => {
   }
   return handleWriteToDB
 };
+
+export const saveSearchResultToFirestore = async (SearchData, PageData, isSame) => {
+  const user = auth.currentUser;
+  if (user) {
+    const userId = user.uid;
+    const userDocRef = doc(colRef, userId);
+    try {
+      // Get the existing data from Firestore
+      const userDocSnapshot = await getDoc(userDocRef);
+      const userData = userDocSnapshot.data();
+
+      // Create or update the 'History' field in the user's document
+      if (!userData.History) {
+        userData.History = {};
+      }
+      
+      // Create or update the 'PageData' field within 'History'
+      if (!userData.History.PageData) {
+        userData.History.PageData = [];
+      }
+      if(isSame)
+      {
+          // Insert PageData as the first element of the PageData array
+          userData.History.PageData.unshift({
+            PageDetails: PageData,
+            SearchRes: SearchData.map((product) => ({
+              thumbnail: product.thumbnail,
+              title: product.title,
+              url: product.link,
+              price: product.price.extracted_value,
+            })),
+          });
+      }else
+      {
+          // Insert PageData as the first element of the PageData array
+          userData.History.PageData.unshift({
+            PageDetails: PageData,
+            SearchRes: SearchData.map((product) => ({
+              thumbnail: product.thumbnail,
+              title: product.title,
+              url: product.link,
+              price: product.extracted_price,
+            })),
+          });
+       }
+
+      // Update the user's document in Firestore
+      await setDoc(userDocRef, userData);
+
+      console.log('Search results saved to Firestore successfully');
+    } catch (error) {
+      console.error('Error saving search results to Firestore:', error);
+    }
+  } else {
+    console.log('User not authenticated. Unable to save search results.');
+  }
+};
+
+
 
 export const useReadDB = () => {
   const {setPreferences} = useSearchContext()
@@ -175,6 +248,8 @@ export const useReadDB = () => {
 
   return readFromDB;
 };
+
+
 export const useUpdateDB = () => {
   const user = auth.currentUser;
   const { setPage, setPreferences } = useSearchContext();
@@ -202,4 +277,27 @@ export const useUpdateDB = () => {
   };
 
   return updateToDB;
+};
+
+export const readHistoryDB = () => {
+  const { setHistory } = useSearchContext();
+
+  const readHistory = async (userId) => {
+    const userDocRef = doc(colRef, userId);
+
+    try {
+      const docSnapshot = await getDoc(userDocRef);
+
+      if (docSnapshot.exists()) {
+        setHistory(docSnapshot.data().History);
+        const userData = docSnapshot.data();
+      } else {
+        console.log('No history data available');
+      }
+    } catch (error) {
+      console.error('Error reading history data from Firestore:', error);
+    }
+  };
+
+  return readHistory;
 };

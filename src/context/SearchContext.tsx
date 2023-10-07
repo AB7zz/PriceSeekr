@@ -21,6 +21,7 @@ interface SearchContextState {
     preferences: any[] | null;
     userData: any[] | null;
     userEmail: any[] | null;
+    history: any[] | null;
 }
 
 interface SearchContextValue extends SearchContextState {
@@ -29,6 +30,7 @@ interface SearchContextValue extends SearchContextState {
     getHTMLData: (data: any) => void;
     setUser: React.Dispatch<React.SetStateAction<any>>;
     setPage: React.Dispatch<React.SetStateAction<string>>;
+    setHistory: React.Dispatch<React.SetStateAction<any>>;
     setPreferences: React.Dispatch<React.SetStateAction<string>>;
     setUserData: React.Dispatch<React.SetStateAction<string>>;
     setEmail: React.Dispatch<React.SetStateAction<string>>;
@@ -45,6 +47,7 @@ const MySearchContext = React.createContext<SearchContextValue>({
     setPreferences: () => {},
     setUserData: () => {},
     setEmail: () => {}, 
+    setHistory: () => {},
     user: null,
     similiar: null,
     same: null,
@@ -54,6 +57,7 @@ const MySearchContext = React.createContext<SearchContextValue>({
     preferences: null,
     userData: null,
     userEmail: null,
+    history: null,
 });
 
 export const MySearchProvider = ({ children }) => {
@@ -66,6 +70,7 @@ export const MySearchProvider = ({ children }) => {
     const [page, setPage] = React.useState(null);
     const [trigger, setTrigger] = React.useState(false)
     const [preferences, setPreferences] = React.useState(null)
+    const [history, setHistory] = React.useState(null)
     const [userData, setUserData] = React.useState(null)
     
     const searchTitle = async(title: string, country: string, currentPrice: any) => {
@@ -137,14 +142,17 @@ export const MySearchProvider = ({ children }) => {
         search.json(params, async (data) => {
             if (data && data["visual_matches"] && data["visual_matches"].length > 0) {
                 // Filter out items that don't have a "price" property
+                console.log("pass 0: raw data no items filtered", data)
                 const itemsWithPrice = data["visual_matches"].filter(item => item.price && item.price.extracted_value <= numericValue);
                 // filter items not in country
+                console.log("pass 1 items without price removed:" ,itemsWithPrice)
                 const allowedDomains = ['.com', country] 
                 const itemsInLocation = itemsWithPrice.filter(item => {
                     const itemDomain = new URL(item.link).hostname.toLowerCase();
                     return allowedDomains.some(allowedDomain => itemDomain.endsWith(allowedDomain));
                   });
-                // console.log(itemsInLocation)
+
+                console.log('pass 2 out of location removed (domain not .com/country):',itemsInLocation);
                 const itemPromises = itemsInLocation.map(async (item) => {
                     try {
                         const response = await axios.get(item.link);
@@ -155,31 +163,37 @@ export const MySearchProvider = ({ children }) => {
                         return item; 
                     }
                 });
-    
                 const itemsWithPageContent = await Promise.all(itemPromises);
-    
+                console.log('pass 3 items without page content are removed', itemsWithPageContent)
                 // Filter out items that contain "out of stock" in their webpage content
-                const filteredItems = itemsWithPageContent.filter(item => {
+                const filteredItems = itemsWithPageContent.map(item => {
                     if (typeof item.pageContent === 'string') {
                         const pageContentLower = item.pageContent.toLowerCase();
-                        return !(
+                        if (
                             pageContentLower.includes('out of stock') ||
-                            pageContentLower.includes('no longer available') || 
+                            pageContentLower.includes('no longer available') ||
                             pageContentLower.includes('sold out')
-                        );
+                        ) {
+                            item.isOutOfStock = true; // Mark the product as out of stock
+                        } else {
+                            item.isOutOfStock = false; // Mark the product as available
+                        }
+                    } else {
+                        item.isOutOfStock = false; // Mark the product as available if no page content
                     }
-                    return true; // Include items without webpage content
+                    return item;
                 });
                 const sortedItems = filteredItems.sort((a, b) => a.price.extracted_value - b.price.extracted_value);
+                console.log("preferences: ",preferences)
                 const sortByPref = sortedItems.filter(prod => {
-                    if(preferences.some(p => prod.link.includes(p.toLowerCase())) || preferences.includes("other")){
+                    if(preferences.some(p => prod.link.includes(p.toLowerCase())) || preferences.includes("Others")){
                         return prod
                     }
+                    
+                    console.log("not in preference: ", prod.link)
                 })
+                console.log("pass 4 - websites not in preferences removed:",sortByPref);
                 setSame(sortByPref);
-            }
-            else{
-                setSame(["Not found"])
             }
         });
     }
@@ -219,10 +233,9 @@ export const MySearchProvider = ({ children }) => {
                 if(data){
                     setTrigger(true)
                 }
-                console.log("your data: ",data)
                 chrome.storage.local.set({ 'data': data })
-                setPageData(data || 'none')
-                console.log('page data set ', data)
+                setPageData(data || null)
+                console.log('page data set', data)
             }
         } catch (error) {
             console.log(error)
@@ -240,6 +253,7 @@ export const MySearchProvider = ({ children }) => {
             setPreferences,
             setUserData,
             setEmail,
+            setHistory,
             user,
             similiar,
             same,
@@ -248,7 +262,8 @@ export const MySearchProvider = ({ children }) => {
             trigger,
             preferences,
             userData,
-            userEmail
+            userEmail,
+            history,
         }}>
         {children}
         </MySearchContext.Provider>

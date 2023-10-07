@@ -1,20 +1,19 @@
-import React, {useState} from 'react'
-import {
-    useEmailSignIn,
-    useGoogleLogin
-} from "~firebase/hooks";
+import React, { useState } from 'react';
+import { useEmailSignIn, useGoogleLogin } from "~firebase/hooks";
 import GoogleIcon from '@mui/icons-material/Google';
 
-const Login = ({setIsNewUser, setShowLoginForm, showLoginForm}) => {
-    const [error, setError] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const handleEmailSignIn = useEmailSignIn(setIsNewUser, setError);
-    const handleGoogleLogin = useGoogleLogin(setIsNewUser, setError);
-    const toggleLoginMode = () => {
-        setShowLoginForm(!showLoginForm);
-        setError(""); // Clear any previous error messages when toggling login/signup
-      };
+const Login = ({ setIsNewUser, setShowLoginForm, showLoginForm }) => {
+  const [error, setError] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const handleEmailSignIn = useEmailSignIn(setIsNewUser, setError);
+  const handleGoogleLogin = useGoogleLogin(setIsNewUser, setError);
+
+  const toggleLoginMode = () => {
+    setShowLoginForm(!showLoginForm);
+    setError(""); // Clear any previous error messages when toggling login/signup
+  };
+
   return (
     <>
       <div className="px-2 mt-5 py-5 w-[360px] flex flex-col justify-center items-center">
@@ -52,23 +51,23 @@ const Login = ({setIsNewUser, setShowLoginForm, showLoginForm}) => {
       </div>
       <div className="px-5">
         <div className="flex justify-around items-center">
-          <hr className="border-[#C5C5C5] border-t-2 w-[100px]" />
+          <hr className="border-[#C5C5C5] border-t-2" />
           <span className="text-lg text-[#A4A4A4] poppins">OR</span>
-          <hr className="border-[#C5C5C5] border-t-2 w-[100px]" />
+          <hr className="border-[#C5C5C5] border-t-2" />
         </div>
         <div className="flex justify-center py-5">
           <button
-            className="bg-[#CF4332] hover:bg-[#AB3324] px-7 py-2 rounded-[5px] text-white font-semibold"
+            className="flex items-center bg-[#CF4332] hover:bg-[#AB3324] px-7 py-2 rounded-[5px] text-white font-semibold"
             onClick={handleGoogleLogin}
           >
             <GoogleIcon className="text-white mr-3" />
             Continue with Google
           </button>
-          <p className="text-red-500 mt-2">{error}</p>
         </div>
+        <p className="text-red-500 mt-2">{error}</p>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

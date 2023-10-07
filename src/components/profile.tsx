@@ -5,9 +5,9 @@ import ebayImage from 'data-base64:~assets/ebay.png';
 import targetImage from 'data-base64:~assets/target.png';
 import smallSellerImage from 'data-base64:~assets/smallsellers.png';
 import walmartImage from 'data-base64:~assets/walmart.webp';
-import { useReadDB } from '~firebase/hooks';
 import { useSearchContext } from '~context/SearchContext';
 import { useUpdateDB } from '~firebase/hooks'; 
+import { useSignOut } from '~firebase/hooks';
 
 const imageUrls = [
   amazonImage,
@@ -21,14 +21,24 @@ const imageUrls = [
 const Profile = () => {
   const { preferences, setPreferences, userEmail } = useSearchContext();
 
-  const initialPreferences = {
-    Amazon: preferences.includes('Amazon'),
-    Bestbuy: preferences.includes('Bestbuy'),
-    eBay: preferences.includes('eBay'),
-    Target: preferences.includes('Target'),
-    Walmart: preferences.includes('Walmart'),
-    Others: preferences.includes('Others')
-  };
+  // Check if preferences is an array and not null
+  const initialPreferences = Array.isArray(preferences)
+    ? {
+        Amazon: preferences.includes('Amazon'),
+        Bestbuy: preferences.includes('Bestbuy'),
+        eBay: preferences.includes('eBay'),
+        Target: preferences.includes('Target'),
+        Walmart: preferences.includes('Walmart'),
+        Others: preferences.includes('Others')
+      }
+    : {
+        Amazon: false,
+        Bestbuy: false,
+        eBay: false,
+        Target: false,
+        Walmart: false,
+        Others: false
+      };
 
   const [selectedPreferences, setSelectedPreferences] = useState(initialPreferences);
 
@@ -53,6 +63,11 @@ const Profile = () => {
   };
 
   const updateToDB = useUpdateDB();
+  const signOut = useSignOut(); 
+
+  const handleSignOut = () => {
+    signOut(); // Call the sign out function to log the user out
+  };
 
   return (
     <div className="mt-5 px-2 py-5 max-w-[340px] mx-auto">
@@ -103,6 +118,13 @@ const Profile = () => {
           onClick={savePreferences}
         >
           Save
+        </button>
+        <button
+  className="rounded bg-blue-500 text-white px-8 py-2 border"
+
+          onClick={handleSignOut}
+        >
+          Sign Out
         </button>
       </div>
     </div>

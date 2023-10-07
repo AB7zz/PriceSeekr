@@ -6,11 +6,13 @@ import Same from "~features/same";
 import Preferences from '~components/preferences';
 import Signout from '~components/Signout'
 import Login from '~components/Login'
+import DisplayHistory from "~components/history";
 import Signup from '~components/Signup'
 import TopBar from "~components/TopBar";
 import { useSearchContext } from "~context/SearchContext";
 import Profile from "~components/profile";
 import Choose from "~components/Choose";
+import ContactUs from "~components/Contact";
 import {
   useDetectChange,
   useReadDB,
@@ -28,7 +30,6 @@ function Main() {
   const handleDetectChange = useDetectChange();
 
   React.useEffect(() => {
-    console.log(user, isNewUser)
     if (user && !isNewUser) {
       readFromDB(user.uid)
       setPage('/choose');
@@ -41,14 +42,33 @@ function Main() {
     handleDetectChange();
   }, []);
 
+  // Add event listener for tab changes
   useEffect(() => {
+    const handleTabChange = (activeInfo) => {
+      if (activeInfo && activeInfo[0]) {
+        getHTMLData(activeInfo[0]);
+      }
+    };
+
+    // Add the event listener for tab changes
+    chrome.tabs.onActivated.addListener((activeInfo) => {
+      handleTabChange(activeInfo);
+    });
+
+    // Call getHTMLData for the currently active tab when the component mounts
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const currentTab = tabs[0];
       if (currentTab) {
         getHTMLData(currentTab);
       }
     });
-  }, []);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      chrome.tabs.onActivated.removeListener(handleTabChange);
+    };
+  }, []); // Empty dependency array means this effect runs only once on mount
+
   
   const setIsNewUserToFalse = () => {
     setIsNewUser(false);
@@ -65,23 +85,31 @@ function Main() {
       return <Preferences setIsNewUserToFalse={setIsNewUserToFalse}/>;
     }
     else if (page === "/choose"){
+
       return <Choose data={pageData} />
     }
     else if (page === '/Profile'){
       return <Profile/>
     }
+    else if (page === '/History'){
+      return <DisplayHistory/>
+    }
+    else if (page === '/Contact'){
+      return <ContactUs/>
+    }
+
   };
 
 
   return (
-    <div className="w-[360px]">
+    <div className="w-[400px]">
     <TopBar />
     {user != null ? (
       isNewUser ? (
         <>{renderContent()}</>
       ) : (
         <div>
-          <div className={`px-10 ${page === "/Profile" ? "px-3" : ""}`}>
+          <div className={`px-5 ${page === "/Profile" ? "px-3" : ""}`}>
             {renderContent()}
           </div>
           <Signout />
