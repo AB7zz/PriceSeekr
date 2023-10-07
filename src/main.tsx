@@ -30,7 +30,6 @@ function Main() {
   const handleDetectChange = useDetectChange();
 
   React.useEffect(() => {
-    console.log(user, isNewUser)
     if (user && !isNewUser) {
       readFromDB(user.uid)
       setPage('/choose');
@@ -43,14 +42,33 @@ function Main() {
     handleDetectChange();
   }, []);
 
+  // Add event listener for tab changes
   useEffect(() => {
+    const handleTabChange = (activeInfo) => {
+      if (activeInfo && activeInfo[0]) {
+        getHTMLData(activeInfo[0]);
+      }
+    };
+
+    // Add the event listener for tab changes
+    chrome.tabs.onActivated.addListener((activeInfo) => {
+      handleTabChange(activeInfo);
+    });
+
+    // Call getHTMLData for the currently active tab when the component mounts
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const currentTab = tabs[0];
       if (currentTab) {
         getHTMLData(currentTab);
       }
     });
-  }, []);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      chrome.tabs.onActivated.removeListener(handleTabChange);
+    };
+  }, []); // Empty dependency array means this effect runs only once on mount
+
   
   const setIsNewUserToFalse = () => {
     setIsNewUser(false);
@@ -67,6 +85,7 @@ function Main() {
       return <Preferences setIsNewUserToFalse={setIsNewUserToFalse}/>;
     }
     else if (page === "/choose"){
+
       return <Choose data={pageData} />
     }
     else if (page === '/Profile'){

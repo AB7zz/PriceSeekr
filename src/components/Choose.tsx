@@ -1,37 +1,84 @@
-import React from 'react'
-import animation1 from "./animation_lm95baft.json"
-import animation2 from "./animation_im34retq.json"
-import Lottie from 'lottie-react'
-import { useSearchContext } from '~context/SearchContext'
-import NotSupport from './NotSupport'
-
-const Choose = ({data}) => {
-  const {setPage} = useSearchContext()
+import React from 'react';
+import { useSearchContext } from '~context/SearchContext';
+import NotSupport from './NotSupport';
+import { Grid, Paper, Typography } from '@mui/material';
+import ImageSearchIcon from '@mui/icons-material/ImageSearch';
+import TravelExploreIcon from '@mui/icons-material/TravelExplore';
+const Choose = ({ data }) => {
+  const { setPage } = useSearchContext();
+  console.log('data prop:', data);
   return (
-    <>
-    {data == 'none' ? 
-    <NotSupport /> 
-    : <div className='px-5 py-7 grid grid-cols-1'>
-        <div onClick={() => setPage('/same')} className='bg-[#FFF5ED] cursor-pointer px-5 py-5 rounded-[15px]'>
-          <div className="grid grid-cols-1">
-            <Lottie animationData={animation1} className='!w-[100px] flex m-auto'/>  
-            <div className='flex justify-center'>
-              <h3 className="text-black font-semibold poppins textl-2xl">Search Same</h3>
-            </div>
-          </div>
-        </div>
-        <hr className="border-[#C5C5C5] border-t-2 w-[200px] flex m-auto my-5" />
-        <div onClick={() => setPage('/similar')} className='bg-[#D9D9D9] cursor-pointer px-5 py-5 rounded-[15px]'>
-          <div className="grid grid-cols-1">
-            <Lottie animationData={animation2} className='!w-[100px] flex m-auto'/>  
-            <div className='flex justify-center'>
-              <h3 className="text-black font-semibold poppins textl-2xl">Search Similar</h3>
-            </div>
-          </div>  
-        </div>
-    </div>}
-    </>
-  )
-}
+    <div className="px-4 py-4">
+      {data ? (
+        <>
+        <h1 className="text-xl font-semibold mb-3 text-center">
+          Select type of Search
+        </h1>
+        <p className="text-sm text-gray-600 mb-6 text-center" >
+          Explore options to find similar or identical products and save money!
+        </p>
+        <Grid container spacing={3}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            onClick={() => {
+              setPage('/same');
+            }}
+            style={{
+              cursor: 'pointer',
+              transition: 'background-color 0.8s',
+            }}
+          >
+            <Paper
+              elevation={3}
+              style={{
+                backgroundColor: '#FFF5ED',
+                padding: '2rem',
+                boxShadow: 'none',
+                borderRadius: '15px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <ImageSearchIcon style={{ fontSize: 64, color: 'orange'}} />
+              <Typography mt={1} >Same Products</Typography>
+            </Paper>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            onClick={() => setPage('/similar')}
+            style={{
+              cursor: 'pointer',
+              transition: 'background-color 0.8s',
+            }}
+          >
+            <Paper
+              elevation={3}
+              style={{
+                backgroundColor: '#f7f7f7',
+                padding: '2rem',
+                boxShadow: 'none',
+                borderRadius: '10px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <TravelExploreIcon style={{ fontSize: 64, color: '#3fcaf6' }} />
+              <Typography  mt={1} >Similar Products</Typography>
+            </Paper>
+          </Grid>
+        </Grid>
+        </>
+      ) : (
+        <NotSupport />
+      )}
+    </div>
+  );
+};
 
-export default Choose
+export default Choose;

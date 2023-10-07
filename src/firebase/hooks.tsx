@@ -166,7 +166,7 @@ export const useWriteToDB = () => {
   return handleWriteToDB
 };
 
-export const saveSearchResultToFirestore = async (SearchData, PageData) => {
+export const saveSearchResultToFirestore = async (SearchData, PageData, isSame) => {
   const user = auth.currentUser;
   if (user) {
     const userId = user.uid;
@@ -185,17 +185,31 @@ export const saveSearchResultToFirestore = async (SearchData, PageData) => {
       if (!userData.History.PageData) {
         userData.History.PageData = [];
       }
-
-      // Insert PageData as the first element of the PageData array
-      userData.History.PageData.unshift({
-        PageDetails: PageData,
-        SearchRes: SearchData.map((product) => ({
-          thumbnail: product.thumbnail,
-          title: product.title,
-          url: product.link,
-          price: product.extracted_price,
-        })),
-      });
+      if(isSame)
+      {
+          // Insert PageData as the first element of the PageData array
+          userData.History.PageData.unshift({
+            PageDetails: PageData,
+            SearchRes: SearchData.map((product) => ({
+              thumbnail: product.thumbnail,
+              title: product.title,
+              url: product.link,
+              price: product.price.extracted_value,
+            })),
+          });
+      }else
+      {
+          // Insert PageData as the first element of the PageData array
+          userData.History.PageData.unshift({
+            PageDetails: PageData,
+            SearchRes: SearchData.map((product) => ({
+              thumbnail: product.thumbnail,
+              title: product.title,
+              url: product.link,
+              price: product.extracted_price,
+            })),
+          });
+       }
 
       // Update the user's document in Firestore
       await setDoc(userDocRef, userData);

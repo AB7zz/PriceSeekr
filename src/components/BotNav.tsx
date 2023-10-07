@@ -10,8 +10,8 @@ const BotNav = () => {
 
   return (
     <>
-      <div className='sticky bottom-0 bg-[#FF9C1A] rounded-tr-[12px] rounded-tl-[15px] px-5 py-2 flex justify-between'>
-        <HomeIcon className="text-white" />
+      <div className='sticky bottom-0 bg-[#FF9C1A] px-5 py-2 flex justify-between' >
+        <HomeIcon className="text-white" onClick={() => setPage('/choose')}/>
         <HistoryIcon className="text-white" onClick={() => setPage('/History')} />
         <AccountCircleIcon className="text-white"onClick={() => setPage('/Profile')}  />
       </div>
