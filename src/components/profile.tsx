@@ -7,8 +7,7 @@ import smallSellerImage from 'data-base64:~assets/smallsellers.png';
 import walmartImage from 'data-base64:~assets/walmart.webp';
 import { useSearchContext } from '~context/SearchContext';
 import { useUpdateDB } from '~firebase/hooks'; 
-import { useSignOut } from '~firebase/hooks';
-import {motion} from 'framer-motion'
+import { motion } from 'framer-motion'
 
 const imageUrls = [
   amazonImage,
@@ -44,49 +43,43 @@ const Profile = () => {
   const [selectedPreferences, setSelectedPreferences] = useState(initialPreferences);
 
   const toggleOption = (optionName) => {
+    setSelectedPreferences((prevState) => {
+      const updatedPreferences = {
+        ...prevState,
+        [optionName]: !prevState[optionName]
+      };
 
-    setSelectedPreferences((prevState) => ({
-      ...prevState,
-      [optionName]: !prevState[optionName]
-    }));
-  };
+      // Save the updated preferences to the database whenever a preference is toggled
+      updateToDB({
+        Preferences: Object.keys(updatedPreferences).filter(
+          (option) => updatedPreferences[option]
+        ),
+      });
 
-
-  const savePreferences = () => {
-   
-    const updatedPreferences = Object.keys(selectedPreferences).filter(
-      (optionName) => selectedPreferences[optionName]
-    );
-
-    updateToDB({
-      Preferences: updatedPreferences,
+      return updatedPreferences;
     });
   };
 
   const updateToDB = useUpdateDB();
-  const signOut = useSignOut(); 
 
-  const handleSignOut = () => {
-    signOut(); // Call the sign out function to log the user out
-  };
 
   return (
     <div className="mt-5 px-2 py-5 max-w-[340px] mx-auto">
-        <div className="text-left mb-2 font-semibold">Your Email</div>
-        <div className="rounded bg-[#EDEDED] p-2 border border-gray-300 text-[#8C8C8C]">
+      <div className="text-left mb-2 font-semibold">Your Email</div>
+      <div className="rounded bg-[#EDEDED] p-2 border border-gray-300 text-[#8C8C8C]">
         {userEmail}
-        </div>
+      </div>
 
-    <div className="mt-6 grid grid-cols-2 gap-4">
-      <motion.button 
-      whileHover={{ scale: 1.1 }}
-      className="rounded-lg bg-[#FFEFDC] text-[#FF9C1A] px-8 py-3 border border-[#FF9C1A] hover:text-[#FF9C1A] hover:bg-[#FFEFDC]">
-        Light Theme
-      </motion.button>
-      <motion.button 
-      whileHover={{ scale: 1.1 }}
-      className="rounded-lg bg-black text-[#FF9C1A] px-8 py-3">Dark Theme</motion.button>
-    </div>
+      <div className="mt-6 grid grid-cols-2 gap-4">
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          className="rounded-lg bg-[#FFEFDC] text-[#FF9C1A] px-8 py-3 border border-[#FF9C1A] hover:text-[#FF9C1A] hover:bg-[#FFEFDC]">
+          Light Theme
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          className="rounded-lg bg-black text-[#FF9C1A] px-8 py-3">Dark Theme</motion.button>
+      </div>
 
       <div className="mt-8 border-t border-gray-200 pt-4">
         <h2 className="text-md text-center">Edit your preferences</h2>
@@ -114,23 +107,6 @@ const Profile = () => {
             </div>
           ))}
         </div>
-      </div>
-
-      <div className="mt-4 text-center">
-      <button
-  className="rounded bg-blue-500 text-white px-8 py-2 border"
-
-          onClick={savePreferences}
-        >
-          Save
-        </button>
-        <button
-  className="rounded bg-blue-500 text-white px-8 py-2 border"
-
-          onClick={handleSignOut}
-        >
-          Sign Out
-        </button>
       </div>
     </div>
   );

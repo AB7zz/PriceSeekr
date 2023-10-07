@@ -267,9 +267,6 @@ export const useUpdateDB = () => {
         if (updatedData.Preferences) {
           setPreferences(updatedData.Preferences);
         }
-
-        // Optionally, you can navigate to a different page after updating
-        setPage('/choose');
       } catch (error) {
         console.error('Error updating data in Firestore:', error);
       }
