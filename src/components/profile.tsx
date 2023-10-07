@@ -8,6 +8,7 @@ import walmartImage from 'data-base64:~assets/walmart.webp';
 import { useSearchContext } from '~context/SearchContext';
 import { useUpdateDB } from '~firebase/hooks'; 
 import { useSignOut } from '~firebase/hooks';
+import {motion} from 'framer-motion'
 
 const imageUrls = [
   amazonImage,
@@ -77,10 +78,14 @@ const Profile = () => {
         </div>
 
     <div className="mt-6 grid grid-cols-2 gap-4">
-      <button className="rounded-lg bg-[#FFEFDC] text-[#FF9C1A] px-8 py-3 border border-[#FF9C1A] hover:text-[#FF9C1A] hover:bg-[#FFEFDC]">
+      <motion.button 
+      whileHover={{ scale: 1.1 }}
+      className="rounded-lg bg-[#FFEFDC] text-[#FF9C1A] px-8 py-3 border border-[#FF9C1A] hover:text-[#FF9C1A] hover:bg-[#FFEFDC]">
         Light Theme
-      </button>
-      <button className="rounded-lg bg-black text-[#FF9C1A] px-8 py-3">Dark Theme</button>
+      </motion.button>
+      <motion.button 
+      whileHover={{ scale: 1.1 }}
+      className="rounded-lg bg-black text-[#FF9C1A] px-8 py-3">Dark Theme</motion.button>
     </div>
 
       <div className="mt-8 border-t border-gray-200 pt-4">
@@ -93,7 +98,7 @@ const Profile = () => {
               className={`rounded-lg w-[100%] h-[60px] px-3 items-center bg-[#EFEFEF] flex ${
                 selectedPreferences[optionName]
                   ? 'border-2 border-[#FF9C1A]'
-                  : 'border-none'
+                  : 'border-0 hover:border-2 hover:border-[#FF9C1A]'
               } cursor-pointer`}
               onClick={() => toggleOption(optionName)}
             >

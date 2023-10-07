@@ -4,7 +4,7 @@ import "~style.css";
 import Similiar from "~features/similiar";
 import Same from "~features/same";
 import Preferences from '~components/preferences';
-import Signout from '~components/Signout'
+// import Signout from '~components/Signout'
 import Login from '~components/Login'
 import DisplayHistory from "~components/history";
 import Signup from '~components/Signup'
@@ -102,7 +102,7 @@ function Main() {
 
 
   return (
-    <div className="w-[400px]">
+    <div className="w-[400px] h-[580px]">
     <TopBar />
     {user != null ? (
       isNewUser ? (
@@ -112,7 +112,7 @@ function Main() {
           <div className={`px-5 ${page === "/Profile" ? "px-3" : ""}`}>
             {renderContent()}
           </div>
-          <Signout />
+          {/* <Signout /> */}
           <BotNav />
         </div>
       )

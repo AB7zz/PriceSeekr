@@ -10,7 +10,7 @@ const BotNav = () => {
 
   return (
     <>
-      <div className='sticky bottom-0 bg-[#FF9C1A] px-5 py-2 flex justify-between' >
+      <div className='absolute w-full bottom-0 bg-[#FF9C1A] px-5 py-2 flex justify-between' >
         <HomeIcon className="text-white" onClick={() => setPage('/choose')}/>
         <HistoryIcon className="text-white" onClick={() => setPage('/History')} />
         <AccountCircleIcon className="text-white"onClick={() => setPage('/Profile')}  />
