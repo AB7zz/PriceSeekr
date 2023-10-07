@@ -7,6 +7,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import PolicyIcon from '@mui/icons-material/Policy';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import CloseIcon from '@mui/icons-material/Close'; // Import the close icon
 import { useSearchContext } from '~context/SearchContext';
 import { useSignOut } from '~firebase/hooks';
 
@@ -14,6 +15,10 @@ const TopBar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const { setPage } = useSearchContext(); // Get setPage function from the context
   const signOut = useSignOut(); 
+
+  const handleCloseWebExtension = () => {
+    window.close();
+  };
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -53,11 +58,14 @@ const TopBar = () => {
           PriceSeekr
         </h3>
       </div>
-      <MoreHorizIcon
-        className="text-white cursor-pointer"
-        onClick={handleMenuOpen}
-        fontSize="medium"
-      />
+      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '10px' }}>
+        <MoreHorizIcon
+          className="text-white cursor-pointer"
+          onClick={handleMenuOpen}
+          fontSize="medium"
+        />
+        <CloseIcon className="text-white cursor-pointer" onClick={handleCloseWebExtension} fontSize="medium" />
+      </div>
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
