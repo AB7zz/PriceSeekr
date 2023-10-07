@@ -108,7 +108,7 @@ function Main() {
       isNewUser ? (
         <>{renderContent()}</>
       ) : (
-        <div>
+        <div className='h-full'>
           <div className={`h-full px-5 ${page === "/Profile" ? "px-3" : ""}`}>
             {renderContent()}
           </div>

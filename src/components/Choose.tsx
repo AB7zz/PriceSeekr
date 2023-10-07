@@ -8,7 +8,7 @@ const Choose = ({ data }) => {
   const { setPage } = useSearchContext();
   console.log('data prop:', data);
   return (
-    <div className="px-4 py-4">
+    <div className="">
       {data ? (
         <>
         <h1 className="text-xl font-semibold mb-3 text-center">

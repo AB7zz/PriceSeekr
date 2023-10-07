@@ -13,7 +13,7 @@ const BotNav = () => {
   };
 
   return (
-    <div className='sticky bottom-0 bg-gray-400 px-5 py-2 flex justify-between'>
+    <div className='fixed w-full bottom-0 bg-[#e0821e] px-5 py-2 flex justify-between'>
       <HomeIcon
         className={isIconActive('/choose')}
         onClick={() => setPage('/choose')}
