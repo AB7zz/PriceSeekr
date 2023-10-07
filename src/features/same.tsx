@@ -44,7 +44,7 @@ const Same = ({ data }) => {
   };
 
   return (
-    <div className="px-5 py-5 w-[360px] bg-white">
+    <div className="px-5 py-5 bg-white">
         <>
           <div>
             <div className="grid grid-cols-2 gap-4">

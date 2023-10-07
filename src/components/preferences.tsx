@@ -65,7 +65,7 @@ const Preferences: React.FC<PreferencesProps> = ({ setIsNewUserToFalse }) => {
   };
   
   return (
-    <div className="px-5 py-10 pt-5 w-[360px] bg-white mt-5">
+    <div className="px-5 py-10 pt-5 bg-white mt-5">
       <div className="flex flex-col justify-center items-center">
         <p className="text-m mb-4 text-lg poppins font-semibold text-[#707070] text-center">Pick where you love to shop for better deals!</p>
       </div>

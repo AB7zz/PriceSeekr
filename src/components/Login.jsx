@@ -16,7 +16,7 @@ const Login = ({ setIsNewUser, setShowLoginForm, showLoginForm }) => {
 
   return (
     <>
-      <div className="px-2 mt-5 py-5 w-[360px] flex flex-col justify-center items-center">
+      <div className="px-2 mt-5 py-5 flex flex-col justify-center items-center">
         <form className="block px-10">
           <input
             type="text"
@@ -41,6 +41,7 @@ const Login = ({ setIsNewUser, setShowLoginForm, showLoginForm }) => {
           <div className="flex justify-center">
             <button
               type="button"
+              style={{padding: '10px', borderRadius: '5px'}}
               className="mt-5 bg-[#FF9C1A] hover:bg-[#E38A16] text-white text-base rounded-[5px] py-2 px-10 text-[19px]"
               onClick={() => handleEmailSignIn(email, password)}
             >
@@ -50,13 +51,14 @@ const Login = ({ setIsNewUser, setShowLoginForm, showLoginForm }) => {
         </form>
       </div>
       <div className="px-5">
-        <div className="flex justify-around items-center">
+        <div style={{justifyContent: 'center'}} className="flex items-center">
           <hr className="border-[#C5C5C5] border-t-2" />
           <span className="text-lg text-[#A4A4A4] poppins">OR</span>
           <hr className="border-[#C5C5C5] border-t-2" />
         </div>
         <div className="flex justify-center py-5">
           <button
+            style={{background: '#CF4332', borderRadius: '5px'}}
             className="flex items-center bg-[#CF4332] hover:bg-[#AB3324] px-7 py-2 rounded-[5px] text-white font-semibold"
             onClick={handleGoogleLogin}
           >
