@@ -30,7 +30,7 @@ export const config: PlasmoCSConfig = {
  
 function Content() {
   const htmlPort = usePort("html")
-  const [display, setDisplay] = React.useState(true)
+  const [display, setDisplay] = React.useState(false)
  React.useEffect(() => {
   htmlPort.send({
     message: "run_get_html_data"
@@ -39,7 +39,10 @@ function Content() {
 
  React.useEffect(() => {
   if (htmlPort.data?.data) {
+    setDisplay(true)
     console.log(htmlPort.data?.data)
+  }else{
+    setDisplay(false)
   } 
  }, [htmlPort.data?.data])
 
