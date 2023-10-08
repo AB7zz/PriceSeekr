@@ -102,17 +102,16 @@ function Main() {
 
 
   return (
-    <div className="w-[400px] h-[580px]">
+    <div className="w-[370px]">
     <TopBar />
     {user != null ? (
       isNewUser ? (
         <>{renderContent()}</>
       ) : (
-        <div className='h-full'>
-          <div className={`h-full px-5 ${page === "/Profile" ? "px-3" : ""}`}>
+        <div className="">
+          <div className={`px-5 h-screen ${page === "/Profile" ? "px-3" : ""}`}>
             {renderContent()}
           </div>
-          {/* <Signout /> */}
           <BotNav />
         </div>
       )

@@ -71,8 +71,8 @@ const DisplayHistory = () => {
             </thead>
             <tbody>
               {selectedItem.map((item, index) => (
-                <tr key={index} className="hover:bg-gray-100 transition duration-300 cursor-pointer">
-                  <td className="px-2 py-5 border mx-auto flex justify-center items-center">
+                <tr key={index} className="hover:bg-gray-100 transition duration-300 cursor-pointer border">
+                  <td className="px-2 py-5  mx-auto flex justify-center items-center">
                     <img src={item.thumbnail} alt={`Item ${index + 1}`} className="max-h-[100px] max-w-[90px] min-h-[50px] min-w-[50px]"/>
                   </td>
                   <td className="px-2 py-2 border text-xs">
@@ -112,11 +112,11 @@ const DisplayHistory = () => {
             {pageDetails.map((item, index) => (
               <tr
                 key={index}
-                className="hover:bg-gray-100 transition duration-300 cursor-pointer"
+                className="hover:bg-gray-100 transition duration-300 cursor-pointer border"
                 onClick={() => handleItemClick(index)}
               >
                 
-                <td className="px-2 py-5 border mx-auto flex justify-center items-center">
+                <td className="px-2 py-5 mx-auto flex justify-center items-center">
                   <img
                     src={item[1]}
                     alt={`Event ${index + 1}`}
@@ -124,7 +124,7 @@ const DisplayHistory = () => {
                   />
                 </td>
 
-                <td className="px-2 py-2 border">
+                <td className="px-2 py-2 border text-xs">
                   <a
                     href={item[4]}
                     target="_blank"
@@ -134,8 +134,8 @@ const DisplayHistory = () => {
                     {limitTitle(item[0], 12)}
                   </a>
                 </td>
-                <td className="px-2 py-4 border">{item[3]}</td>
-                <td className="px-1 py-0 border">${parseFloat(item[2].replace(/[^\d.]/g, '')).toFixed(2)}</td>
+                <td className="px-2 py-4 border text-xs">{item[3]}</td>
+                <td className="px-1 py-0 border text-xs">${parseFloat(item[2].replace(/[^\d.]/g, '')).toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
