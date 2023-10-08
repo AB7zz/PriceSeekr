@@ -37,8 +37,8 @@ const NotSupport: React.FC = () => {
         <div className="grid grid-cols-3 gap-4 pl-[2.20rem]">
           {platforms.map((item, index) => (
             <a key={index} href={item.url} target="_blank" rel="noopener noreferrer">
-              <div className="shadow-lg flex items-center justify-center h-20 w-16 px-3 py-3 rounded-[15px] bg-gray-100">
-                <img src={item.image} alt={item.alt} className="max-w-16 max-h-20" />
+              <div className="shadow-lg flex items-center justify-center h-20 w-20 px-3 py-3 rounded-[15px] bg-gray-100">
+                <img src={item.image} alt={item.alt} className="max-w-20 max-h-20" />
               </div>
             </a>
           ))}

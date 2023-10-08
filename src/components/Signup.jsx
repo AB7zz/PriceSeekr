@@ -42,7 +42,7 @@ const Signup = ({setIsNewUser, setShowLoginForm, showLoginForm}) => {
             <div className="flex justify-center">
               <button
                 type="button"
-                style={{padding: '10px', borderRadius: '5px'}}
+                style={{padding: '10px', borderRadius: '5px', width: '100%'}}
                 className="mt-5 bg-[#e0821e] hover:bg-[#E38A16] text-white text-base rounded-[5px] py-2 px-10 text-[19px]"
                 onClick={() => handleEmailSignUp(email, password)}
               >
@@ -59,7 +59,7 @@ const Signup = ({setIsNewUser, setShowLoginForm, showLoginForm}) => {
           </div>
           <div className="flex justify-center py-5">
             <button
-              style={{background: '#CF4332', borderRadius: '5px'}}
+              style={{background: '#CF4332', borderRadius: '5px', width: '100%', justifyContent: 'center'}}
               className="bg-[#CF4332] hover:bg-[#AB3324] px-7 py-2 rounded-[5px] text-white font-semibold"
               onClick={handleGoogleLogin}
             >
