@@ -49,7 +49,7 @@ const Similiar = ({ data }) => {
   };
 
   return (
-    <div className="px-5 py-5 bg-white">
+    <div className="px-5 py-5 bg-white pb-20">
       {isLoading ? (
         <Loader />
       ) : similiar && !notfound ? (

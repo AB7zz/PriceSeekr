@@ -72,14 +72,13 @@ const DisplayHistory = () => {
             <tbody>
               {selectedItem.map((item, index) => (
                 <tr key={index} className="hover:bg-gray-100 transition duration-300 cursor-pointer">
-                  <td className="px-3 py-3 border">
-                    <img src={item.thumbnail} alt={`Item ${index + 1}`} className="h-fit" />
+                  <td className="px-2 py-5 border mx-auto flex justify-center items-center">
+                    <img src={item.thumbnail} alt={`Item ${index + 1}`} className="max-h-[100px] max-w-[90px] min-h-[50px] min-w-[50px]"/>
                   </td>
                   <td className="px-2 py-2 border text-xs">
                     <a
                       href={item.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    
                       className="text-indigo-500 hover:underline text-xs"
                     >
                       {limitTitle(item.title, 12)}
@@ -117,9 +116,14 @@ const DisplayHistory = () => {
                 onClick={() => handleItemClick(index)}
               >
                 
-                <td className="px-3 py-3 border">
-                  <img src={item[1]} alt={`Event ${index + 1}`} className="h-fit" />
+                <td className="px-2 py-5 border mx-auto flex justify-center items-center">
+                  <img
+                    src={item[1]}
+                    alt={`Event ${index + 1}`}
+                    className="max-h-[100px] max-w-[90px] min-h-[50px] min-w-[50px]"
+                  />
                 </td>
+
                 <td className="px-2 py-2 border">
                   <a
                     href={item[4]}
@@ -148,7 +152,7 @@ const DisplayHistory = () => {
   };
 
   return (
-    <div className="mt-5">
+    <div className="mt-5 pb-20">
       <div className="w-full max-w-3xl">
         <div className="text-left mb-2">
           <button
