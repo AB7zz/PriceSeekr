@@ -12,11 +12,13 @@ const NotSupport: React.FC = () => {
     { image: walmartImage, alt: 'Walmart', url: 'https://www.walmart.com' },
     { image: bestbuyImage, alt: 'BestBuy', url: 'https://www.bestbuy.com' },
     { image: targetImage, alt: 'Target', url: 'https://www.target.com' },
+    { image: targetImage, alt: 'Target', url: 'https://www.target.com' },
+    { image: targetImage, alt: 'Target', url: 'https://www.target.com' },
   ];
 
   return (
     <div className="flex flex-col">
-      <div className="w-full h-40 bg-black rounded-lg text-center relative">
+      <div className="w-full h-[14rem] bg-black rounded-lg text-center relative">
         <div className="absolute left-3 top-9">
           <img
             src={Space} // Use the imported Space (astronaut) image
@@ -28,15 +30,15 @@ const NotSupport: React.FC = () => {
           <p className="text-sm">We do not support this website</p>
         </div>
       </div>
-      <div className="text-center mt-3">
+      <div className="text-center">
         <p className="my-4 text-base">
           Browse products from one of our supported platforms
         </p>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-3 gap-4 pl-[2.20rem]">
           {platforms.map((item, index) => (
             <a key={index} href={item.url} target="_blank" rel="noopener noreferrer">
-              <div className="shadow-lg flex items-center justify-center h-32 w-30 px-3 py-3 rounded-[15px] bg-gray-100">
-                <img src={item.image} alt={item.alt} className="max-w-20 max-h-20" />
+              <div className="shadow-lg flex items-center justify-center h-20 w-16 px-3 py-3 rounded-[15px] bg-gray-100">
+                <img src={item.image} alt={item.alt} className="max-w-16 max-h-20" />
               </div>
             </a>
           ))}

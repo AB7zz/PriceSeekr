@@ -71,14 +71,14 @@ const Preferences: React.FC<PreferencesProps> = ({ setIsNewUserToFalse }) => {
       </div>
       <div className="grid grid-cols-2 gap-4 mt-5">
         {Object.keys(initialPreferences).map((optionName, index) => (
-          <div key={index} className={`rounded-lg w-[100%] h-[60px] px-3 items-center bg-[#EFEFEF] flex ${preferences[optionName] ? 'border-2 border-[#FF9C1A]' : 'border-none'} cursor-pointer`} onClick={() => toggleOption(optionName)}>
+          <div key={index} className={`rounded-lg w-[100%] h-[60px] px-3 items-center bg-[#EFEFEF] flex ${preferences[optionName] ? 'border-2 border-[#e0821e]' : 'border-- hover:border-2 border-[#e0821e]'} cursor-pointer`} onClick={() => toggleOption(optionName)}>
             <img src={imageUrls[index]} alt={`Image ${index}`} className='w-[35px] mr-3' style={{ objectFit: 'contain' }} />
             <p className='text-[#393939] poppins font-semibold text-lg text-center'>{optionName}</p>
           </div>
         ))}
       </div>
       <div className="flex justify-center mt-6">
-        <button className="bg-[#FF9C1A] text-white poppins font-bold text-base rounded-lg py-2 px-7 transition-colors" onClick={handleContinue}>
+        <button className="bg-[#e0821e] text-white poppins font-bold text-base rounded-lg py-2 px-7 transition-colors" onClick={handleContinue}>
           Continue
         </button>
       </div>

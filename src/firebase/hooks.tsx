@@ -147,7 +147,7 @@ export const useWriteToDB = () => {
     if (user) {
       const userId = user.uid;
       const userEmail = user.email;
-  
+      console.log(userId, userEmail)
       const userDocRef = doc(colRef, userId);
       try {
         await setDoc(userDocRef, {
