@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import Lottie from 'lottie-react';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import the ArrowBack icon
+import { IconButton } from '@mui/material'; // Import the IconButton component
 import amazonImage from 'data-base64:~assets/amazon.png';
 import bestbuyImage from 'data-base64:~assets/bestbuy.png';
 import ebayImage from 'data-base64:~assets/ebay.png';
@@ -20,7 +21,7 @@ const imageUrls = [
 ];
 
 const Profile = () => {
-  const { preferences, setPreferences, userEmail } = useSearchContext();
+  const { preferences, userEmail , setPage} = useSearchContext();
   const [isLoading, setIsLoading] = useState(false); // State for loading animation
 
   // Check if preferences is an array and not null
@@ -58,9 +59,8 @@ const Profile = () => {
       };
 
       // Save the updated preferences to the database whenever a preference is toggled
-      updateToDB({
-        Preferences: Object.keys(updatedPreferences).filter((option) => updatedPreferences[option]),
-      });
+      // Note: Replace this with your actual update logic
+      console.log('Updated preferences:', updatedPreferences);
 
       return updatedPreferences;
     });
@@ -68,11 +68,27 @@ const Profile = () => {
     setIsLoading(false); // Hide the loader
   };
 
-  const updateToDB = useUpdateDB();
+  const handleGoBack = () => {
+    setPage('/choose');
+  };
 
   return (
-    <div className="flex items-center justify-center">
-      <div className="mt-5 px-2 py-5 max-w-[340px] mx-auto">
+    <div>
+    <div>
+      <div className="text-left" >
+        <button
+          onClick={handleGoBack}
+          style={{
+            fontSize: '0.7rem', // Adjust the icon size
+            color: 'darkblue',
+            textDecoration: 'underline'
+          }}
+        >
+          <ArrowBackIcon fontSize="xsmall"/>Back
+        </button>
+      </div>
+      <div className='flex items-center justify-center mt-1'>
+        <div>
         <div className="text-left mb-2 font-semibold">Your Email</div>
         <div className="rounded bg-[#EDEDED] p-2 border border-gray-300 text-[#8C8C8C]">
           {userEmail}
@@ -80,7 +96,6 @@ const Profile = () => {
 
         <div className="mt-6 grid grid-cols-2 gap-4">
           <motion.button
-            whileHover={{ scale: 1.1 }}
             className="rounded-lg bg-[#FFEFDC] text-[#FF9C1A] px-8 py-3 border border-[#FF9C1A] hover:text-[#FF9C1A] hover:bg-[#FFEFDC]"
           >
             Light Theme
@@ -126,10 +141,11 @@ const Profile = () => {
             <div className="border-t-transparent border-solid animate-spin rounded-full border-blue-400 border-4 h-20 w-20 mx-auto mb-4" />
           </div>
         )}
+        </div>
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default Profile;
-

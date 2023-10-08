@@ -6,6 +6,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import firebase from 'firebase/app';
 import { useSearchContext } from "~context/SearchContext";
 import { auth, colRef } from "~firebase";
 import { getFirestore, doc, getDoc, setDoc, snapshotEqual } from 'firebase/firestore';
@@ -195,10 +196,12 @@ export const saveSearchResultToFirestore = async (SearchData, PageData, isSame) 
               title: product.title,
               url: product.link,
               price: product.price.extracted_value,
+              company: product.source,
             })),
           });
       }else
       {
+        const date = new Date();
           // Insert PageData as the first element of the PageData array
           userData.History.PageData.unshift({
             PageDetails: PageData,
@@ -207,6 +210,8 @@ export const saveSearchResultToFirestore = async (SearchData, PageData, isSame) 
               title: product.title,
               url: product.link,
               price: product.extracted_price,
+              company: product.source,
+              searchDate: date
             })),
           });
        }

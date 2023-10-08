@@ -105,22 +105,26 @@ export const MySearchProvider = ({ children }) => {
     }
   
     const runSearchSimiliar = (data: any) => {
-        if(data){
-            console.log('runSearchSimiliar is called')
-            if(!country){
-                getLocation()
-                    .then(country => {
-                        setCountry(country)
-                        searchTitle(data[0], country, data[2])
-                    })
-            }else{
-                searchTitle(data[0], country, data[2])
-            }
+        if (data) {
+          console.log('runSearchSimilar is called');
+     
+          if (!country) {
+            getLocation()
+              .then((country) => {
+                setCountry(country);
+                searchTitle(data[0], country, data[2]);
+              });
+          } else {
+            searchTitle(data[0], country, data[2]);
+          }
         }
-    }
-
+      }
+      
+      
     const runSearchImage = (data: any) => {
         console.log('runSearchImage is called')
+ // Append the current date to the array
+      
         if(!country){
             getLocation()
                 .then(country => {
@@ -205,26 +209,27 @@ export const MySearchProvider = ({ children }) => {
                     target: { tabId: tab.tabId || tab.id },
                     func: (url) => {
                         let productTitle, image, price
+                        const currentDate = new Date().toLocaleDateString();
                         if (url.includes('ebay')) {
                             productTitle = document.querySelector(".x-item-title__mainTitle .ux-textspans")?.innerHTML || "";
                             image = document.querySelector('img.a-dynamic-image')?.getAttribute('src') || document.querySelector('img.ux-image-magnify__image--original')?.getAttribute('src') || "";
                             price = document.querySelector('.x-price-primary .ux-textspans')?.innerHTML || "";
-                            return [productTitle, image, price]
+                            return [productTitle, image, price, currentDate, url]
                         } else if (url.includes('amazon')) {
                             productTitle = document.querySelector('#productTitle')?.innerHTML || "";
                             image = document.querySelector('#landingImage')?.getAttribute('src') || document.querySelector("img.a-dynamic-image")?.getAttribute('src') || "";
                             price = document.querySelector('.a-offscreen')?.innerHTML || "";
-                            return [productTitle.replace(/ {2,}/g, ''), image, price]
+                            return [productTitle.replace(/ {2,}/g, ''), image, price, currentDate, url]
                         } else if (url.includes('walmart')){
                             productTitle = document.querySelector("#main-title")?.innerHTML || "";
                             image = document.querySelector('[data-testid="hero-image-container"] img')?.getAttribute("src") || ""
                             price = document.querySelector('[itemprop="price"]')?.innerHTML
-                            return [productTitle, image, price]
+                            return [productTitle, image, price, currentDate, url]
                         } else if (url.includes('bestbuy')){
                             productTitle = document.querySelector(".shop-product-title h1")?.innerHTML || ""
                             image = document.querySelector(".primary-image")?.getAttribute("src") || ""
                             price = document.querySelector('[data-testid="customer-price"] span')?.innerHTML || ""
-                            return [productTitle, image, price]
+                            return [productTitle, image, price, currentDate, url]
                         }
                     },
                     args: [tab.url]
