@@ -85,8 +85,8 @@ const DisplayHistory = () => {
                       {limitTitle(item.title, 12)}
                     </a>
                   </td>
-                  <td className="px-2 py-4 border">{limitTitle(item.company,2)}</td>
-                  <td className="px-1 py-0 border">${item.price}</td>
+                  <td className="px-2 py-4 border text-xs">{limitTitle(item.company,2)}</td>
+                  <td className="px-1 py-0 border text-xs">${item.price.toFixed(2)}</td>
 
                 </tr>
               ))}
