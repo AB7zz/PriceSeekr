@@ -16,7 +16,7 @@ const Signup = ({setIsNewUser, setShowLoginForm, showLoginForm}) => {
         setError(""); // Clear any previous error messages when toggling login/signup
     };
     return (
-    <>
+      <div style={{marginTop: '10vh', padding: "1.25rem"}} className="px-5 mt-[10vh]">
         <div className="px-2 mt-5 py-5 flex flex-col justify-center items-center">
           <form className="px-10">
             <input
@@ -42,8 +42,8 @@ const Signup = ({setIsNewUser, setShowLoginForm, showLoginForm}) => {
             <div className="flex justify-center">
               <button
                 type="button"
-                style={{padding: '10px', borderRadius: '5px'}}
-                className="mt-5 bg-[#FF9C1A] hover:bg-[#E38A16] text-white text-base rounded-[5px] py-2 px-10 text-[19px]"
+                style={{padding: '10px', borderRadius: '5px', width: '100%'}}
+                className="loginSignupBtn mt-5 bg-[#e0821e] hover:bg-[#E38A16] text-white text-base rounded-[5px] py-2 px-10 text-[19px]"
                 onClick={() => handleEmailSignUp(email, password)}
               >
                 Sign up
@@ -59,8 +59,8 @@ const Signup = ({setIsNewUser, setShowLoginForm, showLoginForm}) => {
           </div>
           <div className="flex justify-center py-5">
             <button
-              style={{background: '#CF4332', borderRadius: '5px'}}
-              className="bg-[#CF4332] hover:bg-[#AB3324] px-7 py-2 rounded-[5px] text-white font-semibold"
+              style={{background: '#CF4332', borderRadius: '5px', width: '100%', justifyContent: 'center'}}
+              className="googleBtn bg-[#CF4332] hover:bg-[#AB3324] px-7 py-2 rounded-[5px] text-white font-semibold"
               onClick={handleGoogleLogin}
             >
               <GoogleIcon className="text-white mr-3" />
@@ -69,7 +69,7 @@ const Signup = ({setIsNewUser, setShowLoginForm, showLoginForm}) => {
             <p className="text-red-500 mt-2">{error}</p> {/* Display error message */}
           </div>
         </div>
-        </>
+      </div>
   )
 }
 
