@@ -22,3 +22,11 @@ td{
 ::-webkit-scrollbar-thumb:hover {
     background: #555 !important; /* Background color when hovered */
 }
+
+.loginSignupBtn:hover{
+    background: #E38A16;
+}
+
+.googleBtn:hover{
+    background: #AB3324;
+}
