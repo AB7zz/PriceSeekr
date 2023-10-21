@@ -20,10 +20,10 @@ const Similiar = ({ data }) => {
       } else {
         setIsLoading(false);
       }
-
+      console.log("similar data tmp: ", similiar);
       // Save search results to Firestore if data is available
       if (similiar && similiar.length > 0) {
-        console.log("similar data tmp: ", similiar);
+        
         saveSearchResultToFirestore(similiar, data, false);
       }
     };

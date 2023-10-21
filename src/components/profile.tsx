@@ -21,7 +21,7 @@ const imageUrls = [
 ];
 
 const Profile = () => {
-  const { preferences, userEmail , setPage} = useSearchContext();
+  const { preferences, userEmail, setPage } = useSearchContext();
   const [isLoading, setIsLoading] = useState(false); // State for loading animation
 
   // Check if preferences is an array and not null
@@ -57,6 +57,9 @@ const Profile = () => {
         ...prevState,
         [optionName]: !prevState[optionName],
       };
+      updateToDB({
+        Preferences: Object.keys(updatedPreferences).filter((option) => updatedPreferences[option]),
+      });
 
       // Save the updated preferences to the database whenever a preference is toggled
       // Note: Replace this with your actual update logic
@@ -67,6 +70,7 @@ const Profile = () => {
 
     setIsLoading(false); // Hide the loader
   };
+  const updateToDB = useUpdateDB();
 
   const handleGoBack = () => {
     setPage('/choose');
@@ -74,77 +78,76 @@ const Profile = () => {
 
   return (
     <div>
-    <div>
-      <div className="text-left" >
+      <div className="text-left">
         <button
           onClick={handleGoBack}
           style={{
             fontSize: '0.7rem', // Adjust the icon size
             color: 'darkblue',
-            textDecoration: 'underline'
+            textDecoration: 'underline',
           }}
         >
-          <ArrowBackIcon fontSize="xsmall"/>Back
+          <ArrowBackIcon fontSize="xsmall" />
+          Back
         </button>
       </div>
-      <div className='flex items-center justify-center mt-1'>
+      <div className="flex items-center justify-center mt-1">
         <div>
-        <div className="text-left mb-2 font-semibold">Your Email</div>
-        <div className="rounded bg-[#EDEDED] p-2 border border-gray-300 text-[#8C8C8C]">
-          {userEmail}
-        </div>
-
-        <div className="mt-6 grid grid-cols-2 gap-4">
-          <motion.button
-            className="rounded-lg bg-[#FFEFDC] text-[#FF9C1A] px-8 py-3 border border-[#FF9C1A] hover:text-[#FF9C1A] hover:bg-[#FFEFDC]"
-          >
-            Light Theme
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            className="rounded-lg bg-black text-[#FF9C1A] px-8 py-3"
-          >
-            Dark Theme
-          </motion.button>
-        </div>
-
-        <div className="mt-8 border-t border-gray-200 pt-4">
-          <h2 className="text-md text-center">Edit your preferences</h2>
-
-          <div className="grid grid-cols-2 gap-4 mt-5">
-            {Object.keys(initialPreferences).map((optionName, index) => (
-              <div
-                key={index}
-                className={`rounded-lg w-[100%] h-[60px] px-3 items-center bg-[#EFEFEF] flex ${
-                  selectedPreferences[optionName]
-                    ? 'border-2 border-[#FF9C1A]'
-                    : 'border-0 hover:border-2 hover:border-[#FF9C1A]'
-                } cursor-pointer`}
-                onClick={() => toggleOption(optionName)}
-              >
-                <img
-                  src={imageUrls[index]}
-                  alt={`Image ${index}`}
-                  className="w-[35px] mr-3"
-                  style={{ objectFit: 'contain' }}
-                />
-                <p className="text-[#393939] poppins font-semibold text-lg text-center">
-                  {optionName}
-                </p>
-              </div>
-            ))}
+          <div className="text-left mb-2 font-semibold">Your Email</div>
+          <div className="rounded bg-[#EDEDED] p-2 border border-gray-300 text-[#8C8C8C]">
+            {userEmail}
           </div>
-        </div>
 
-        {isLoading && (
-          <div className="absolute inset-0 bg-gray-800 bg-opacity-40 flex items-center justify-center">
-            <div className="border-t-transparent border-solid animate-spin rounded-full border-blue-400 border-4 h-20 w-20 mx-auto mb-4" />
+          <div className="mt-6 grid grid-cols-2 gap-4">
+            <motion.button
+              className="rounded-lg bg-[#FFEFDC] text-[#FF9C1A] px-8 py-3 border border-[#FF9C1A] hover:text-[#FF9C1A] hover:bg-[#FFEFDC]"
+            >
+              Light Theme
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              className="rounded-lg bg-black text-[#FF9C1A] px-8 py-3"
+            >
+              Dark Theme
+            </motion.button>
           </div>
-        )}
+
+          <div className="mt-8 border-t border-gray-200 pt-4">
+            <h2 className="text-md text-center">Edit your preferences</h2>
+
+            <div className="grid grid-cols-2 gap-4 mt-5">
+              {Object.keys(initialPreferences).map((optionName, index) => (
+                <div
+                  key={index}
+                  className={`rounded-lg w-[100%] h-[60px] px-3 items-center bg-[#EFEFEF] flex ${
+                    selectedPreferences[optionName]
+                      ? 'border-2 border-[#FF9C1A]'
+                      : 'border-0 hover:border-2 hover:border-[#FF9C1A]'
+                  } cursor-pointer`}
+                  onClick={() => toggleOption(optionName)}
+                >
+                  <img
+                    src={imageUrls[index]}
+                    alt={`Image ${index}`}
+                    className="w-[35px] mr-3"
+                    style={{ objectFit: 'contain' }}
+                  />
+                  <p className="text-[#393939] poppins font-semibold text-lg text-center">
+                    {optionName}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {isLoading && (
+            <div className="absolute inset-0 bg-gray-800 bg-opacity-40 flex items-center justify-center">
+              <div className="border-t-transparent border-solid animate-spin rounded-full border-blue-400 border-4 h-20 w-20 mx-auto mb-4" />
+            </div>
+          )}
         </div>
       </div>
     </div>
-  </div>
 );
 };
 

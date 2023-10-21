@@ -116,13 +116,16 @@ function Main() {
         </div>
       )
     ) : showLoginForm ? (
+      
       <Login
         setIsNewUser={setIsNewUser}
         setShowLoginForm={setShowLoginForm}
         showLoginForm={showLoginForm}
       />
     ) : (
+      
       <Signup
+        
         setIsNewUser={setIsNewUser}
         setShowLoginForm={setShowLoginForm}
         showLoginForm={showLoginForm}

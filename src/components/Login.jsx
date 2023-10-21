@@ -15,8 +15,8 @@ const Login = ({ setIsNewUser, setShowLoginForm, showLoginForm }) => {
   };
 
   return (
-    <div style={{marginTop: '10vh', padding: "1.25rem"}} className="mt-[10vh] px-5">
-      <div className="px-2 mt-5 py-5 flex flex-col justify-center items-center">
+    <div className="px-5">
+      <div className="px-2 py-5 flex flex-col justify-center items-center">
         <form className="block px-10">
           <input
             type="text"
@@ -52,9 +52,9 @@ const Login = ({ setIsNewUser, setShowLoginForm, showLoginForm }) => {
       </div>
       <div className="px-5">
         <div style={{justifyContent: 'center'}} className="flex items-center">
-          <hr className="border-[#C5C5C5] border-t-2" />
-          <span className="text-lg text-[#A4A4A4] poppins">OR</span>
-          <hr className="border-[#C5C5C5] border-t-2" />
+          <div class="flex-grow border-t-2 border-gray-400"></div>
+          <span className="text-sm text-[#A4A4A4] poppins">OR</span>
+          <div class="flex-grow border-t-2 border-gray-400"></div>
         </div>
         <div className="flex justify-center py-5">
           <button

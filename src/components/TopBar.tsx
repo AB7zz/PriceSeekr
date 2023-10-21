@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import logo from 'data-base64:~assets/icon.development.png';
+import logo from 'data-base64:~assets/priceseekrlogo1.png';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import PolicyIcon from '@mui/icons-material/Policy';
@@ -48,15 +48,10 @@ const TopBar = () => {
   };
 
   return (
-    <div className={`bg-black px-6 py-3 mb-6 flex justify-between items-center h-[65px]`}>
+    <div className={`bg-black px-1 py-3 mb-6 flex justify-between items-center h-[65px]`}>
       <div className="flex items-center">
-        <img className="w-[25px] mr-1" src={logo} alt="logo" />
-        <h3
-          className="text-white text-lg font"
-          style={{ fontFamily: 'Montserrat, sans-serif' }}
-        >
-          PriceSeekr
-        </h3>
+        <img className=" mt-2 w-[130px]" src={logo} alt="logo" />
+
       </div>
       <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '10px' }}>
         <MoreHorizIcon

@@ -74,6 +74,7 @@ export const MySearchProvider = ({ children }) => {
     const [userData, setUserData] = React.useState(null)
     
     const searchTitle = async(title: string, country: string, currentPrice: any) => {
+        
         let params = {
             api_key: "9ff5a1b75caee5bb01410bebc61e1014f53a01e8dfa29b28d2e7f23067c0338f", 
             q: title,       
@@ -82,6 +83,7 @@ export const MySearchProvider = ({ children }) => {
             engine: 'google_shopping',             
         }
         search.json(params, (data: any) => {
+            console.log("raw data from similar search:",data)
             const numericValue = parseFloat(currentPrice.replace(/[^0-9.]/g, ''));
             const itemsWithPrice = data["shopping_results"].filter(item => item.price && item.extracted_price <= numericValue)
             const sortedItems = itemsWithPrice.sort((a, b) => a.extracted_price - b.extracted_price)
@@ -90,6 +92,7 @@ export const MySearchProvider = ({ children }) => {
                     return prod
                 }
             })
+            console.log("similar search results:",sortByPref);
             setSimiliar(sortByPref)
         })
     }
@@ -123,8 +126,6 @@ export const MySearchProvider = ({ children }) => {
       
     const runSearchImage = (data: any) => {
         console.log('runSearchImage is called')
- // Append the current date to the array
-      
         if(!country){
             getLocation()
                 .then(country => {

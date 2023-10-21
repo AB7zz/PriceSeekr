@@ -2,21 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useSearchContext } from '~context/SearchContext';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'; 
 import Loader from '../components/loader';
+import NoResults from '~components/NoResults';
 import NotSupport from '../components/NotSupport';
 import { saveSearchResultToFirestore } from '~firebase/hooks';
 
 const Same = ({ data }) => {
   const { runSearchImage, same, setPage } = useSearchContext();
   const [isLoading, setIsLoading] = useState(true);
-  const [notfound, setNotfound] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       if (!same && data !== null) {
         runSearchImage(data);
-      } else if (JSON.stringify(same) === JSON.stringify(["Not found"])) {
-        setIsLoading(false);
-        setNotfound(true);
       } else {
         setIsLoading(false);
       }
@@ -49,11 +46,12 @@ const Same = ({ data }) => {
   };
 
   return (
-    <div className="px-5 py-5 bg-white pb-20">
+    <div className="">
       {isLoading ? (
         <Loader />
-      ) : same && !notfound ? (
+      ) : same && same.length > 0 ? (
         <>
+        <div className='px-5 py-5 bg-white pb-20"' >
           {/* back button */}
           <div className="text-left mb-3" >
             <button
@@ -90,9 +88,10 @@ const Same = ({ data }) => {
               ))}
             </div>
           </div>
+          </div>
         </>
       ) : (
-        !isLoading && <p>No cheaper products found.</p>
+        <NoResults />
       )}
     </div>
   );

@@ -16,8 +16,8 @@ const Signup = ({setIsNewUser, setShowLoginForm, showLoginForm}) => {
         setError(""); // Clear any previous error messages when toggling login/signup
     };
     return (
-      <div style={{marginTop: '10vh', padding: "1.25rem"}} className="px-5 mt-[10vh]">
-        <div className="px-2 mt-5 py-5 flex flex-col justify-center items-center">
+      <div className="px-5">
+        <div className="px-2 py-5 flex flex-col justify-center items-center">
           <form className="px-10">
             <input
               type="text"
@@ -52,10 +52,11 @@ const Signup = ({setIsNewUser, setShowLoginForm, showLoginForm}) => {
           </form>
         </div>
         <div className="px-5">
+        
           <div style={{justifyContent: 'center'}} className="flex items-center">
-            <hr className="border-[#C5C5C5] border-t-2 w-[100px]" />
-            <span className="text-lg text-[#A4A4A4] poppins">OR</span>
-            <hr className="border-[#C5C5C5] border-t-2 w-[100px]" />
+            <div class="flex-grow border-t-2 border-gray-400"></div>
+            <span className="text-sm text-[#A4A4A4] poppins">OR</span>
+            <div class="flex-grow border-t-2 border-gray-400"></div>
           </div>
           <div className="flex justify-center py-5">
             <button
