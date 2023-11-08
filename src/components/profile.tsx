@@ -21,7 +21,7 @@ const imageUrls = [
 ];
 
 const Profile = () => {
-  const { preferences, userEmail, setPage } = useSearchContext();
+  const { preferences, userEmail, setPage, darkTheme, setDark } = useSearchContext();
   const [isLoading, setIsLoading] = useState(false); // State for loading animation
 
   // Check if preferences is an array and not null
@@ -100,11 +100,13 @@ const Profile = () => {
 
           <div className="mt-6 grid grid-cols-2 gap-4">
             <motion.button
+            onClick = {() => setDark(false)}
               className="rounded-lg bg-[#FFEFDC] text-[#FF9C1A] px-8 py-3 border border-[#FF9C1A] hover:text-[#FF9C1A] hover:bg-[#FFEFDC]"
             >
               Light Theme
             </motion.button>
             <motion.button
+            onClick = {() => setDark(true)}
               whileHover={{ scale: 1.1 }}
               className="rounded-lg bg-black text-[#FF9C1A] px-8 py-3"
             >

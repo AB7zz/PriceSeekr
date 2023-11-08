@@ -20,7 +20,7 @@ import {
 import BotNav from "~components/BotNav";
 
 function Main() {
-  const { user, getHTMLData, pageData, page, setPage } = useSearchContext();
+  const { user, getHTMLData, pageData, page, setPage, darkTheme } = useSearchContext();
 
   const [isNewUser, setIsNewUser] = useState(false);
   const [showLoginForm, setShowLoginForm] = useState(true);
@@ -85,7 +85,6 @@ function Main() {
       return <Preferences setIsNewUserToFalse={setIsNewUserToFalse}/>;
     }
     else if (page === "/choose"){
-
       return <Choose data={pageData} />
     }
     else if (page === '/Profile'){
@@ -102,7 +101,7 @@ function Main() {
 
 
   return (
-    <div className="w-[370px]">
+    <div className={`${darkTheme ? 'bg-[#202020]' : 'bg-white'} w-[370px]`}>
     <TopBar />
     {user != null ? (
       isNewUser ? (

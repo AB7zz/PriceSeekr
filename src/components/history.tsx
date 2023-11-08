@@ -158,7 +158,7 @@ const DisplayHistory = () => {
         <div className="text-left mb-2">
           <motion.button
             onClick={handleGoBack}
-            className="rounded-[15px] px-3 py-3 bg-gray-100 text-[#FF8500]"
+            className="rounded-[15px] px-3 py-3 bg-gray-100 text-[#e0821e]"
             whileHover={{scale: 1.1}}
             style={{
               borderRadius: '20px',

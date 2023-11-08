@@ -18,6 +18,7 @@ interface SearchContextState {
     pageData: any[] | null;
     page: string | null;
     trigger: boolean | null;
+    darkTheme: boolean | null;
     preferences: any[] | null;
     userData: any[] | null;
     userEmail: any[] | null;
@@ -32,6 +33,7 @@ interface SearchContextValue extends SearchContextState {
     setPage: React.Dispatch<React.SetStateAction<string>>;
     setHistory: React.Dispatch<React.SetStateAction<any>>;
     setPreferences: React.Dispatch<React.SetStateAction<string>>;
+    setDark: React.Dispatch<React.SetStateAction<boolean>>;
     setUserData: React.Dispatch<React.SetStateAction<string>>;
     setEmail: React.Dispatch<React.SetStateAction<string>>;
     setPageData: React.Dispatch<React.SetStateAction<string>>;
@@ -48,12 +50,14 @@ const MySearchContext = React.createContext<SearchContextValue>({
     setUserData: () => {},
     setEmail: () => {}, 
     setHistory: () => {},
+    setDark: () => {},
     user: null,
     similiar: null,
     same: null,
     pageData: null,
     page: null,
     trigger: false,
+    darkTheme: false,
     preferences: null,
     userData: null,
     userEmail: null,
@@ -69,6 +73,7 @@ export const MySearchProvider = ({ children }) => {
     const [pageData, setPageData] = React.useState(null)
     const [page, setPage] = React.useState(null);
     const [trigger, setTrigger] = React.useState(false)
+    const [darkTheme, setDark] = React.useState(true)
     const [preferences, setPreferences] = React.useState(null)
     const [history, setHistory] = React.useState(null)
     const [userData, setUserData] = React.useState(null)
@@ -260,6 +265,8 @@ export const MySearchProvider = ({ children }) => {
             setUserData,
             setEmail,
             setHistory,
+            setDark,
+            darkTheme,
             user,
             similiar,
             same,
