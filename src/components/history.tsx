@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchContext } from '~context/SearchContext';
 import { readHistoryDB } from '~firebase/hooks';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { motion } from 'framer-motion'
 
 const DisplayHistory = () => {
   const { user, history, setPage } = useSearchContext();
@@ -155,16 +156,20 @@ const DisplayHistory = () => {
     <div className="mt-5 pb-20">
       <div className="w-full max-w-3xl">
         <div className="text-left mb-2">
-          <button
+          <motion.button
             onClick={handleGoBack}
+            className="rounded-[15px] px-3 py-3 bg-gray-100 text-[#FF8500]"
+            whileHover={{scale: 1.1}}
             style={{
-              fontSize: '0.7rem',
-              color: 'darkblue',
-              textDecoration: 'underline',
+              borderRadius: '20px',
+              color: '#FF8500',
+              alignItems: 'center',
+              alignContent: 'center',
+              fontWeight: 500
             }}
           >
-            <ArrowBackIcon fontSize="xsmall" />Back
-          </button>
+            <ArrowBackIcon fontSize="xsmall" className='mr-2' />Back
+          </motion.button>
         </div>
         {renderContent()}
       </div>

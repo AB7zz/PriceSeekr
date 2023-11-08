@@ -6,10 +6,9 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import firebase from 'firebase/app';
 import { useSearchContext } from "~context/SearchContext";
 import { auth, colRef } from "~firebase";
-import { getFirestore, doc, getDoc, setDoc, snapshotEqual } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 
 const mapFirebaseErrorToMessage = (errorCode) => {
