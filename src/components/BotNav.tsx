@@ -9,7 +9,7 @@ const BotNav = () => {
 
   // Define a function to check if the icon is active
   const isIconActive = (iconPage) => {
-    return page === iconPage ? 'text-black text-lg' : 'text-white text-base';
+    return page === iconPage ? 'text-black text-lg hover:cursor-pointer' : 'text-white text-base hover:cursor-pointer';
   };
 
   return (
