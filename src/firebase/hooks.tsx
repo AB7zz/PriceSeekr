@@ -144,6 +144,7 @@ export const useWriteToDB = () => {
   const user = auth.currentUser;
   const {setPage} = useSearchContext()
   const handleWriteToDB = async(preferences) => {
+    console.log('called useWriteToDB')
     if (user) {
       const userId = user.uid;
       const userEmail = user.email;
@@ -166,73 +167,78 @@ export const useWriteToDB = () => {
   return handleWriteToDB
 };
 
-export const saveSearchResultToFirestore = async (SearchData, PageData, isSame) => {
+export const useSaveSearchResultToFirestore = () => {
   const user = auth.currentUser;
-  if (user) {
-    const userId = user.uid;
-    const userDocRef = doc(colRef, userId);
-    try {
-      // Get the existing data from Firestore
-      const userDocSnapshot = await getDoc(userDocRef);
-      const userData = userDocSnapshot.data();
-
-      // Create or update the 'History' field in the user's document
-      if (!userData.History) {
-        userData.History = {};
+  const saveSearchResultToFirestore = async (SearchData, PageData, isSame) => {
+    console.log('called saveSearchResultToFirestore')
+    if (user) {
+      const userId = user.uid;
+      const userDocRef = doc(colRef, userId);
+      try {
+        // Get the existing data from Firestore
+        const userDocSnapshot = await getDoc(userDocRef);
+        const userData = userDocSnapshot.data();
+  
+        // Create or update the 'History' field in the user's document
+        if (!userData.History) {
+          userData.History = {};
+        }
+        
+        // Create or update the 'PageData' field within 'History'
+        if (!userData.History.PageData) {
+          userData.History.PageData = [];
+        }
+        if(isSame)
+        {
+            // Insert PageData as the first element of the PageData array
+            userData.History.PageData.unshift({
+              PageDetails: PageData,
+              SearchRes: SearchData.map((product) => ({
+                thumbnail: product.thumbnail,
+                title: product.title,
+                url: product.link,
+                price: product.price.extracted_value,
+                company: product.source,
+              })),
+            });
+        }else
+        {
+          const date = new Date();
+            // Insert PageData as the first element of the PageData array
+            userData.History.PageData.unshift({
+              PageDetails: PageData,
+              SearchRes: SearchData.map((product) => ({
+                thumbnail: product.thumbnail,
+                title: product.title,
+                url: product.link,
+                price: product.extracted_price,
+                company: product.source,
+                searchDate: date
+              })),
+            });
+         }
+  
+        // Update the user's document in Firestore
+        await setDoc(userDocRef, userData);
+  
+        console.log('Search results saved to Firestore successfully');
+      } catch (error) {
+        console.error('Error saving search results to Firestore:', error);
       }
-      
-      // Create or update the 'PageData' field within 'History'
-      if (!userData.History.PageData) {
-        userData.History.PageData = [];
-      }
-      if(isSame)
-      {
-          // Insert PageData as the first element of the PageData array
-          userData.History.PageData.unshift({
-            PageDetails: PageData,
-            SearchRes: SearchData.map((product) => ({
-              thumbnail: product.thumbnail,
-              title: product.title,
-              url: product.link,
-              price: product.price.extracted_value,
-              company: product.source,
-            })),
-          });
-      }else
-      {
-        const date = new Date();
-          // Insert PageData as the first element of the PageData array
-          userData.History.PageData.unshift({
-            PageDetails: PageData,
-            SearchRes: SearchData.map((product) => ({
-              thumbnail: product.thumbnail,
-              title: product.title,
-              url: product.link,
-              price: product.extracted_price,
-              company: product.source,
-              searchDate: date
-            })),
-          });
-       }
-
-      // Update the user's document in Firestore
-      await setDoc(userDocRef, userData);
-
-      console.log('Search results saved to Firestore successfully');
-    } catch (error) {
-      console.error('Error saving search results to Firestore:', error);
+    } else {
+      console.log('User not authenticated. Unable to save search results.');
     }
-  } else {
-    console.log('User not authenticated. Unable to save search results.');
   }
+  return saveSearchResultToFirestore
 };
 
 
 
 export const useReadDB = () => {
   const {setPreferences} = useSearchContext()
-
+  
   const readFromDB = async (userId) => {
+    console.log('called useReadDB')
     const userDocRef = doc(colRef, userId);
 
     try {
@@ -257,11 +263,13 @@ export const useReadDB = () => {
 export const useUpdateDB = () => {
   const user = auth.currentUser;
   const { setPage, setPreferences } = useSearchContext();
-
+  
   const updateToDB = async (updatedData) => {
+    console.log('called useUpdateDB')
     if (user) {
       const userId = user.uid;
       const userDocRef = doc(colRef, userId);
+
 
       try {
         await setDoc(userDocRef, updatedData, { merge: true });
@@ -282,16 +290,16 @@ export const useUpdateDB = () => {
 
 export const readHistoryDB = () => {
   const { setHistory } = useSearchContext();
-
+  
   const readHistory = async (userId) => {
+    console.log('called readHistoryDB')
     const userDocRef = doc(colRef, userId);
-
+    
     try {
       const docSnapshot = await getDoc(userDocRef);
 
       if (docSnapshot.exists()) {
         setHistory(docSnapshot.data().History);
-        const userData = docSnapshot.data();
       } else {
         console.log('No history data available');
       }

@@ -3,13 +3,13 @@ import { useSearchContext } from '~context/SearchContext';
 import Loader from '../components/loader';
 import NotSupport from '../components/NotSupport';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'; 
-import { saveSearchResultToFirestore } from '~firebase/hooks';
+import { useSaveSearchResultToFirestore } from '~firebase/hooks';
 
 const Similiar = ({ data }) => {
   const { runSearchSimiliar, similiar, setPage } = useSearchContext();
   const [isLoading, setIsLoading] = useState(true);
   const [notfound, setNotfound] = useState(false);
-
+  const saveSearchResultToFirestore = useSaveSearchResultToFirestore();
   useEffect(() => {
     const fetchData = async () => {
       if (!similiar && data !== null) {
@@ -64,7 +64,7 @@ const Similiar = ({ data }) => {
                 textDecoration: 'underline'
               }}
             >
-              <ArrowBackIcon fontSize="xsmall"/>Back
+              <ArrowBackIcon/>Back
             </button>
           </div>
           <div>

@@ -54,9 +54,9 @@ const Signup = ({setIsNewUser, setShowLoginForm, showLoginForm}) => {
         <div className="px-5">
         
           <div style={{justifyContent: 'center'}} className="flex items-center">
-            <div class="flex-grow border-t-2 border-gray-400"></div>
+            <div className="flex-grow border-t-2 border-gray-400"></div>
             <span className="text-sm text-[#A4A4A4] poppins">OR</span>
-            <div class="flex-grow border-t-2 border-gray-400"></div>
+            <div className="flex-grow border-t-2 border-gray-400"></div>
           </div>
           <div className="flex justify-center py-5">
             <button

@@ -4,12 +4,12 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Loader from '../components/loader';
 import NoResults from '~components/NoResults';
 import NotSupport from '../components/NotSupport';
-import { saveSearchResultToFirestore } from '~firebase/hooks';
+import { useSaveSearchResultToFirestore } from '~firebase/hooks';
 
 const Same = ({ data }) => {
   const { runSearchImage, same, setPage } = useSearchContext();
   const [isLoading, setIsLoading] = useState(true);
-
+  const saveSearchResultToFirestore = useSaveSearchResultToFirestore();
   useEffect(() => {
     const fetchData = async () => {
       if (!same && data !== null) {
@@ -62,7 +62,7 @@ const Same = ({ data }) => {
                 textDecoration: 'underline'
               }}
             >
-              <ArrowBackIcon fontSize="xsmall"/>Back
+              <ArrowBackIcon/>Back
             </button>
           </div>
           <div>

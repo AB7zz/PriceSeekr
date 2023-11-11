@@ -6,7 +6,6 @@ import ImageSearchIcon from '@mui/icons-material/ImageSearch';
 import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 const Choose = ({ data }) => {
   const { setPage, darkTheme } = useSearchContext();
-  console.log('data prop:', data);
   return (
     <div className="">
       {data ? (

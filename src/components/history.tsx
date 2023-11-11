@@ -11,15 +11,12 @@ const DisplayHistory = () => {
   const readHistory = readHistoryDB();
 
   useEffect(() => {
-    const fetchHistoryData = async () => {
-      if (user) {
-        await readHistory(user.uid);
-        const extractedPageDetails = history.PageData.map((pageData) => pageData.PageDetails);
-        setPageDetails(extractedPageDetails);
-      }
-    };
-
-    fetchHistoryData();
+    if (user) {
+      readHistory(user.uid);
+      console.log(history)
+      const extractedPageDetails = history?.PageData?.map((pageData) => pageData.PageDetails);
+      setPageDetails(extractedPageDetails);
+    }
   }, [history]);
 
   const handleItemClick = (index) => {
@@ -46,13 +43,13 @@ const DisplayHistory = () => {
 
   const renderContent = () => {
     if (selectedItemIndex !== null) {
-      const selectedItem = history.PageData[selectedItemIndex].SearchRes;
+      const selectedItem = history?.PageData[selectedItemIndex].SearchRes;
       return (
         <div>
         <p className="text-center text-md text-black font-semibold">
           Showing results for{' '}
           <a
-              href={history.PageData[selectedItemIndex].PageDetails[4]}
+              href={history?.PageData[selectedItemIndex].PageDetails[4]}
               target="_blank"
               rel="noopener noreferrer"
               className="text-indigo-500 hover:underline text-xs"
