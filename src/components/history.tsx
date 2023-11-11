@@ -5,7 +5,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { motion } from 'framer-motion'
 
 const DisplayHistory = () => {
-  const { user, history, setPage } = useSearchContext();
+  const { user, history, setPage, darkTheme } = useSearchContext();
   const [pageDetails, setPageDetails] = useState([]);
   const [selectedItemIndex, setSelectedItemIndex] = useState(null);
   const readHistory = readHistoryDB();
@@ -143,7 +143,7 @@ const DisplayHistory = () => {
     } else {
       return (
         <div>
-          <h1 className="text-center text-xl text-black font-semibold">Nothing to display</h1>
+          <h1 className={`text-center text-xl ${darkTheme ? 'text-white' : 'text-black'} font-semibold`}>Nothing to display</h1>
         </div>
       );
     }
@@ -155,7 +155,7 @@ const DisplayHistory = () => {
         <div className="text-left mb-2">
           <motion.button
             onClick={handleGoBack}
-            className="rounded-[15px] px-3 py-3 bg-gray-100 text-[#e0821e]"
+            className={`rounded-[15px] px-3 py-3 ${darkTheme ? 'bg-[#2d2d2d]' : 'bg-gray-100'} text-[#e0821e]`}
             whileHover={{scale: 1.1}}
             style={{
               borderRadius: '20px',
@@ -165,7 +165,7 @@ const DisplayHistory = () => {
               fontWeight: 500
             }}
           >
-            <ArrowBackIcon fontSize="xsmall" className='mr-2' />Back
+            <ArrowBackIcon className='mr-2' />Back
           </motion.button>
         </div>
         {renderContent()}

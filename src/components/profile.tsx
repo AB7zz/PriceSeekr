@@ -79,22 +79,25 @@ const Profile = () => {
   return (
     <div>
       <div className="text-left">
-        <button
-          onClick={handleGoBack}
-          style={{
-            fontSize: '0.7rem', // Adjust the icon size
-            color: 'darkblue',
-            textDecoration: 'underline',
-          }}
-        >
-          <ArrowBackIcon fontSize="xsmall" />
-          Back
-        </button>
+      <motion.button
+            onClick={handleGoBack}
+            className={`rounded-[15px] px-3 py-3 ${darkTheme ? 'bg-[#2d2d2d]' : 'bg-gray-100'} text-[#e0821e]`}
+            whileHover={{scale: 1.1}}
+            style={{
+              borderRadius: '20px',
+              color: '#FF8500',
+              alignItems: 'center',
+              alignContent: 'center',
+              fontWeight: 500
+            }}
+          >
+            <ArrowBackIcon className='mr-2' />Back
+          </motion.button>
       </div>
-      <div className="flex items-center justify-center mt-1">
+      <div className="flex items-center justify-center mt-5">
         <div>
-          <div className="text-left mb-2 font-semibold">Your Email</div>
-          <div className="rounded bg-[#EDEDED] p-2 border border-gray-300 text-[#8C8C8C]">
+          <div className={`text-left mb-2 font-semibold ${darkTheme ? 'text-white' : 'text-black'}`}>Your Email</div>
+          <div className={`rounded ${darkTheme ? 'bg-[#2d2d2d]' : 'bg-[#EDEDED] border border-gray-300'} p-2 text-[#8C8C8C]`}>
             {userEmail}
           </div>
 
@@ -115,13 +118,13 @@ const Profile = () => {
           </div>
 
           <div className="mt-8 border-t border-gray-200 pt-4">
-            <h2 className="text-md text-center">Edit your preferences</h2>
+            <h2 className={`text-md text-center ${darkTheme ? 'text-white' : 'text-black'}`}>Edit your preferences</h2>
 
             <div className="grid grid-cols-2 gap-4 mt-5">
               {Object.keys(initialPreferences).map((optionName, index) => (
                 <div
                   key={index}
-                  className={`rounded-lg w-[100%] h-[60px] px-3 items-center bg-[#EFEFEF] flex ${
+                  className={`rounded-lg w-[100%] h-[60px] px-3 items-center ${darkTheme ? 'bg-[#2d2d2d]' : 'bg-[#EFEFEF]'} flex ${
                     selectedPreferences[optionName]
                       ? 'border-2 border-[#FF9C1A]'
                       : 'border-0 hover:border-2 hover:border-[#FF9C1A]'
@@ -134,7 +137,7 @@ const Profile = () => {
                     className="w-[35px] mr-3"
                     style={{ objectFit: 'contain' }}
                   />
-                  <p className="text-[#393939] poppins font-semibold text-lg text-center">
+                  <p className={`${darkTheme ? 'text-white' : 'text-[#393939]'} poppins font-semibold text-lg text-center`}>
                     {optionName}
                   </p>
                 </div>
