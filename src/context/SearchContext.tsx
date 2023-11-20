@@ -81,7 +81,7 @@ export const MySearchProvider = ({ children }) => {
     const searchTitle = async(title: string, country: string, currentPrice: any) => {
         
         let params = {
-            api_key: "9ff5a1b75caee5bb01410bebc61e1014f53a01e8dfa29b28d2e7f23067c0338f", 
+            api_key: process.env.PLASMO_PUBLIC_API_KEY_SIMILAR, 
             q: title,       
             gl: country,
             google_domain: google_domains.find(g => g.country_code == country)?.domain,
@@ -144,7 +144,7 @@ export const MySearchProvider = ({ children }) => {
 
     const searchImage = async(image: any, country: any, currentPrice: any) => {
         let params = {
-            api_key:"4ede514098f0aaed97b7659099bcebc41d4015a987a506f23ab7a6c4be65063f", 
+            api_key: process.env.PLASMO_PUBLIC_API_KEY_SIMILAR, 
             url: image,       
             engine: 'google_lens',                
         }

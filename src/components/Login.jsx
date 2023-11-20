@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useEmailSignIn, useGoogleLogin } from "~firebase/hooks";
 import GoogleIcon from '@mui/icons-material/Google';
+import { useStateContext } from '~context/SearchContext'
 
 const Login = ({ setIsNewUser, setShowLoginForm, showLoginForm }) => {
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const {darkTheme} = useStateContext()
   const handleEmailSignIn = useEmailSignIn(setIsNewUser, setError);
   const handleGoogleLogin = useGoogleLogin(setIsNewUser, setError);
 
@@ -33,7 +35,7 @@ const Login = ({ setIsNewUser, setShowLoginForm, showLoginForm }) => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <p
-            className="my-2 text-black font-semibold cursor-pointer"
+            className={`my-2 ${darkTheme ? 'text-white' : 'text-black'} font-semibold cursor-pointer`}
             onClick={toggleLoginMode}
           >
             Don't have an account? <span className="text-blue-500">Sign up</span>

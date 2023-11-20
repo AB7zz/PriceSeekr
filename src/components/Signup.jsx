@@ -4,10 +4,12 @@ import {
     useGoogleLogin
 } from "~firebase/hooks";
 import GoogleIcon from '@mui/icons-material/Google';
+import { useStateContext } from '~context/SearchContext'
 
 const Signup = ({setIsNewUser, setShowLoginForm, showLoginForm}) => {
     const [error, setError] = useState("");
     const [email, setEmail] = useState("");
+    const {darkTheme} = useStateContext()
     const [password, setPassword] = useState("");
     const handleEmailSignUp = useEmailSignUp(setIsNewUser, setError);
     const handleGoogleLogin = useGoogleLogin(setIsNewUser, setError);
@@ -34,7 +36,7 @@ const Signup = ({setIsNewUser, setShowLoginForm, showLoginForm}) => {
               onChange={(e) => setPassword(e.target.value)}
             />
             <p
-                className="my-2 text-black font-semibold cursor-pointer"
+                className={`my-2 ${darkTheme ? 'text-white' : 'text-black'} font-semibold cursor-pointer`}
                 onClick={toggleLoginMode}
               >
               Already have an account? <span className="text-blue-500">Log in</span>

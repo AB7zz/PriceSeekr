@@ -34,3 +34,7 @@ keys.json
 
 # typescript
 .tsbuildinfo
+
+
+.env.development
+.env

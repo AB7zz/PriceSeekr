@@ -27,21 +27,21 @@ const Profile = () => {
   // Check if preferences is an array and not null
   const initialPreferences = Array.isArray(preferences)
     ? {
-        Amazon: preferences.includes('Amazon'),
-        Bestbuy: preferences.includes('Bestbuy'),
-        eBay: preferences.includes('eBay'),
-        Target: preferences.includes('Target'),
-        Walmart: preferences.includes('Walmart'),
-        Others: preferences.includes('Others'),
-      }
+      Amazon: preferences.includes('Amazon'),
+      Bestbuy: preferences.includes('Bestbuy'),
+      eBay: preferences.includes('eBay'),
+      Target: preferences.includes('Target'),
+      Walmart: preferences.includes('Walmart'),
+      Others: preferences.includes('Others'),
+    }
     : {
-        Amazon: false,
-        Bestbuy: false,
-        eBay: false,
-        Target: false,
-        Walmart: false,
-        Others: false,
-      };
+      Amazon: false,
+      Bestbuy: false,
+      eBay: false,
+      Target: false,
+      Walmart: false,
+      Others: false,
+    };
 
   const [selectedPreferences, setSelectedPreferences] = useState(initialPreferences);
 
@@ -79,20 +79,20 @@ const Profile = () => {
   return (
     <div>
       <div className="text-left">
-      <motion.button
-            onClick={handleGoBack}
-            className={`rounded-[15px] px-3 py-3 ${darkTheme ? 'bg-[#2d2d2d]' : 'bg-gray-100'} text-[#e0821e]`}
-            whileHover={{scale: 1.1}}
-            style={{
-              borderRadius: '20px',
-              color: '#FF8500',
-              alignItems: 'center',
-              alignContent: 'center',
-              fontWeight: 500
-            }}
-          >
-            <ArrowBackIcon className='mr-2' />Back
-          </motion.button>
+        <motion.button
+          onClick={handleGoBack}
+          className={`rounded-[15px] px-3 py-3 ${darkTheme ? 'bg-[#2d2d2d]' : 'bg-gray-100'} text-[#e0821e]`}
+          whileHover={{ scale: 1.1 }}
+          style={{
+            borderRadius: '20px',
+            color: '#FF8500',
+            alignItems: 'center',
+            alignContent: 'center',
+            fontWeight: 500
+          }}
+        >
+          <ArrowBackIcon className='mr-2' />Back
+        </motion.button>
       </div>
       <div className="flex items-center justify-center mt-5">
         <div>
@@ -103,13 +103,13 @@ const Profile = () => {
 
           <div className="mt-6 grid grid-cols-2 gap-4">
             <motion.button
-            onClick = {() => setDark(false)}
+              onClick={() => setDark(false)}
               className="rounded-lg bg-[#FFEFDC] text-[#FF9C1A] px-8 py-3 border border-[#FF9C1A] hover:text-[#FF9C1A] hover:bg-[#FFEFDC]"
             >
               Light Theme
             </motion.button>
             <motion.button
-            onClick = {() => setDark(true)}
+              onClick={() => setDark(true)}
               whileHover={{ scale: 1.1 }}
               className="rounded-lg bg-black text-[#FF9C1A] px-8 py-3"
             >
@@ -124,11 +124,10 @@ const Profile = () => {
               {Object.keys(initialPreferences).map((optionName, index) => (
                 <div
                   key={index}
-                  className={`rounded-lg w-[100%] h-[60px] px-3 items-center ${darkTheme ? 'bg-[#2d2d2d]' : 'bg-[#EFEFEF]'} flex ${
-                    selectedPreferences[optionName]
+                  className={`rounded-lg w-[100%] h-[60px] px-3 items-center ${darkTheme ? 'bg-[#2d2d2d]' : 'bg-[#EFEFEF]'} flex ${selectedPreferences[optionName]
                       ? 'border-2 border-[#FF9C1A]'
                       : 'border-0 hover:border-2 hover:border-[#FF9C1A]'
-                  } cursor-pointer`}
+                    } cursor-pointer`}
                   onClick={() => toggleOption(optionName)}
                 >
                   <img
@@ -153,7 +152,7 @@ const Profile = () => {
         </div>
       </div>
     </div>
-);
+  );
 };
 
 export default Profile;
