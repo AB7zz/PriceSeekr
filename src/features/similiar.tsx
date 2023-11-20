@@ -4,9 +4,10 @@ import Loader from '../components/loader';
 import NotSupport from '../components/NotSupport';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'; 
 import { useSaveSearchResultToFirestore } from '~firebase/hooks';
+import NoResults from '~components/NoResults';
 
 const Similiar = ({ data }) => {
-  const { runSearchSimiliar, similiar, setPage } = useSearchContext();
+  const { runSearchSimiliar, similiar, setPage, darkTheme } = useSearchContext();
   const [isLoading, setIsLoading] = useState(true);
   const [notfound, setNotfound] = useState(false);
   const saveSearchResultToFirestore = useSaveSearchResultToFirestore();
@@ -47,12 +48,12 @@ const Similiar = ({ data }) => {
     }
     return text;
   };
-
+ 
   return (
-    <div className="px-5 py-5 bg-white pb-20">
+    <div className={`px-5 py-5 ${darkTheme ? 'bg-transparent' : 'bg-white'} rounded-[15px] pb-20`}>
       {isLoading ? (
         <Loader />
-      ) : similiar && !notfound ? (
+      ) : similiar && similiar.length > 0 ? (
         <>
           {/* back button */}
           <div className="text-left mb-3" >
@@ -92,7 +93,7 @@ const Similiar = ({ data }) => {
           </div>
         </>
       ) : (
-        !isLoading && <p>No similar products found.</p>
+        <NoResults />
       )}
     </div>
   );

@@ -44,7 +44,7 @@ const Same = ({ data }) => {
     }
     return title;
   };
-
+ 
   return (
     <div className="">
       {isLoading ? (

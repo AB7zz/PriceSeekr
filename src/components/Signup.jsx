@@ -4,12 +4,12 @@ import {
     useGoogleLogin
 } from "~firebase/hooks";
 import GoogleIcon from '@mui/icons-material/Google';
-import { useStateContext } from '~context/SearchContext'
+import { useSearchContext } from '~context/SearchContext'
 
 const Signup = ({setIsNewUser, setShowLoginForm, showLoginForm}) => {
     const [error, setError] = useState("");
     const [email, setEmail] = useState("");
-    const {darkTheme} = useStateContext()
+    const {darkTheme} = useSearchContext()
     const [password, setPassword] = useState("");
     const handleEmailSignUp = useEmailSignUp(setIsNewUser, setError);
     const handleGoogleLogin = useGoogleLogin(setIsNewUser, setError);

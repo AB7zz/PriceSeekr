@@ -17,11 +17,11 @@ const NoResults: React.FC = () => {
     return (
         <>
             <div className="flex flex-col overflow-hidden">
-                <div className="text-left mb-2 ">
+                <div className="text-left mb-2 py-3 px-3">
                     <motion.button
                         onClick={handleGoBack}
                         className={`rounded-[15px] px-3 py-3 ${darkTheme ? 'bg-[#2d2d2d]' : 'bg-gray-100'} text-[#e0821e]`}
-                        whileHover={{ scale: 1.1 }}
+                        whileHover={{ scale: 1.05 }}
                         style={{
                             borderRadius: '20px',
                             color: '#FF8500',

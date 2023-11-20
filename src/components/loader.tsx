@@ -3,7 +3,7 @@ import { useSearchContext } from '~context/SearchContext';
 
 
 const Loader = () => {
-  const {darkTheme} = useStateContext()
+  const {darkTheme} = useSearchContext()
   const [loadingText, setLoadingText] = useState('Searching for products');
 
   useEffect(() => {
