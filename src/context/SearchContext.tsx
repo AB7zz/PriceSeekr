@@ -73,7 +73,7 @@ export const MySearchProvider = ({ children }) => {
     const [pageData, setPageData] = React.useState(null)
     const [page, setPage] = React.useState(null);
     const [trigger, setTrigger] = React.useState(false)
-    const [darkTheme, setDark] = React.useState(true)
+    const [darkTheme, setDark] = React.useState(false)
     const [preferences, setPreferences] = React.useState(null)
     const [history, setHistory] = React.useState(null)
     const [userData, setUserData] = React.useState(null)
@@ -90,7 +90,7 @@ export const MySearchProvider = ({ children }) => {
         search.json(params, (data: any) => {
             console.log("raw data from similar search:",data)
             const numericValue = parseFloat(currentPrice.replace(/[^0-9.]/g, ''));
-            const itemsWithPrice = data["shopping_results"].filter(item => item.price && item.extracted_price <= numericValue)
+            const itemsWithPrice = data.shopping_results.filter(item => item.price && item.extracted_price <= numericValue)
             const sortedItems = itemsWithPrice.sort((a, b) => a.extracted_price - b.extracted_price)
             const sortByPref = sortedItems.filter(prod => {
                 if(preferences.some(p => prod.link.includes(p.toLowerCase())) || preferences.includes("other")){
@@ -146,7 +146,9 @@ export const MySearchProvider = ({ children }) => {
         let params = {
             api_key: process.env.PLASMO_PUBLIC_API_KEY_SIMILAR, 
             url: image,       
-            engine: 'google_lens',                
+            engine: 'google_lens',    
+            google_domain: google_domains.find(g => g.country_code == country)?.domain,
+            gl: country            
         }
         const numericValue = parseFloat(currentPrice.replace(/[^0-9.]/g, ''));
         search.json(params, async (data) => {
@@ -182,6 +184,7 @@ export const MySearchProvider = ({ children }) => {
                         if (
                             pageContentLower.includes('out of stock') ||
                             pageContentLower.includes('no longer available') ||
+                            pageContentLower.includes('unavailable') ||
                             pageContentLower.includes('sold out')
                         ) {
                             item.isOutOfStock = true; // Mark the product as out of stock
@@ -224,7 +227,7 @@ export const MySearchProvider = ({ children }) => {
                         } else if (url.includes('amazon')) {
                             productTitle = document.querySelector('#productTitle')?.innerHTML || "";
                             image = document.querySelector('#landingImage')?.getAttribute('src') || document.querySelector("img.a-dynamic-image")?.getAttribute('src') || "";
-                            price = document.querySelector('.a-offscreen')?.innerHTML || "";
+                            price = document.querySelector('.a-price-whole')?.innerHTML || "";
                             return [productTitle.replace(/ {2,}/g, ''), image, price, currentDate, url]
                         } else if (url.includes('walmart')){
                             productTitle = document.querySelector("#main-title")?.innerHTML || "";

@@ -7,7 +7,7 @@ import NotSupport from '../components/NotSupport';
 import { useSaveSearchResultToFirestore } from '~firebase/hooks';
 
 const Same = ({ data }) => {
-  const { runSearchImage, same, setPage } = useSearchContext();
+  const { runSearchImage, same, setPage, darkTheme } = useSearchContext();
   const [isLoading, setIsLoading] = useState(true);
   const saveSearchResultToFirestore = useSaveSearchResultToFirestore();
   useEffect(() => {
@@ -51,40 +51,43 @@ const Same = ({ data }) => {
         <Loader />
       ) : same && same.length > 0 ? (
         <>
-        <div className='px-5 py-5 bg-white pb-20"' >
+        <div className='px-5 py-5 bg-transparent pb-20' >
           {/* back button */}
           <div className="text-left mb-3" >
             <button
               onClick={handleGoBack}
+              className={`rounded-[15px] px-3 py-3 ${darkTheme ? 'bg-[#2d2d2d]' : 'bg-gray-100'} text-[#e0821e]`}
               style={{
-                fontSize: '0.7rem', // Adjust the icon size
-                color: 'darkblue',
-                textDecoration: 'underline'
+                  borderRadius: '20px',
+                  color: '#FF8500',
+                  alignItems: 'center',
+                  alignContent: 'center',
+                  fontWeight: 500
               }}
             >
-              <ArrowBackIcon/>Back
+                <ArrowBackIcon className='mr-2' />Back
             </button>
           </div>
           <div>
             <div className="grid grid-cols-2 gap-4">
               {same.map((product, i) => (
-                <a href={product.link} className="h-[270px] shadow-md px-2 py-2 bg-gray-100 flex flex-col justify-between relative" key={i}>
+                <div onClick={() => chrome.tabs.create({ url: product.link }) } className={`h-[270px] rounded-[10px] shadow-md px-2 py-2 ${darkTheme ? 'bg-[#2d2d2d]' : 'bg-gray-100'} flex flex-col justify-between relative`} key={i}>
                   {product.isOutOfStock && (
                     <p className="absolute bottom-2 left-2 text-dark-green font-bold text-xs">In Stock</p>
                   )}
                   <div>
                     <img className="w-[200px] h-[139px]" src={product.thumbnail} alt="product thumbnail" />
-                    <a className="text-sm mt-1">
+                    <a className={`${darkTheme && 'text-white'} text-sm mt-1`}>
                       {truncateTitle(product.title, 48)} {/* Limit title to 50 characters */}
                     </a>
-                    <p className="text-gray-500 text-sm absolute bottom-6 left-2">{product.source}</p>
+                    <p className={`${darkTheme ? 'text-white' : 'text-gray-500'} text-sm absolute bottom-6 left-2`}>{product.source}</p>
                   </div>
                   {product.price && (
                     <p className="text-green-400 text-sm font-bold self-end">
                       {removeAsterisk(product.price.value)}
                     </p>
                   )}
-                </a>
+                </div>
               ))}
             </div>
           </div>

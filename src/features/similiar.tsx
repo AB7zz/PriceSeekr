@@ -71,14 +71,14 @@ const Similiar = ({ data }) => {
           <div>
             <div className="grid grid-cols-2 gap-4">
               {similiar.map((product, i) => (
-                <a href={product.link} className="h-[270px] shadow-md px-2 py-2 bg-gray-100 flex flex-col justify-between relative" key={i}>
+                <div onClick={() => chrome.tabs.create({ url: product.link }) } className={`h-[270px] rounded-[10px] shadow-md px-2 py-2 ${darkTheme ? 'b-[#2d2d2d]' : 'bg-gray-100'} flex flex-col justify-between relative`} key={i}>
                   <p className="absolute bottom-2 left-2 text-dark-green font-bold text-xs">In Stock</p>
                   <div>
                     <img className="w-[200px] h-[139px]" src={product.thumbnail} alt="product thumbnail" />
-                    <a className="text-sm mt-1">
+                    <a className={`${darkTheme && 'text-white'} text-sm mt-1`}>
                       {truncateText(product.title, 48)} {/* Limit title to 48 characters */}
                     </a>
-                    <p className="text-gray-500 text-sm absolute bottom-6 left-2">
+                    <p className={`${darkTheme ? 'text-white' : 'text-gray-500'} text-sm absolute bottom-6 left-2`}>
                       {truncateText(product.source, 10)} {/* Limit source to 8 characters */}
                     </p>
                   </div>
@@ -87,7 +87,7 @@ const Similiar = ({ data }) => {
                       {removeAsterisk(product.price)}
                     </p>
                   )}
-                </a>
+                </div>
               ))}
             </div>
           </div>

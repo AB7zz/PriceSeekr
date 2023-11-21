@@ -107,8 +107,8 @@ function Main() {
       isNewUser ? (
         <>{renderContent()}</>
       ) : (
-        <div className="">
-          <div className={`px-5 h-screen ${page === "/Profile" ? "px-3" : ""}`}>
+        <div className="mb-[75px]">
+          <div className={`px-2 h-screen ${page === "/Profile" ? "px-3" : ""}`}>
             {renderContent()}
           </div>
           <BotNav />
