@@ -46,17 +46,17 @@ const DisplayHistory = () => {
       const selectedItem = history?.PageData[selectedItemIndex].SearchRes;
       return (
         <div>
-        <p className="text-center text-md text-black font-semibold">
-          Showing results for{' '}
-          <a
-              href={history?.PageData[selectedItemIndex].PageDetails[4]}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-indigo-500 hover:underline text-xs"
-              >
-            {limitTitle(history.PageData[selectedItemIndex].PageDetails[0], 12)}
-          </a>
-        </p>
+          <p className="text-center text-md text-black font-semibold">
+            Showing results for{' '}
+            <a
+                href={history?.PageData[selectedItemIndex].PageDetails[4]}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-indigo-500 hover:underline text-xs"
+                >
+              {limitTitle(history.PageData[selectedItemIndex].PageDetails[0], 12)}
+            </a>
+          </p>
           <table className="w-full mt-4 bg-white shadow-md rounded-lg overflow-hidden border">
             <thead className="">
 
@@ -84,7 +84,6 @@ const DisplayHistory = () => {
                   </td>
                   <td className="px-2 py-4 border text-xs">{limitTitle(item.company,2)}</td>
                   <td className="px-1 py-0 border text-xs">${item.price.toFixed(2)}</td>
-
                 </tr>
               ))}
             </tbody>
@@ -94,51 +93,51 @@ const DisplayHistory = () => {
     } else if (pageDetails) {
       return (
         <div>
-        <p className="text-center text-lg text-black font">
-          Your Past Searches
-        </p>
-        <table className="w-full mt-4 bg-white shadow-md rounded-lg overflow-hidden border">
-            <thead className="">
-              <tr>
-                <th className="border-bottom"></th>
-                <th className="border-bottom"></th>
-                <th className="border-bottom"></th>
-                <th className="border-bottom"></th>
-              </tr>
-            </thead>
-          <tbody>
-            {pageDetails.map((item, index) => (
-              <tr
-                key={index}
-                className="hover:bg-gray-100 transition duration-300 cursor-pointer border"
-                onClick={() => handleItemClick(index)}
-              >
-                
-                <td className="px-2 py-5 mx-auto flex justify-center items-center">
-                  <img
-                    src={item[1]}
-                    alt={`Event ${index + 1}`}
-                    className="max-h-[100px] max-w-[90px] min-h-[50px] min-w-[50px]"
-                  />
-                </td>
+          <p className={`text-center text-lg ${darkTheme ? 'text-white' : 'text-black'} font`}>
+            Your Past Searches
+          </p>
+          <table className={`w-full mt-4 ${darkTheme ? 'bg-[#2d2d2d]' : 'bg-white'} shadow-md rounded-lg overflow-hidden border`}>
+              <thead className="">
+                <tr>
+                  <th className="border-bottom"></th>
+                  <th className="border-bottom"></th>
+                  <th className="border-bottom"></th>
+                  <th className="border-bottom"></th>
+                </tr>
+              </thead>
+            <tbody>
+              {pageDetails.map((item, index) => (
+                <tr
+                  key={index}
+                  className={`${darkTheme ? 'hover:bg-[#3b3b3b]' : 'hover:bg-gray-100'} transition duration-300 cursor-pointer border ${darkTheme && 'border-[#202020]'}`}
+                  onClick={() => handleItemClick(index)}
+                >
+                  
+                  <td className="px-2 py-5 mx-auto flex justify-center items-center">
+                    <img
+                      src={item[1]}
+                      alt={`Event ${index + 1}`}
+                      className="max-h-[100px] max-w-[90px] min-h-[50px] min-w-[50px]"
+                    />
+                  </td>
 
-                <td className="px-2 py-2 border text-xs">
-                  <a
-                    href={item[4]}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-indigo-500 hover:underline text-xs"
-                  >
-                    {limitTitle(item[0], 12)}
-                  </a>
-                </td>
-                <td className="px-2 py-4 border text-xs">{item[3]}</td>
-                <td className="px-1 py-0 border text-xs">${parseFloat(item[2].replace(/[^\d.]/g, '')).toFixed(2)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                  <td className={`px-2 py-2 border ${darkTheme && 'border-[#202020]'} text-xs`}>
+                    <a
+                      href={item[4]}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-indigo-500 hover:underline text-xs"
+                    >
+                      {limitTitle(item[0], 12)}
+                    </a>
+                  </td>
+                  <td className={`${darkTheme ? 'text-white' : 'text-black'} px-2 py-4 border ${darkTheme && 'border-[#202020]'} text-xs`}>{item[3]}</td>
+                  <td className={`${darkTheme ? 'text-white' : 'text-black'} px-1 py-0 border ${darkTheme && 'border-[#202020]'} text-xs`}>${parseFloat(item[2].replace(/[^\d.]/g, '')).toFixed(2)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       );
     } else {
       return (

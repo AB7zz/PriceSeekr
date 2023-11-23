@@ -5,6 +5,7 @@ import NotSupport from '../components/NotSupport';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'; 
 import { useSaveSearchResultToFirestore } from '~firebase/hooks';
 import NoResults from '~components/NoResults';
+import {motion} from 'framer-motion'
 
 const Similiar = ({ data }) => {
   const { runSearchSimiliar, similiar, setPage, darkTheme } = useSearchContext();
@@ -57,21 +58,25 @@ const Similiar = ({ data }) => {
         <>
           {/* back button */}
           <div className="text-left mb-3" >
-            <button
+            <motion.button
               onClick={handleGoBack}
+              className={`rounded-[15px] px-3 py-3 ${darkTheme ? 'bg-[#2d2d2d]' : 'bg-gray-100'} text-[#e0821e]`}
+              whileHover={{ scale: 1.05 }}
               style={{
-                fontSize: '0.7rem', // Adjust the icon size
-                color: 'darkblue',
-                textDecoration: 'underline'
+                  borderRadius: '20px',
+                  color: '#FF8500',
+                  alignItems: 'center',
+                  alignContent: 'center',
+                  fontWeight: 500
               }}
-            >
-              <ArrowBackIcon/>Back
-            </button>
+          >
+              <ArrowBackIcon className='mr-2' />Back
+          </motion.button>
           </div>
           <div>
             <div className="grid grid-cols-2 gap-4">
               {similiar.map((product, i) => (
-                <div onClick={() => chrome.tabs.create({ url: product.link }) } className={`h-[270px] rounded-[10px] shadow-md px-2 py-2 ${darkTheme ? 'b-[#2d2d2d]' : 'bg-gray-100'} flex flex-col justify-between relative`} key={i}>
+                <div onClick={() => chrome.tabs.create({ url: product.link }) } className={`h-[270px] rounded-[10px] shadow-md px-2 py-2 ${darkTheme ? 'bg-[#2d2d2d]' : 'bg-gray-100'} flex flex-col justify-between relative`} key={i}>
                   <p className="absolute bottom-2 left-2 text-dark-green font-bold text-xs">In Stock</p>
                   <div>
                     <img className="w-[200px] h-[139px]" src={product.thumbnail} alt="product thumbnail" />
