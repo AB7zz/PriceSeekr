@@ -20,7 +20,7 @@ import {
 import BotNav from "~components/BotNav";
 
 function Main() {
-  const { user, getHTMLData, pageData, page, setPage, darkTheme } = useSearchContext();
+  const { user, getHTMLData, pageData, page, setPage, darkTheme, initTheme } = useSearchContext();
 
   const [isNewUser, setIsNewUser] = useState(false);
   const [showLoginForm, setShowLoginForm] = useState(true);
@@ -39,6 +39,7 @@ function Main() {
   }, [user]);
   
   useEffect(() => {
+    initTheme()
     handleDetectChange();
   }, []);
 

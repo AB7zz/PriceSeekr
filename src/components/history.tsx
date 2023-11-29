@@ -46,7 +46,7 @@ const DisplayHistory = () => {
       const selectedItem = history?.PageData[selectedItemIndex].SearchRes;
       return (
         <div>
-          <p className="text-center text-md text-black font-semibold">
+          <p className={`text-center text-md ${darkTheme ? 'text-white' : 'text-black'} font-semibold`}>
             Showing results for{' '}
             <a
                 href={history?.PageData[selectedItemIndex].PageDetails[4]}
@@ -57,7 +57,7 @@ const DisplayHistory = () => {
               {limitTitle(history.PageData[selectedItemIndex].PageDetails[0], 12)}
             </a>
           </p>
-          <table className="w-full mt-4 bg-white shadow-md rounded-lg overflow-hidden border">
+          <table className={`w-full mt-4 ${darkTheme ? 'bg-[#2d2d2d]' : 'bg-white'} shadow-md rounded-lg overflow-hidden border`}>
             <thead className="">
 
               <tr>
@@ -69,11 +69,11 @@ const DisplayHistory = () => {
             </thead>
             <tbody>
               {selectedItem.map((item, index) => (
-                <tr key={index} className="hover:bg-gray-100 transition duration-300 cursor-pointer border">
-                  <td className="px-2 py-5  mx-auto flex justify-center items-center">
+                <tr key={index} className={`${darkTheme ? 'hover:bg-[#3b3b3b]' : 'hover:bg-gray-100'} transition duration-300 cursor-pointer border ${darkTheme && 'border-[#202020]'}`}>
+                  <td className={`px-2 py-5 ${darkTheme && 'border-[#202020]'} mx-auto flex justify-center items-center`}>
                     <img src={item.thumbnail} alt={`Item ${index + 1}`} className="max-h-[100px] max-w-[90px] min-h-[50px] min-w-[50px]"/>
                   </td>
-                  <td className="px-2 py-2 border text-xs">
+                  <td className={`px-2 py-2 border ${darkTheme && 'border-[#202020]'}  text-xs`}>
                     <a
                       href={item.url}
                     
@@ -82,8 +82,8 @@ const DisplayHistory = () => {
                       {limitTitle(item.title, 12)}
                     </a>
                   </td>
-                  <td className="px-2 py-4 border text-xs">{limitTitle(item.company,2)}</td>
-                  <td className="px-1 py-0 border text-xs">${item.price.toFixed(2)}</td>
+                  <td className={`px-2 py-4 border ${darkTheme && 'border-[#202020]'} ${darkTheme ? 'text-white' : 'text-black'} text-xs`}>{limitTitle(item.company,2)}</td>
+                  <td className={`px-1 py-0 border ${darkTheme && 'border-[#202020]'} ${darkTheme ? 'text-white' : 'text-black'} text-xs`}>${item.price.toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>

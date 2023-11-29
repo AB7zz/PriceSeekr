@@ -3,12 +3,22 @@ require('dotenv').config();
 const SerpApi = require("google-search-results-nodejs")
 const search = new SerpApi.GoogleSearch("9ff5a1b75caee5bb01410bebc61e1014f53a01e8dfa29b28d2e7f23067c0338f")
 import google_domains from '../json/google-domains.json'
+import { Storage } from "@plasmohq/storage"
 
 import axios from 'axios'
 
 interface User {
     displayName: string;
     uid: string;
+}
+
+interface PageDataItem {
+    PageDetails: any[];
+    SearchRes: any[];
+}
+
+interface HistoryItem {
+    PageData: PageDataItem[] | null
 }
 
 interface SearchContextState {
@@ -22,13 +32,15 @@ interface SearchContextState {
     preferences: any[] | null;
     userData: any[] | null;
     userEmail: any[] | null;
-    history: any[] | null;
+    history: HistoryItem | null;
 }
 
 interface SearchContextValue extends SearchContextState {
     runSearchSimiliar: (data: any) => void;
     runSearchImage: (data: any) => void;
     getHTMLData: (data: any) => void;
+    handleTheme: () => void;
+    initTheme: () => void;
     setUser: React.Dispatch<React.SetStateAction<any>>;
     setPage: React.Dispatch<React.SetStateAction<string>>;
     setHistory: React.Dispatch<React.SetStateAction<any>>;
@@ -43,6 +55,7 @@ const MySearchContext = React.createContext<SearchContextValue>({
     runSearchSimiliar: () => {},
     runSearchImage: () => {},
     setUser: () => {},
+    handleTheme: () => {},
     getHTMLData: () => {},
     setPage: () => {},
     setPageData: () => {},
@@ -51,6 +64,7 @@ const MySearchContext = React.createContext<SearchContextValue>({
     setEmail: () => {}, 
     setHistory: () => {},
     setDark: () => {},
+    initTheme: () => {},
     user: null,
     similiar: null,
     same: null,
@@ -65,6 +79,7 @@ const MySearchContext = React.createContext<SearchContextValue>({
 });
 
 export const MySearchProvider = ({ children }) => {
+    const storage = new Storage()
     const [similiar, setSimiliar] = React.useState(null)
     const [user, setUser] = React.useState(null); 
     const [userEmail, setEmail] = React.useState(null); 
@@ -77,6 +92,24 @@ export const MySearchProvider = ({ children }) => {
     const [preferences, setPreferences] = React.useState(null)
     const [history, setHistory] = React.useState(null)
     const [userData, setUserData] = React.useState(null)
+
+    const initTheme = async() => {
+        const theme = await storage.get('dark') as boolean
+        if(theme != null){
+            console.log('theme initialized', theme)
+            if(theme === true){
+                setDark(true)
+            }else if(theme === false){
+                setDark(false)
+            }
+        }
+    }
+
+    const handleTheme = async() => {
+        await storage.set("dark", !darkTheme)
+        console.log('theme set')
+        setDark(darkTheme => !darkTheme)
+    }
     
     const searchTitle = async(title: string, country: string, currentPrice: any) => {
         
@@ -258,6 +291,8 @@ export const MySearchProvider = ({ children }) => {
 
     return (
         <MySearchContext.Provider value={{ 
+            initTheme,
+            handleTheme,
             runSearchSimiliar,
             runSearchImage,
             setUser,
