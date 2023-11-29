@@ -178,10 +178,10 @@ export const MySearchProvider = ({ children }) => {
     const searchImage = async(image: any, country: any, currentPrice: any) => {
         let params = {
             api_key: process.env.PLASMO_PUBLIC_API_KEY_SIMILAR, 
+            gl: country,            
             url: image,       
             engine: 'google_lens',    
             google_domain: google_domains.find(g => g.country_code == country)?.domain,
-            gl: country            
         }
         const numericValue = parseFloat(currentPrice.replace(/[^0-9.]/g, ''));
         search.json(params, async (data) => {

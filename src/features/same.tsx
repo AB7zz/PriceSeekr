@@ -73,7 +73,7 @@ const Same = ({ data }) => {
               {same.map((product, i) => (
                 <div onClick={() => chrome.tabs.create({ url: product.link }) } className={`h-[270px] rounded-[10px] shadow-md px-2 py-2 ${darkTheme ? 'bg-[#2d2d2d]' : 'bg-gray-100'} flex flex-col justify-between relative`} key={i}>
                   {product.isOutOfStock && (
-                    <p className="absolute bottom-2 left-2 text-dark-green font-bold text-xs">In Stock</p>
+                    <p className="absolute bottom-2 left-2 text-blue-800 font-bold text-xs">In Stock</p>
                   )}
                   <div>
                     <img className="w-[200px] h-[139px]" src={product.thumbnail} alt="product thumbnail" />
