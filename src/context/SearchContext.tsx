@@ -211,11 +211,12 @@ export const MySearchProvider = ({ children }) => {
                 const itemsWithPrice = data["visual_matches"].filter(item => item.price && item.price.extracted_value <= numericValue);
                 // filter items not in country
                 console.log("pass 1 items without price removed:" ,itemsWithPrice)
-                const allowedDomains = ['.com', country] 
+                // const allowedDomains = ['.com', country] 
+                const allowedDomains = [country] 
                 const itemsInLocation = itemsWithPrice.filter(item => {
                     const itemDomain = new URL(item.link).hostname.toLowerCase();
                     return allowedDomains.some(allowedDomain => itemDomain.endsWith(allowedDomain));
-                  });
+                });
 
                 console.log('pass 2 out of location removed (domain not .com/country):',itemsInLocation);
                 const itemPromises = itemsInLocation.map(async (item) => {

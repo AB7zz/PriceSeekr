@@ -77,7 +77,7 @@ const Same = ({ data }) => {
           <div>
             <div className="grid grid-cols-2 gap-4">
               {same.map((product, i) => (
-                <div onClick={() => chrome.tabs.create({ url: product.link }) } className={`h-[270px] rounded-[10px] shadow-md px-2 py-2 ${darkTheme ? 'bg-[#2d2d2d]' : 'bg-gray-100'} flex flex-col justify-between relative`} key={i}>
+                <div onClick={() => chrome.tabs.create({ url: product.link }) } className={`cursor-pointer h-[270px] rounded-[10px] shadow-md px-2 py-2 ${darkTheme ? 'bg-[#2d2d2d]' : 'bg-gray-100'} flex flex-col justify-between relative`} key={i}>
                   {product.isOutOfStock && (
                     <p className="absolute bottom-2 left-2 text-blue-800 font-bold text-xs">In Stock</p>
                   )}

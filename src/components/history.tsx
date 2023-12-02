@@ -76,14 +76,14 @@ const DisplayHistory = () => {
                   <td className={`px-2 py-2 border ${darkTheme && 'border-[#202020]'}  text-xs`}>
                     <a
                       href={item.url}
-                    
+                      target="_blank"
                       className="text-indigo-500 hover:underline text-xs"
                     >
                       {limitTitle(item.title, 12)}
                     </a>
                   </td>
                   <td className={`px-2 py-4 border ${darkTheme && 'border-[#202020]'} ${darkTheme ? 'text-white' : 'text-black'} text-xs`}>{limitTitle(item.company,2)}</td>
-                  <td className={`px-1 py-0 border ${darkTheme && 'border-[#202020]'} ${darkTheme ? 'text-white' : 'text-black'} text-xs`}>${item.price.toFixed(2)}</td>
+                  <td className={`px-1 py-0 border ${darkTheme && 'border-[#202020]'} ${darkTheme ? 'text-white' : 'text-black'} text-xs`}>{item.price.toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>
@@ -132,7 +132,7 @@ const DisplayHistory = () => {
                     </a>
                   </td>
                   <td className={`${darkTheme ? 'text-white' : 'text-black'} px-2 py-4 border ${darkTheme && 'border-[#202020]'} text-xs`}>{item[3]}</td>
-                  <td className={`${darkTheme ? 'text-white' : 'text-black'} px-1 py-0 border ${darkTheme && 'border-[#202020]'} text-xs`}>${parseFloat(item[2].replace(/[^\d.]/g, '')).toFixed(2)}</td>
+                  <td className={`${darkTheme ? 'text-white' : 'text-black'} px-1 py-0 border ${darkTheme && 'border-[#202020]'} text-xs`}>{parseFloat(item[2].replace(/[^\d.]/g, '')).toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>

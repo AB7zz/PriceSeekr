@@ -57,10 +57,10 @@ const Signup = ({setIsNewUser, setShowLoginForm, showLoginForm}) => {
         
           <div style={{justifyContent: 'center'}} className="flex items-center">
             <div className="flex-grow border-t-2 border-gray-400"></div>
-            <span className="text-sm text-[#A4A4A4] poppins">OR</span>
+            <span className={`text-sm ${darkTheme ? 'text-white font-semibold' : 'text-[#A4A4A4]'} poppins`}>OR</span>
             <div className="flex-grow border-t-2 border-gray-400"></div>
           </div>
-          <div className="flex justify-center py-5">
+          <div className="flex flex-col justify-center py-5">
             <button
               style={{background: '#CF4332', borderRadius: '5px', width: '100%', justifyContent: 'center'}}
               className="googleBtn bg-[#CF4332] hover:bg-[#AB3324] px-7 py-2 rounded-[5px] text-white font-semibold"
@@ -69,7 +69,7 @@ const Signup = ({setIsNewUser, setShowLoginForm, showLoginForm}) => {
               <GoogleIcon className="text-white mr-3" />
               Continue with Google
             </button>
-            <p className="text-red-500 mt-2">{error}</p> {/* Display error message */}
+            <p style={{color: 'red', textAlign: 'center'}} className="text-center text-red-500 mt-2">{error}</p> {/* Display error message */}
           </div>
         </div>
       </div>
