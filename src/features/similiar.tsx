@@ -6,9 +6,10 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useSaveSearchResultToFirestore } from '~firebase/hooks';
 import NoResults from '~components/NoResults';
 import {motion} from 'framer-motion'
+import ApiExceeded from '~components/ApiExceeded'
 
 const Similiar = ({ data }) => {
-  const { runSearchSimiliar, similiar, setPage, darkTheme } = useSearchContext();
+  const { runSearchSimiliar, similiar, setPage, darkTheme, apiCalls } = useSearchContext();
   const [isLoading, setIsLoading] = useState(true);
   const [notfound, setNotfound] = useState(false);
   const saveSearchResultToFirestore = useSaveSearchResultToFirestore();
@@ -26,7 +27,7 @@ const Similiar = ({ data }) => {
       // Save search results to Firestore if data is available
       if (similiar && similiar.length > 0) {
         
-        saveSearchResultToFirestore(similiar, data, false);
+        saveSearchResultToFirestore(similiar, data, false, apiCalls);
       }
     };
 
@@ -52,9 +53,13 @@ const Similiar = ({ data }) => {
  
   return (
     <div className={`px-5 py-5 ${darkTheme ? 'bg-transparent' : 'bg-white'} rounded-[15px] pb-20`}>
-      {isLoading ? (
+      {isLoading && apiCalls < 5 ? (
         <Loader />
-      ) : similiar && similiar.length > 0 ? (
+      ) 
+      : isLoading && apiCalls >= 5 ? (
+        <ApiExceeded />
+      )
+      : similiar && similiar.length > 0 ? (
         <>
           {/* back button */}
           <div className="text-left mb-3" >

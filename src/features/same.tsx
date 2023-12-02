@@ -5,9 +5,11 @@ import Loader from '../components/loader';
 import NoResults from '~components/NoResults';
 import NotSupport from '../components/NotSupport';
 import { useSaveSearchResultToFirestore } from '~firebase/hooks';
+import ApiExceeded from '~components/ApiExceeded'
+
 
 const Same = ({ data }) => {
-  const { runSearchImage, same, setPage, darkTheme } = useSearchContext();
+  const { runSearchImage, same, setPage, darkTheme, apiCalls } = useSearchContext();
   const [isLoading, setIsLoading] = useState(true);
   const saveSearchResultToFirestore = useSaveSearchResultToFirestore();
   useEffect(() => {
@@ -21,7 +23,7 @@ const Same = ({ data }) => {
       // Save search result to Firestore if data is available
       if (same && same.length > 0) {
         console.log("same data tmp: ",same )
-        saveSearchResultToFirestore(same, data, true);
+        saveSearchResultToFirestore(same, data, true, apiCalls);
       }
     };
 
@@ -47,9 +49,13 @@ const Same = ({ data }) => {
  
   return (
     <div className="">
-      {isLoading ? (
+      {isLoading && apiCalls < 5 ? (
         <Loader />
-      ) : same && same.length > 0 ? (
+      ) 
+      : isLoading && apiCalls >= 5 ? (
+        <ApiExceeded />
+      )
+      : same && same.length > 0 ? (
         <>
         <div className='px-5 py-5 bg-transparent pb-20' >
           {/* back button */}

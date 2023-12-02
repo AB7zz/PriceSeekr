@@ -169,7 +169,7 @@ export const useWriteToDB = () => {
 
 export const useSaveSearchResultToFirestore = () => {
   const user = auth.currentUser;
-  const saveSearchResultToFirestore = async (SearchData, PageData, isSame) => {
+  const saveSearchResultToFirestore = async (SearchData, PageData, isSame, apiCalls) => {
     console.log('called saveSearchResultToFirestore')
     if (user) {
       const userId = user.uid;
@@ -183,6 +183,8 @@ export const useSaveSearchResultToFirestore = () => {
         if (!userData.History) {
           userData.History = {};
         }
+
+        userData.APICalls = apiCalls
         
         // Create or update the 'PageData' field within 'History'
         if (!userData.History.PageData) {
@@ -235,17 +237,17 @@ export const useSaveSearchResultToFirestore = () => {
 
 
 export const useReadDB = () => {
-  const {setPreferences} = useSearchContext()
+  const {setPreferences, setAPICalls} = useSearchContext()
   
   const readFromDB = async (userId) => {
     console.log('called useReadDB')
     const userDocRef = doc(colRef, userId);
-
     try {
       const docSnapshot = await getDoc(userDocRef);
 
       if (docSnapshot.exists()) {
         setPreferences(docSnapshot.data().Preferences)
+        setAPICalls(docSnapshot.data().APICalls || 0)
         const userData = docSnapshot.data();
         console.log('User data:', userData);
       } else {

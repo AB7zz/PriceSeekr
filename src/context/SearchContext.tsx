@@ -4,6 +4,7 @@ const SerpApi = require("google-search-results-nodejs")
 const search = new SerpApi.GoogleSearch("9ff5a1b75caee5bb01410bebc61e1014f53a01e8dfa29b28d2e7f23067c0338f")
 import google_domains from '../json/google-domains.json'
 import { Storage } from "@plasmohq/storage"
+import { useUpdateDB } from '~firebase/hooks';
 
 import axios from 'axios'
 
@@ -33,6 +34,7 @@ interface SearchContextState {
     userData: any[] | null;
     userEmail: any[] | null;
     history: HistoryItem | null;
+    apiCalls: any | null;
 }
 
 interface SearchContextValue extends SearchContextState {
@@ -42,6 +44,7 @@ interface SearchContextValue extends SearchContextState {
     handleTheme: () => void;
     initTheme: () => void;
     setUser: React.Dispatch<React.SetStateAction<any>>;
+    setAPICalls: React.Dispatch<React.SetStateAction<any>>;
     setPage: React.Dispatch<React.SetStateAction<string>>;
     setHistory: React.Dispatch<React.SetStateAction<any>>;
     setPreferences: React.Dispatch<React.SetStateAction<string>>;
@@ -64,6 +67,7 @@ const MySearchContext = React.createContext<SearchContextValue>({
     setEmail: () => {}, 
     setHistory: () => {},
     setDark: () => {},
+    setAPICalls: () => {},
     initTheme: () => {},
     user: null,
     similiar: null,
@@ -76,6 +80,7 @@ const MySearchContext = React.createContext<SearchContextValue>({
     userData: null,
     userEmail: null,
     history: null,
+    apiCalls: null
 });
 
 export const MySearchProvider = ({ children }) => {
@@ -87,6 +92,7 @@ export const MySearchProvider = ({ children }) => {
     const [country, setCountry] = React.useState(null)
     const [pageData, setPageData] = React.useState(null)
     const [page, setPage] = React.useState(null);
+    const [apiCalls, setAPICalls] = React.useState(null)
     const [trigger, setTrigger] = React.useState(false)
     const [darkTheme, setDark] = React.useState(false)
     const [preferences, setPreferences] = React.useState(null)
@@ -126,7 +132,7 @@ export const MySearchProvider = ({ children }) => {
             const itemsWithPrice = data.shopping_results.filter(item => item.price && item.extracted_price <= numericValue)
             const sortedItems = itemsWithPrice.sort((a, b) => a.extracted_price - b.extracted_price)
             const sortByPref = sortedItems.filter(prod => {
-                if(preferences.some(p => prod.link.includes(p.toLowerCase())) || preferences.includes("other")){
+                if(preferences && preferences.some(p => prod.link.includes(p.toLowerCase())) || preferences.includes("other")){
                     return prod
                 }
             })
@@ -145,33 +151,47 @@ export const MySearchProvider = ({ children }) => {
         }
     }
   
+    const updateToDB = useUpdateDB();
     const runSearchSimiliar = (data: any) => {
-        if (data) {
-          console.log('runSearchSimilar is called');
-     
-          if (!country) {
-            getLocation()
-              .then((country) => {
-                setCountry(country);
+        if (data && apiCalls < 5) {
+            setAPICalls(apiCalls => apiCalls + 1)
+            // updateToDB({
+            //     APICalls: apiCalls
+            // });
+            console.log('runSearchSimilar is called');
+            if (!country) {
+                getLocation()
+                .then((country) => {
+                    setCountry(country);
+                    searchTitle(data[0], country, data[2]);
+                });
+            } else {
                 searchTitle(data[0], country, data[2]);
-              });
-          } else {
-            searchTitle(data[0], country, data[2]);
-          }
+            }
+        }else{
+            console.log('api calls exceeded')
         }
       }
       
       
     const runSearchImage = (data: any) => {
-        console.log('runSearchImage is called')
-        if(!country){
-            getLocation()
-                .then(country => {
-                    setCountry(country)
-                    searchImage(data[1], country, data[2])
-                })
+        if(data && apiCalls < 5){
+            setAPICalls(apiCalls => apiCalls + 1)
+            updateToDB({
+                APICalls: apiCalls
+            });
+            console.log('runSearchImage is called')
+            if(!country){
+                getLocation()
+                    .then(country => {
+                        setCountry(country)
+                        searchImage(data[1], country, data[2])
+                    })
+            }else{
+                searchImage(data[1], country, data[2])
+            }
         }else{
-            searchImage(data[1], country, data[2])
+            console.log('api calls exceeded')
         }
     }
 
@@ -232,7 +252,7 @@ export const MySearchProvider = ({ children }) => {
                 const sortedItems = filteredItems.sort((a, b) => a.price.extracted_value - b.price.extracted_value);
                 console.log("preferences: ",preferences)
                 const sortByPref = sortedItems.filter(prod => {
-                    if(preferences.some(p => prod.link.includes(p.toLowerCase())) || preferences.includes("Others")){
+                    if(preferences && preferences.some(p => prod.link.includes(p.toLowerCase())) || preferences.includes("Others")){
                         return prod
                     }
                     
@@ -296,6 +316,7 @@ export const MySearchProvider = ({ children }) => {
             runSearchSimiliar,
             runSearchImage,
             setUser,
+            setAPICalls,
             getHTMLData,
             setPage,
             setPageData,
@@ -304,6 +325,7 @@ export const MySearchProvider = ({ children }) => {
             setEmail,
             setHistory,
             setDark,
+            apiCalls,
             darkTheme,
             user,
             similiar,
