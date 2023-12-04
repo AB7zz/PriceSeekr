@@ -20,7 +20,7 @@
     "@propelauth/react": "^2.0.10",
     "axios": "^1.4.0",
     "dotenv": "^16.3.1",
-    "firebase": "^10.3.1",
+    "firebase": "^10.4.0",
     "framer-motion": "^10.16.4",
     "google-search-results-nodejs": "^2.1.0",
     "lottie-react": "^2.4.0",
@@ -38,7 +38,7 @@
     "@types/node": "20.2.5",
     "@types/react": "18.2.8",
     "@types/react-dom": "18.2.4",
-    "chai": "^4.3.8",
+    "chai": "^4.3.10",
     "postcss": "8.4.24",
     "prettier": "2.8.8",
     "typescript": "5.1.3"
