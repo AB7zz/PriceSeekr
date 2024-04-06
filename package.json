@@ -64,10 +64,7 @@
     },
     "permissions": [
       "browsingData",
-      "activeTab",
-      "contextMenus",
       "tabs",
-      "declarativeContent",
       "scripting",
       "storage",
       "identity",
