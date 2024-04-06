@@ -63,16 +63,16 @@
       ]
     },
     "permissions": [
-      "browsingData",
-      "tabs",
-      "scripting",
       "storage",
+      "browsingData",
+      "activeTab",
+      "scripting",
       "identity",
       "webNavigation"
     ],
     "content_security_policy": {
       "extension_pages": "script-src 'self' 'wasm-unsafe-eval'",
-      "sandbox": "sandbox allow-scripts; script-src 'self' 'https://apis.google.com/' 'https://amazon.in/' 'ws://localhost:1815/' 'https://www.gstatic.com/' 'https://*.firebaseio.com' 'https://www.googleapis.com' 'https://securetoken.googleapis.com'; object-src 'self'"
+      "sandbox": "sandbox allow-scripts; script-src 'self' 'https://apis.google.com/' 'https://amazon.in/' 'ws://localhost:1815/' 'https://www.gstatic.com/' 'https://*.firebaseio.com' 'https://www.googleapis.com' 'https://securetoken.googleapis.com'; object-src 'self'; default-src 'self'"
     }
   }
 }

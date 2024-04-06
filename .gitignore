@@ -36,5 +36,4 @@ keys.json
 .tsbuildinfo
 
 
-.env.development
-.env
+.env.*
