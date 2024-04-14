@@ -5,7 +5,7 @@ import {
   signOut,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-} from "firebase/auth";
+} from "firebase/auth/web-extension";
 import { useSearchContext } from "~context/SearchContext";
 import { auth, colRef } from "~firebase";
 import { doc, getDoc, setDoc } from 'firebase/firestore';

@@ -1,6 +1,6 @@
 import {
     getAuth
-} from "firebase/auth";
+} from "firebase/auth/web-extension";
 import { initializeApp } from "firebase/app";
 // import { getDatabase } from "firebase/database";
 import { getFirestore, collection } from "firebase/firestore";
