@@ -5,6 +5,7 @@ const search = new SerpApi.GoogleSearch("9ff5a1b75caee5bb01410bebc61e1014f53a01e
 import google_domains from '../json/google-domains.json'
 import { Storage } from "@plasmohq/storage"
 import { useUpdateDB } from '~firebase/hooks';
+import selectors from '../json/ecommerce_scrape.json'
 
 import axios from 'axios'
 
@@ -270,33 +271,45 @@ export const MySearchProvider = ({ children }) => {
             if (tab) {
                 const [result] = await chrome.scripting.executeScript({
                     target: { tabId: tab.tabId || tab.id },
-                    func: (url) => {
-                        let productTitle, image, price
-                        const currentDate = new Date().toLocaleDateString();
-                        if (url.includes('ebay')) {
-                            productTitle = document.querySelector(".x-item-title__mainTitle .ux-textspans")?.innerHTML || "";
-                            image = document.querySelector('img.a-dynamic-image')?.getAttribute('src') || document.querySelector('img.ux-image-magnify__image--original')?.getAttribute('src') || "";
-                            price = document.querySelector('.x-price-primary .ux-textspans')?.innerHTML || "";
-                            return [productTitle, image, price, currentDate, url]
-                        } else if (url.includes('amazon')) {
-                            productTitle = document.querySelector('#productTitle')?.innerHTML || "";
-                            image = document.querySelector('#landingImage')?.getAttribute('src') || document.querySelector("img.a-dynamic-image")?.getAttribute('src') || "";
-                            price = document.querySelector('.a-price-whole')?.innerHTML || "";
-                            return [productTitle.replace(/ {2,}/g, ''), image, price, currentDate, url]
-                        } else if (url.includes('walmart')){
-                            productTitle = document.querySelector("#main-title")?.innerHTML || "";
-                            image = document.querySelector('[data-testid="hero-image-container"] img')?.getAttribute("src") || ""
-                            price = document.querySelector('[itemprop="price"]')?.innerHTML
-                            return [productTitle, image, price, currentDate, url]
-                        } else if (url.includes('bestbuy')){
-                            productTitle = document.querySelector(".shop-product-title h1")?.innerHTML || ""
-                            image = document.querySelector(".primary-image")?.getAttribute("src") || ""
-                            price = document.querySelector('[data-testid="customer-price"] span')?.innerHTML || ""
-                            return [productTitle, image, price, currentDate, url]
+                    func: (selectors, url) => {
+                        console.log('getHTMLData is called', url)
+                        let domain = '';
+                        if (url.includes('amazon')) {
+                            domain = 'amazon';
                         }
+                        else if (url.includes('ebay')){
+                            domain = 'ebay';
+                        }
+                        else if (url.includes('walmart')){
+                            domain = 'walmart';
+                        }
+                        else if (url.includes('bestbuy')){
+                            domain = 'bestbuy';
+                        }
+
+                        const { title: titleSelector, price: priceSelector, image: imageSelector } = selectors[domain] || {}
+
+                        const currentDate = new Date().toLocaleDateString();
+
+                        const productTitle = document.querySelector(titleSelector)?.innerHTML || "";
+        
+                        const price = document.querySelector(priceSelector)?.innerHTML || "";
+                        
+                        const image = document.querySelector(imageSelector)?.getAttribute('src') || "";
+                        
+                        return [
+                            productTitle.replace(/ {2,}/g, ''),
+                            image,
+                            price,
+                            currentDate,
+                            url
+                        ]
                     },
-                    args: [tab.url]
+                    args: [selectors, tab.url]
                 });
+                const { title: titleSelector, price: priceSelector, image: imageSelector } = selectors["amazon"] || {};
+
+                console.log(titleSelector, priceSelector, imageSelector, "amazon")
                 const data = result.result;
                 if(data){
                     setTrigger(true)
