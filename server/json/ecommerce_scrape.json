@@ -1,0 +1,22 @@
+{
+    "amazon": {
+        "title": "#productTitle",
+        "price": ".a-price-whole",
+        "image": "#landingImage, img.a-dynamic-image"
+    },
+    "ebay": {
+        "title": ".x-item-title__mainTitle .ux-textspans",
+        "price": ".x-price-primary .ux-textspans",
+        "image": "img.a-dynamic-image, img.ux-image-magnify__image--original"
+    },
+    "walmart": {
+        "title": "#main-title",
+        "price": "[itemprop=\"price\"]",
+        "image": "[data-testid=\"hero-image-container\"] img"
+    },
+    "bestbuy": {
+        "title": ".shop-product-title h1",
+        "price": ".primary-image",
+        "image": "[data-testid=\"customer-price\"] span"
+    }
+}
