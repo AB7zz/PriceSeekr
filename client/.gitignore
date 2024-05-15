@@ -36,3 +36,5 @@ keys.json
 
 
 .env.*
+.env
+*.env
